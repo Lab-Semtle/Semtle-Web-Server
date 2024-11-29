@@ -1,11 +1,9 @@
-package com.example.test.application;
+package com.archisemtle.semtlewebserverspring.application;
 
-import com.example.test.domain.Member;
-import com.example.test.dto.MemberRequestDto;
-import com.example.test.infrastructure.MemberRepository;
+import com.archisemtle.semtlewebserverspring.dto.MemberRequestDto;
+import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -16,7 +14,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Member save(MemberRequestDto memberRequestDto) {
-        return memberRepository.save(memberRequestDto.toEntity());
+    public void save(MemberRequestDto memberRequestDto) {
+//        return memberRepository.save(memberRequestDto.toEntity());
+        return ;
     }
 }

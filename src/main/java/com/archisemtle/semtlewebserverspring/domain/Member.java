@@ -1,4 +1,4 @@
-package com.example.test.domain;
+package com.archisemtle.semtlewebserverspring.domain;
 
 import lombok.*;
 import jakarta.persistence.*;
@@ -7,12 +7,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.UUID;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "member")
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int memberId;
@@ -38,7 +38,8 @@ public class Member {
     private boolean manageApprovalStatus;
 
     @Builder
-    public Member(String email, String password, String name, Date birth, String phone, String studentId, boolean manageApprovalStatus) {
+    public Member(String email, String password, String name, Date birth, String phone,
+        String studentId, boolean manageApprovalStatus) {
         this.email = email;
         this.password = password;
         this.name = name;

@@ -1,4 +1,4 @@
-package com.example.test.domain;
+package com.archisemtle.semtlewebserverspring.domain;
 
 import lombok.*;
 import jakarta.persistence.*;
@@ -18,33 +18,35 @@ public class Member {
     private int memberId;
 
     @Column(nullable = false, unique = true)
-    private UUID uuid = UUID.randomUUID();
+    private UUID uuid;
 
-    private String email;
+    private String studentId;
 
     private String password;
 
     private String name;
 
-    //    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
 
     private String phone;
 
-    private String studentId;
+    private String email;
 
     private String role;
 
     private boolean manageApprovalStatus;
 
     @Builder
-    public Member(String email, String password, String name, Date birth, String phone, String studentId, boolean manageApprovalStatus) {
-        this.email = email;
+    public Member(UUID uuid, String studentId, String password, String name, Date birth, String phone, String email, String role, boolean manageApprovalStatus) {
+        this.uuid = uuid;
+        this.studentId = studentId;
         this.password = password;
         this.name = name;
         this.birth = birth;
         this.phone = phone;
-        this.studentId = studentId;
+        this.email = email;
+        this.role = role;
         this.manageApprovalStatus = manageApprovalStatus;
     }
 }

@@ -1,6 +1,6 @@
-package com.example.test.infrastructure;
+package com.archisemtle.semtlewebserverspring.infrastructure;
 
-import com.example.test.domain.Member;
+import com.archisemtle.semtlewebserverspring.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

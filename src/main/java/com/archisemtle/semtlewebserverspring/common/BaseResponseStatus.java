@@ -99,6 +99,7 @@ public enum BaseResponseStatus {
     /**
      * 7000 : Category Service Error
      */
+    NO_EXIST_CATEGORY(HttpStatus.NOT_FOUND, false, 7000, "존재하지 않는 카테고리입니다."),
     NO_TINY_CATEGORY(HttpStatus.NOT_FOUND, false, 7001, "tinycategory가 존재하지 않는 카테고리입니다"),
 
 

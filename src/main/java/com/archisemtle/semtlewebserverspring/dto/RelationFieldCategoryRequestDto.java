@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ProjectTypeCategoryRequestDto {
+public class RelationFieldCategoryRequestDto {
     private String name;
 }

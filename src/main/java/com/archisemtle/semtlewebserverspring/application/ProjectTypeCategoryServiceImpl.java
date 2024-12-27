@@ -17,18 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProjectTypeCategoryServiceImpl implements ProjectTypeCategoryService {
 
-    private ProjectTypeCategoryRepository projectTypeCategoryRepository;
+    private final ProjectTypeCategoryRepository projectTypeCategoryRepository;
 
     @Override
     public List<ProjectTypeCategoryResponseDto> getProjectTypeCategory() {
-        List<ProjectTypeCategory> projectTypeCategoryRepositoryAll = projectTypeCategoryRepository.findAll();
-        return projectTypeCategoryRepositoryAll.stream()
+        List<ProjectTypeCategory> projectTypeCategoryList = projectTypeCategoryRepository.findAll();
+        return projectTypeCategoryList.stream()
             .map(ProjectTypeCategoryResponseDto::entityToDto).toList();
     }
 
     @Override
     public void addProjectTypeCategory(
         ProjectTypeCategoryRequestDto projectTypeCategoryRequestDto) {
-
+        ProjectTypeCategory projectTypeCategory = ProjectTypeCategory.builder()
+            .name(projectTypeCategoryRequestDto.getName())
+            .build();
+        projectTypeCategoryRepository.save(projectTypeCategory);
     }
 }

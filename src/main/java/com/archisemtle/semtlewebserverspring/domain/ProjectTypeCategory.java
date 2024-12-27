@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,10 @@ public class ProjectTypeCategory {
     private Long id;
     @Column(name = "project_type_category_name")
     private String name;
+
+    @Builder
+    public ProjectTypeCategory(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

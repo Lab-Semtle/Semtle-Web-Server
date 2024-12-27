@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,10 @@ public class RelationFieldCategory {
     private Long id;
     @Column(name = "relation_field_category_name")
     private String name;
+
+    @Builder
+    public RelationFieldCategory(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

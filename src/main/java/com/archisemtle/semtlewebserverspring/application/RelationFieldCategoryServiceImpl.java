@@ -1,8 +1,6 @@
 package com.archisemtle.semtlewebserverspring.application;
 
-import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
-import com.archisemtle.semtlewebserverspring.dto.ProjectTypeCategoryRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.RelationFieldCategoryRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.RelationFieldCategoryResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldCategoryRepository;
@@ -30,9 +28,9 @@ public class RelationFieldCategoryServiceImpl implements RelationFieldCategorySe
     @Override
     public void addRelationFieldCategory(
         RelationFieldCategoryRequestDto relationFieldCategoryRequestDto) {
-            RelationFieldCategory relationFieldCategory = RelationFieldCategory.builder()
-                .name(relationFieldCategoryRequestDto.getName())
-                .build();
-            relationFieldCategoryRepository.save(relationFieldCategory);
+        RelationFieldCategory relationFieldCategory = RelationFieldCategory.builder()
+            .name(relationFieldCategoryRequestDto.getName())
+            .build();
+        relationFieldCategoryRepository.save(relationFieldCategory);
     }
 }

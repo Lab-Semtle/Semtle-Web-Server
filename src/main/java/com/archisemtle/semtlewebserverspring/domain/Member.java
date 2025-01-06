@@ -37,6 +37,8 @@ public class Member {
 
     private boolean manageApprovalStatus;
 
+    //private String imageUrl;
+
     @Builder
     public Member(String email, String password, String name, Date birth, String phone,
         String studentId, boolean manageApprovalStatus) {

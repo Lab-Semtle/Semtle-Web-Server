@@ -5,17 +5,19 @@ import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import java.util.Date;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@NoArgsConstructor
+@Setter
+@Builder
 public class AddProjectBoardRequestDto {
 
     private String title;
     private String content;
-    private String writerUuid;
-    private String writerName;
     private ProjectTypeCategory projectTypeCategory;
     private List<RelationFieldCategory> relationFieldCategories;
     private Date projectStartTime;

@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,12 @@ public class RelationFieldProjectPostMiddle {
     private ProjectBoard projectBoard;
     @ManyToOne(fetch = FetchType.LAZY)
     private RelationFieldCategory relationFieldCategory;
+
+    @Builder
+    public RelationFieldProjectPostMiddle(Long id, ProjectBoard projectBoard,
+        RelationFieldCategory relationFieldCategory) {
+        this.id = id;
+        this.projectBoard = projectBoard;
+        this.relationFieldCategory = relationFieldCategory;
+    }
 }

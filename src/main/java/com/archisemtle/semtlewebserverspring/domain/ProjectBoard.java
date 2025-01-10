@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.Date;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -43,8 +44,24 @@ public class ProjectBoard {
     private Date projectEndTime;
     @Column(name = "project_recruiting_end_time", nullable = false)
     private Date projectRecruitingEndTime;
-    @Column(name = "project_status", nullable = false)
+    @Column(name = "project_status")
     @ColumnDefault("'RECRUITING'") //Todo 추후에 초기화 값이 무조건 RECRUITING이 아닐수도 있으면 서비스로직에서 값을 추가하는 걸로
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
+
+    @Builder
+    public ProjectBoard(Long id, String title, String content, String writerUuid, String writerName,
+        ProjectTypeCategory projectTypeCategory, Date projectStartTime, Date projectEndTime,
+        Date projectRecruitingEndTime, ProjectStatus projectStatus) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.writerUuid = writerUuid;
+        this.writerName = writerName;
+        this.projectTypeCategory = projectTypeCategory;
+        this.projectStartTime = projectStartTime;
+        this.projectEndTime = projectEndTime;
+        this.projectRecruitingEndTime = projectRecruitingEndTime;
+        this.projectStatus = projectStatus;
+    }
 }

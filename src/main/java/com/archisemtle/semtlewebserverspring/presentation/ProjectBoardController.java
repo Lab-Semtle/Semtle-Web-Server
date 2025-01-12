@@ -2,6 +2,7 @@ package com.archisemtle.semtlewebserverspring.presentation;
 
 import com.archisemtle.semtlewebserverspring.application.ProjectBoardService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
+import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.vo.AddProjcetBoardRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class ProjectBoardController {
     public CommonResponse<ProjectBoardResponseVo> projectBoardResponseVoCommonResponse(
         @PathVariable("projectBoardId") Long id) {
 
-        return null;//CommonResponse.success("ok", projectBoardService.getProjectBoard(id));
-
+        return CommonResponse.success("ok",
+            ProjectBoardResponseDto.dtoToVo(projectBoardService.getProjectBoard(id)));
     }
 }

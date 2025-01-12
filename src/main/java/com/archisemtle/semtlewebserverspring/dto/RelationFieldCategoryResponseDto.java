@@ -1,6 +1,5 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import lombok.Builder;
 import lombok.Getter;

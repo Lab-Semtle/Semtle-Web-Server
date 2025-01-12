@@ -29,6 +29,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
     private final RelationFieldProjectPostMiddleRepository relationFieldProjectPostMiddleRepository;
     private final RelationFieldCategoryRepository relationFieldCategoryRepository;
 
+    //게시물작성
     @Override
     @Transactional
     public void addProjectBoard(AddProjectBoardRequestDto addProjectBoardRequestDto) {
@@ -62,24 +63,36 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
         relationFieldProjectPostMiddleRepository.saveAll(relationFieldProjectPostMiddles);
     }
 
+    //게시물 한개 조회
     @Override
     public ProjectBoardResponseDto getProjectBoard(Long id) {
-//        ProjectBoard projectBoard = projectBoardRepository.findById(id)
-//            .orElseThrow(() -> new BaseException(NO_DATA));
-//
-//        List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddleList = relationFieldProjectPostMiddleRepository.findByProjectBoardId(
-//            id);
-//
-//        if (relationFieldProjectPostMiddleList.isEmpty()) {
-//            throw new BaseException(NO_EXIST_CATEGORY);
-//        }
-//
-//        ProjectBoardResponseDto.builder()
-//            .title(projectBoard.getTitle())
-//            .content(projectBoard.getContent())
-//            .writerName(projectBoard.getWriterName())
-//            .projectTypeCategory(relationFieldProjectPostMiddleList)
-        return null;
+        ProjectBoard projectBoard = projectBoardRepository.findById(id)
+            .orElseThrow(() -> new BaseException(NO_DATA)); //todo 나중에 BaseResponseStatue 수정 필요
+
+        List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddleList = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(
+            id);
+
+        if (relationFieldProjectPostMiddleList.isEmpty()) {
+            throw new BaseException(NO_EXIST_CATEGORY);
+        }
+
+        List<String> relationFieldCategoryNames = relationFieldProjectPostMiddleList.stream()
+            .map(
+                relationFieldProjectPostMiddle -> relationFieldProjectPostMiddle.getRelationFieldCategory()
+                    .getName())
+            .toList();
+
+        return ProjectBoardResponseDto.builder()
+            .title(projectBoard.getTitle())
+            .content(projectBoard.getContent())
+            .writerName(projectBoard.getWriterName())
+            .projectTypeCategoryName(projectBoard.getProjectTypeCategory().getName())
+            .relationFieldCategoryName(relationFieldCategoryNames)
+            .projectStartTime(projectBoard.getProjectStartTime())
+            .projectEndTime(projectBoard.getProjectEndTime())
+            .projectRecruitingEndTime(projectBoard.getProjectRecruitingEndTime())
+            .projectStatus(projectBoard.getProjectStatus())
+            .build();
     }
 
     @Override

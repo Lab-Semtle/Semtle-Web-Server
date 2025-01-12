@@ -101,8 +101,20 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
     }
 
     @Override
-    public void deleteProjectBoard() {
+    @Transactional
+    public void deleteProjectBoard(Long id) {
+        ProjectBoard projectBoard = projectBoardRepository.findById(id)
+            .orElseThrow(() -> new BaseException(NO_DATA));
 
+        List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddleList = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(
+            id);
+
+        if (relationFieldProjectPostMiddleList.isEmpty()) {
+            throw new BaseException(NO_DATA);
+        }
+
+        relationFieldProjectPostMiddleRepository.deleteAllByProjectBoardId(id);
+        projectBoardRepository.delete(projectBoard);
     }
 
     @Override

@@ -11,7 +11,7 @@ public interface ProjectBoardService {
 
     void getProjectBoardList();
 
-    void deleteProjectBoard();
+    void deleteProjectBoard(Long id);
 
     void updateProjectBoard();
 }

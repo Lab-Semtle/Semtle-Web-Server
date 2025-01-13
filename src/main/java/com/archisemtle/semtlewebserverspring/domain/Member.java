@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "member")
 public class Member {
@@ -40,14 +39,18 @@ public class Member {
     //private String imageUrl;
 
     @Builder
-    public Member(String email, String password, String name, Date birth, String phone,
-        String studentId, boolean manageApprovalStatus) {
+    public Member(int memberId,UUID uuid, String email, String password, String name, Date birth,
+        String phone,
+        String studentId, String role, boolean manageApprovalStatus) {
+        this.memberId = memberId;
+        this.uuid = uuid;
         this.email = email;
         this.password = password;
         this.name = name;
         this.birth = birth;
         this.phone = phone;
         this.studentId = studentId;
+        this.role = role;
         this.manageApprovalStatus = manageApprovalStatus;
     }
 }

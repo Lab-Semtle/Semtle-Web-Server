@@ -1,6 +1,5 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Member;
 import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;

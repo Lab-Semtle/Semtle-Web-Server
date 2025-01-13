@@ -2,8 +2,10 @@ package com.archisemtle.semtlewebserverspring.application;
 
 import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.dto.MemberRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.UpdateMemberRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import jakarta.transaction.Transactional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,25 +23,25 @@ public class MemberService {
     }
 
     // Member 조회 메서드
-    public Member findById(int id) {
-        return memberRepository.findById(id).orElse(null);
+    public Member findByUUID(UUID uuid) {
+        return memberRepository.findByUuid(uuid).orElse(null);
     }
 
     @Transactional
-    public void update(int id ,MemberRequestDto memberRequestDto) {
-        Member member = memberRepository.findById(id).orElse(null);
+    public void update(UUID uuid , UpdateMemberRequestDto updateMemberRequestDto) {
+        Member member = memberRepository.findByUuid(uuid).orElse(null);
+
+        Member updateMember = updateMemberRequestDto.toEntity();
+
         // DTO에서 가져온 값만 업데이트
-        if (memberRequestDto.getName() != null) {
-            member.setName(memberRequestDto.getName());
+        if (updateMember.getName() != null) {
+            member.setName(updateMember.getName());
         }
-        if (memberRequestDto.getBirth() != null) {
-            member.setBirth(memberRequestDto.getBirth());
+        if (updateMember.getBirth() != null) {
+            member.setBirth(updateMember.getBirth());
         }
-        if (memberRequestDto.getPhone() != null) {
-            member.setPhone(memberRequestDto.getPhone());
-        }
-        if (memberRequestDto.getStudentId() != null) {
-            member.setStudentId(memberRequestDto.getStudentId());
+        if (updateMember.getPhone() != null) {
+            member.setPhone(updateMember.getPhone());
         }
 //        if (memberRequestDto.getImageUrl() != null) {
 //            member.setImageUrl(memberRequestDto.getImageUrl());

@@ -10,6 +10,7 @@ import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
 import com.archisemtle.semtlewebserverspring.dto.AddProjectBoardRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
+import com.archisemtle.semtlewebserverspring.dto.UpdateProjectBoardRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldCategoryRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
@@ -120,7 +121,42 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
     }
 
     @Override
-    public void updateProjectBoard() {
+    @Transactional
+    public void updateProjectBoard(Long id,
+        UpdateProjectBoardRequestDto updateProjectBoardRequestDto) {
+        ProjectBoard origin = projectBoardRepository.findById(id).orElseThrow(() -> new BaseException(NO_DATA));
 
+        ProjectBoard projectBoard = ProjectBoard.builder()
+            .id(id)
+            .title(updateProjectBoardRequestDto.getTitle())
+            .content(updateProjectBoardRequestDto.getContent())
+            .writerUuid(origin.getWriterUuid()) //TODO: 나중에 실제 값으로 변경해야함
+            .writerName(origin.getWriterName())
+            .projectTypeCategory(updateProjectBoardRequestDto.getProjectTypeCategory())
+            .projectStartTime(updateProjectBoardRequestDto.getProjectStartTime())
+            .projectEndTime(updateProjectBoardRequestDto.getProjectEndTime())
+            .projectRecruitingEndTime(updateProjectBoardRequestDto.getProjectRecruitingEndTime())
+            .projectStatus(origin.getProjectStatus())
+            .build();
+
+        projectBoardRepository.save(projectBoard);
+
+        relationFieldProjectPostMiddleRepository.deleteAllByProjectBoardId(id);
+
+        List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddles = updateProjectBoardRequestDto.getRelationFieldCategories()
+            .stream().map(
+                relationFieldCategory -> {
+                    RelationFieldCategory validationRelationFieldCategory = relationFieldCategoryRepository.findById(
+                            relationFieldCategory.getId())
+                        .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
+                    RelationFieldProjectPostMiddle relationFieldProjectPostMiddle = RelationFieldProjectPostMiddle.builder()
+                        .projectBoard(projectBoard)
+                        .relationFieldCategory(validationRelationFieldCategory)
+                        .build();
+                    return relationFieldProjectPostMiddle;
+                })
+            .collect(Collectors.toList());
+
+        relationFieldProjectPostMiddleRepository.saveAll(relationFieldProjectPostMiddles);
     }
 }

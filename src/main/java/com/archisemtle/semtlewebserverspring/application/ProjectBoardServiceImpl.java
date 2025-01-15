@@ -4,6 +4,7 @@ import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.NO
 import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.NO_EXIST_CATEGORY;
 
 import com.archisemtle.semtlewebserverspring.common.BaseException;
+import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
@@ -42,6 +43,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .projectStartTime(addProjectBoardRequestDto.getProjectStartTime())
             .projectEndTime(addProjectBoardRequestDto.getProjectEndTime())
             .projectRecruitingEndTime(addProjectBoardRequestDto.getProjectRecruitingEndTime())
+            .projectStatus(ProjectStatus.RECRUITING)
             .build();
 
         projectBoardRepository.save(projectBoard);

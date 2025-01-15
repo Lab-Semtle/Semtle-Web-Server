@@ -44,8 +44,8 @@ public class ProjectBoard {
     private Date projectEndTime;
     @Column(name = "project_recruiting_end_time", nullable = false)
     private Date projectRecruitingEndTime;
-    @Column(name = "project_status")
-    @ColumnDefault("'RECRUITING'") //Todo 추후에 초기화 값이 무조건 RECRUITING이 아닐수도 있으면 서비스로직에서 값을 추가하는 걸로
+    @Column(name = "project_status", nullable = false)
+//    @ColumnDefault("'RECRUITING'") //Todo 추후에 초기화 값이 무조건 RECRUITING이 아닐수도 있으면 서비스로직에서 값을 추가하는 걸로
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
 

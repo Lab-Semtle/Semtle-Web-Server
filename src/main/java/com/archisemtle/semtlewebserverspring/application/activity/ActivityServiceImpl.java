@@ -26,21 +26,26 @@ public class ActivityServiceImpl implements ActivityService{
     public ActivityResponseDto createActivityBoard(ActivityRequestDto requestDto,
                                                 List<MultipartFile> imageFile) throws IOException {
         Activity activity = new Activity(requestDto);
-        activity.setCreateDate(new Date());
+
+        activity.builder()
+            .createDate(new Date())
+            .build();
+
         activityRepository.save(activity);
 
         if (imageFile != null) {
             for (MultipartFile file : imageFile) {
                 if (!file.isEmpty()) {
-                    String imageUrl = saveImageFile(file);
 
-                    ActivityImage activityImage = new ActivityImage();
-                    activityImage.setImageUrl(imageUrl);
+                    String imageUrl = saveImageFile(file);
+                    ActivityImage activityImage = ActivityImage.builder()
+                        .imageUrl(imageUrl)
+                        .activity(activity)
+                        .build();
 
                     activity.getImages().add(activityImage);
-                    activityImage.setActivity(activity);
-
                     activityImageRepository.save(activityImage);
+
                 }
             }
         }
@@ -59,10 +64,12 @@ public class ActivityServiceImpl implements ActivityService{
         Activity activity = activityRepository.findById(id).orElseThrow(
             ()-> new IllegalArgumentException("조회 실패")
         );
-        activity.setTitle(requestDto.getTitle());
-        activity.setContent(requestDto.getContent());
-        activity.setWriter(requestDto.getWriter());
-        activity.setCreateDate(new Date());
+        activity.builder()
+            .title(requestDto.getTitle())
+            .content(requestDto.getContent())
+            .writer(requestDto.getWriter())
+            .createDate(new Date())
+            .build();
 
         return activity.getBoardId();
     }

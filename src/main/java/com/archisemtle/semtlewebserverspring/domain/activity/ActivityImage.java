@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @Entity(name="activity_image")
 @NoArgsConstructor
 public class ActivityImage {

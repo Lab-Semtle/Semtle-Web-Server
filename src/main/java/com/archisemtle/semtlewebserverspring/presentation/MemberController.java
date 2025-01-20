@@ -35,7 +35,8 @@ public class MemberController {
     // 출력 - 이름, 생년월일, 전화번호, 학번, 프로필 사진
     @GetMapping("/api/v1/members/{uuid}")
     public CommonResponse<ShowMemberResponseVo> showMember(@PathVariable UUID uuid){
-        ShowMemberResponseVo responseVo = memberService.show(uuid);
+        ShowMemberResponseDto showMemberDto =  memberService.show(uuid);
+        ShowMemberResponseVo responseVo = ShowMemberResponseVo.dtoToVo(showMemberDto);
         return CommonResponse.success("Member Showed successfully", responseVo);
     }
 

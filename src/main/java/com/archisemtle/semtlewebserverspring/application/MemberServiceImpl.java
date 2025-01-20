@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
     // Member 조회 메서드
     @Override
-    public ShowMemberResponseVo show(UUID uuid) {
+    public ShowMemberResponseDto show(UUID uuid) {
         Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
             BaseResponseStatus.NO_EXIST_MEMBERS));
         ShowMember showMember = ShowMember.builder()
@@ -38,8 +38,7 @@ public class MemberServiceImpl implements MemberService {
             .phone(member.getPhone())
             .build();
         ShowMemberResponseDto showMemberDto = ShowMemberResponseDto.entityToDto(showMember);
-        ShowMemberResponseVo responseVo = ShowMemberResponseVo.dtoToVo(showMemberDto);
-        return responseVo;
+        return showMemberDto;
     }
 
     // Member 수정 메서드

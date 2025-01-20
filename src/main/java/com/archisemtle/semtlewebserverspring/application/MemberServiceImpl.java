@@ -1,10 +1,14 @@
 package com.archisemtle.semtlewebserverspring.application;
 
+import com.archisemtle.semtlewebserverspring.common.BaseException;
+import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.domain.ShowMember;
 import com.archisemtle.semtlewebserverspring.dto.MemberRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.ShowMemberResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.UpdateMemberRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
+import com.archisemtle.semtlewebserverspring.vo.ShowMemberResponseVo;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,22 +29,25 @@ public class MemberServiceImpl implements MemberService {
 
     // Member 조회 메서드
     @Override
-    public ShowMember show(UUID uuid) {
-        Member member = memberRepository.findByUuid(uuid).orElse(null);
+    public ShowMemberResponseVo show(UUID uuid) {
+        Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
+            BaseResponseStatus.NO_EXIST_MEMBERS));
         ShowMember showMember = ShowMember.builder()
             .name(member.getName())
             .birth(member.getBirth())
             .phone(member.getPhone())
             .build();
-
-        return showMember;
+        ShowMemberResponseDto showMemberDto = ShowMemberResponseDto.entityToDto(showMember);
+        ShowMemberResponseVo responseVo = ShowMemberResponseVo.dtoToVo(showMemberDto);
+        return responseVo;
     }
 
     // Member 수정 메서드
     @Override
     @Transactional
     public void update(UUID uuid , UpdateMemberRequestDto updateMemberRequestDto) {
-        Member member = memberRepository.findByUuid(uuid).orElse(null);
+        Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
+            BaseResponseStatus.NO_EXIST_MEMBERS));
 
         Member updatedMember = Member.builder()
             .memberId(member.getMemberId())

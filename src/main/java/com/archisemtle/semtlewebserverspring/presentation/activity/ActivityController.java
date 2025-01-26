@@ -2,9 +2,11 @@ package com.archisemtle.semtlewebserverspring.presentation.activity;
 
 import com.archisemtle.semtlewebserverspring.application.activity.ActivityService;
 import com.archisemtle.semtlewebserverspring.application.activity.ActivityServiceImpl;
+import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityResponseDto;
+import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -54,8 +56,10 @@ public class ActivityController {
     }
 
     @PutMapping("/{id}")
-    public CommonResponse<String> updateActivity(@PathVariable Long id, @RequestPart("requestDto") ActivityRequestDto requestDto,
-                                                @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+    public CommonResponse<String> updateActivity(@PathVariable Long id, @RequestBody ActivityRequestDto requestDto
+                                                /*,@RequestPart(value = "files", required = false) List<MultipartFile> files*/)
+        throws IOException
+    {
         Long updateId = activityService.updateActivityBoard(id, requestDto);
         return CommonResponse.success("게시글 수정 성공");
     }

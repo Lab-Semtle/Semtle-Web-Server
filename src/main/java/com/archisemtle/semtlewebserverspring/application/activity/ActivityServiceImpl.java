@@ -1,5 +1,7 @@
 package com.archisemtle.semtlewebserverspring.application.activity;
 
+import com.archisemtle.semtlewebserverspring.common.BaseException;
+import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.domain.activity.Activity;
 import com.archisemtle.semtlewebserverspring.domain.activity.ActivityImage;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
@@ -13,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,9 +28,10 @@ public class ActivityServiceImpl implements ActivityService{
 
     public ActivityResponseDto createActivityBoard(ActivityRequestDto requestDto,
                                                 List<MultipartFile> imageFile) throws IOException {
-        Activity activity = new Activity(requestDto);
-
-        activity.builder()
+        Activity activity = Activity.builder()
+            .title(requestDto.getTitle())
+            .content(requestDto.getContent())
+            .writer(requestDto.getWriter())
             .createDate(new Date())
             .build();
 
@@ -54,7 +58,7 @@ public class ActivityServiceImpl implements ActivityService{
 
     public ActivityResponseDto readActivityBoard(Long id){
         Activity activity = activityRepository.findById(id).orElseThrow(
-            ()-> new IllegalArgumentException("조회 실패")
+            ()-> new BaseException(BaseResponseStatus.NO_DATA)
         );
         return new ActivityResponseDto(activity);
     }
@@ -62,18 +66,26 @@ public class ActivityServiceImpl implements ActivityService{
     @Transactional
     public Long updateActivityBoard(Long id, ActivityRequestDto requestDto){
         Activity activity = activityRepository.findById(id).orElseThrow(
-            ()-> new IllegalArgumentException("조회 실패")
+            ()-> new BaseException(BaseResponseStatus.NO_DATA)
         );
-        activity.builder()
+        activity = activity.toBuilder()
+            .boardId(activity.getBoardId())
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
-            .createDate(new Date())
             .build();
+
+        activityRepository.save(activity);
 
         return activity.getBoardId();
     }
+
     public Long deleteActivityBoard(Long id){
+
+        Activity activity = activityRepository.findById(id).orElseThrow(() ->
+            new BaseException(BaseResponseStatus.NO_DATA)
+        );
+
         activityRepository.deleteById(id);
         return id;
     }

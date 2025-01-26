@@ -12,12 +12,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity(name = "activity")
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class Activity {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @Setter(AccessLevel.NONE)
     private Long boardId;
 
     @Column(nullable = false, unique = false)
@@ -29,6 +28,7 @@ public class Activity {
     @Temporal(TemporalType.DATE)
     private Date createDate;
 
+    @Column(nullable = true, unique = false)
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityImage> images = new ArrayList<>();
 

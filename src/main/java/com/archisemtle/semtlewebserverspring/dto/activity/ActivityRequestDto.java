@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ActivityRequestDto {
-
     private String title;
     private String content;
     private String writer;

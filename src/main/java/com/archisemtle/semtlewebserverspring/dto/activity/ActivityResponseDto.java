@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ActivityResponseDto {
 
+    private Long boardId;
     private String title;
     private String content;
     private String writer;
@@ -18,11 +19,12 @@ public class ActivityResponseDto {
     private List<ActivityImageResponseDto> images;
 
     public ActivityResponseDto(Activity activity){
+        this.boardId = activity.getBoardId();
         this.title = activity.getTitle();
         this.content = activity.getContent();
         this.writer = activity.getWriter();
         this.createDate = activity.getCreateDate();
-        this.images = activity.getImages().stream()
-            .map(ActivityImageResponseDto::new).collect(Collectors.toList());
+        this.images = activity.getImages() != null ? activity.getImages().stream()
+            .map(ActivityImageResponseDto::new).collect(Collectors.toList()) : List.of();
     }
 }

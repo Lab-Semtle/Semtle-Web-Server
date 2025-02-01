@@ -58,6 +58,7 @@ public class ProjectBoard {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.contact = contact;
         this.writerUuid = writerUuid;
         this.writerName = writerName;
         this.projectTypeCategory = projectTypeCategory;

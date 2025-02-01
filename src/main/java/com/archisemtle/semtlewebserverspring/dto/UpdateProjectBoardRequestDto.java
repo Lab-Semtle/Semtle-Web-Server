@@ -14,6 +14,7 @@ import lombok.Setter;
 public class UpdateProjectBoardRequestDto {
     private String title;
     private String content;
+    private String contact;
     private ProjectTypeCategory projectTypeCategory;
     private List<RelationFieldCategory> relationFieldCategories;
     private Date projectStartTime;

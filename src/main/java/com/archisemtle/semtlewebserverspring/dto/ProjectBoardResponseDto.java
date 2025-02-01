@@ -18,6 +18,7 @@ public class ProjectBoardResponseDto {
     private String title;
     private String content;
     private String writerName;
+    private String contact;
     private String projectTypeCategoryName;
     private List<String> relationFieldCategoryName;
     private Date projectStartTime;
@@ -30,6 +31,7 @@ public class ProjectBoardResponseDto {
             .title(projectBoardResponseDto.getTitle())
             .content(projectBoardResponseDto.getContent())
             .writerName(projectBoardResponseDto.getWriterName())
+            .contact(projectBoardResponseDto.getContact())
             .projectTypeCategory(projectBoardResponseDto.getProjectTypeCategoryName())
             .relationFieldCategory(projectBoardResponseDto.getRelationFieldCategoryName())
             .projectStartTime(projectBoardResponseDto.getProjectStartTime())

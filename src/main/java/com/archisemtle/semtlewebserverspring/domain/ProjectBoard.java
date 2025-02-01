@@ -35,6 +35,8 @@ public class ProjectBoard {
     private String writerUuid;
     @Column(name = "project_writer_name", nullable = false)
     private String writerName;
+    @Column(name = "project_writer_contact")
+    private String contact;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_type_category_id", nullable = false)
     private ProjectTypeCategory projectTypeCategory;
@@ -51,8 +53,8 @@ public class ProjectBoard {
 
     @Builder
     public ProjectBoard(Long id, String title, String content, String writerUuid, String writerName,
-        ProjectTypeCategory projectTypeCategory, Date projectStartTime, Date projectEndTime,
-        Date projectRecruitingEndTime, ProjectStatus projectStatus) {
+        String contact, ProjectTypeCategory projectTypeCategory, Date projectStartTime,
+        Date projectEndTime, Date projectRecruitingEndTime, ProjectStatus projectStatus) {
         this.id = id;
         this.title = title;
         this.content = content;

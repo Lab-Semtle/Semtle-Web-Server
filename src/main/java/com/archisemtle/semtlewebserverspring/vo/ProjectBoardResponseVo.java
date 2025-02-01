@@ -15,6 +15,7 @@ public class ProjectBoardResponseVo {
     private String title;
     private String content;
     private String writerName;
+    private String contact;
     private String projectTypeCategory;
     private List<String> relationFieldCategory;
     private Date projectStartTime;

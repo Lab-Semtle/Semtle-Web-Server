@@ -11,6 +11,7 @@ import lombok.Getter;
 public class UpdateProjectBoardRequestVo {
     private String title;
     private String content;
+    private String contact;
     private ProjectTypeCategory projectTypeCategory;
     private List<RelationFieldCategory> relationFieldCategories;
     private Date projectStartTime;
@@ -22,6 +23,7 @@ public class UpdateProjectBoardRequestVo {
         return UpdateProjectBoardRequestDto.builder()
             .title(updateProjectBoardRequestVo.getTitle())
             .content(updateProjectBoardRequestVo.getContent())
+            .contact(updateProjectBoardRequestVo.getContact())
             .projectTypeCategory(updateProjectBoardRequestVo.getProjectTypeCategory())
             .relationFieldCategories(updateProjectBoardRequestVo.getRelationFieldCategories())
             .projectStartTime(updateProjectBoardRequestVo.getProjectStartTime())

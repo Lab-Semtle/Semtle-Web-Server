@@ -13,6 +13,7 @@ public class AddProjcetBoardRequestVo {
 
     private String title;
     private String content;
+    private String contact;
     private ProjectTypeCategory projectTypeCategory;
     private List<RelationFieldCategory> relationFieldCategories;
     private Date projectStartTime;
@@ -24,6 +25,7 @@ public class AddProjcetBoardRequestVo {
         return AddProjectBoardRequestDto.builder()
             .title(addProjcetBoardRequestVo.getTitle())
             .content(addProjcetBoardRequestVo.getContent())
+            .contact(addProjcetBoardRequestVo.getContact())
             .projectTypeCategory(addProjcetBoardRequestVo.getProjectTypeCategory())
             .relationFieldCategories(addProjcetBoardRequestVo.getRelationFieldCategories())
             .projectStartTime(addProjcetBoardRequestVo.getProjectStartTime())

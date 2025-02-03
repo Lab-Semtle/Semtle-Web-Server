@@ -10,14 +10,14 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 public class MemberFirstSaveDto {
-    private String name;
+    private String username;
     private Date birth;
     private String phone;
     private String email;
 
     @Builder
-    public MemberFirstSaveDto(String name, Date birth, String phone, String email) {
-        this.name = name;
+    public MemberFirstSaveDto(String username, Date birth, String phone, String email) {
+        this.username = username;
         this.birth = birth;
         this.phone = phone;
         this.email = email;
@@ -25,7 +25,7 @@ public class MemberFirstSaveDto {
 
     public Member toEntity() {
         return Member.builder()
-                .name(name)
+                .username(username)
                 .birth(birth)
                 .phone(phone)
                 .email(email)

@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
 import com.archisemtle.semtlewebserverspring.domain.Member;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class MemberRegistrationDto {
                 .uuid(UUID.randomUUID())
                 .studentId(studentId)
                 .password(passwordEncoder.encode(password))
-                .role("Member")
+                .roles(List.of("ROLE_USER"))
                 .manageApprovalStatus(false)
                 .build();
     }

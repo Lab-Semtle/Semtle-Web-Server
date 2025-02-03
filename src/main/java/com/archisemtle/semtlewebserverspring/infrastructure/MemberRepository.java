@@ -9,4 +9,8 @@ import java.util.UUID;
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByUuid(UUID uuid);
+
+    Optional<Member> findByUsername(String username);
+
+    Optional<Member> findByStudentId(String studentId);
 }

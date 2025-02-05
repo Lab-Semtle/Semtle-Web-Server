@@ -169,21 +169,9 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
 //        System.out.println(projectBoard3.getProjectStatus());
 //        System.out.println(projectBoard4.getProjectStatus());
 //        System.out.println(projectBoard5.getProjectStatus());
-//
-//        List<ProjectBoard> projectBoards = projectBoardRepository.findAllByProjectStatus(
-//            ProjectStatus.IN_PROGRESS);
-
-//        projectBoards.forEach(board -> System.out.println("ProjectBoard ID: " + board.getId()));
 
         Page<ProjectBoard> projectBoardList = projectBoardRepository.findAllOrderByCustomStatus(
             pageable);
-
-//        projectBoardList.forEach(board -> {
-//            System.out.println(
-//                "Title: " + board.getTitle() + " ProjectStatus: " + board.getProjectStatus());
-//            log.info(
-//                "Title: " + board.getTitle() + "ProjectStatus: " + board.getProjectStatus());
-//        });
 
         return projectBoardList.map(board -> ProjectListRequestDto.builder()
             .projectBoardId(board.getId())

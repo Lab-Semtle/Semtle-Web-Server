@@ -10,6 +10,7 @@ import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
 import com.archisemtle.semtlewebserverspring.dto.AddProjectBoardRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
+import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.UpdateProjectBoardRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldCategoryRepository;
@@ -18,6 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +46,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .content(addProjectBoardRequestDto.getContent())
             .writerUuid("temp") //TODO: 나중에 실제 값으로 변경해야함
             .writerName("tempName")
+            .contact(addProjectBoardRequestDto.getContact())
             .projectTypeCategory(addProjectBoardRequestDto.getProjectTypeCategory())
             .projectStartTime(addProjectBoardRequestDto.getProjectStartTime())
             .projectEndTime(addProjectBoardRequestDto.getProjectEndTime())
@@ -89,6 +96,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .title(projectBoard.getTitle())
             .content(projectBoard.getContent())
             .writerName(projectBoard.getWriterName())
+            .contact(projectBoard.getContact())
             .projectTypeCategoryName(projectBoard.getProjectTypeCategory().getName())
             .relationFieldCategoryName(relationFieldCategoryNames)
             .projectStartTime(projectBoard.getProjectStartTime())
@@ -99,8 +107,87 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
     }
 
     @Override
-    public void getProjectBoardList() {
+    @Transactional
+    public Page<ProjectListRequestDto> getProjectBoardList(int page, int size) {
 
+        Pageable pageable = PageRequest.of(page, size);
+
+//        ProjectBoard test = projectBoardRepository.findById(1L)
+//            .orElseThrow(() -> new BaseException(NO_DATA));
+//
+//        ProjectBoard test2 = projectBoardRepository.findById(4L)
+//            .orElseThrow(() -> new BaseException(NO_DATA));
+//
+//        ProjectBoard projectBoard = ProjectBoard.builder()
+//            .id(test.getId())
+//            .title(test.getTitle())
+//            .content(test.getContent())
+//            .contact(test.getContact())
+//            .projectEndTime(test.getProjectEndTime())
+//            .projectRecruitingEndTime(test.getProjectRecruitingEndTime())
+//            .projectStartTime(test.getProjectStartTime())
+//            .projectTypeCategory(test.getProjectTypeCategory())
+//            .projectStatus(ProjectStatus.IN_PROGRESS)
+//            .writerName(test.getWriterName())
+//            .writerUuid(test.getWriterUuid())
+//            .build();
+//
+//        ProjectBoard projectBoardInsert2 = ProjectBoard.builder()
+//            .id(test2.getId())
+//            .title(test2.getTitle())
+//            .content(test2.getContent())
+//            .contact(test2.getContact())
+//            .projectEndTime(test2.getProjectEndTime())
+//            .projectRecruitingEndTime(test2.getProjectRecruitingEndTime())
+//            .projectStartTime(test2.getProjectStartTime())
+//            .projectTypeCategory(test2.getProjectTypeCategory())
+//            .projectStatus(ProjectStatus.IN_PROGRESS)
+//            .writerName(test2.getWriterName())
+//            .writerUuid(test2.getWriterUuid())
+//            .build();
+//
+//        projectBoardRepository.save(projectBoard);
+//        projectBoardRepository.save(projectBoardInsert2);
+//
+//        ProjectBoard projectBoard1 = projectBoardRepository.findById(1L)
+//            .orElseThrow(() -> new BaseException(NO_DATA));
+//
+//        ProjectBoard projectBoard2 = projectBoardRepository.findById(2L)
+//            .orElseThrow(() -> new BaseException(NO_DATA));
+//
+//        ProjectBoard projectBoard3 = projectBoardRepository.findById(2L)
+//            .orElseThrow(() -> new BaseException(NO_DATA));
+//
+//        ProjectBoard projectBoard4 = projectBoardRepository.findById(4L)
+//            .orElseThrow(() -> new BaseException(NO_DATA));
+//
+//        ProjectBoard projectBoard5 = projectBoardRepository.findById(2L)
+//            .orElseThrow(() -> new BaseException(NO_DATA));
+//
+//        System.out.println(projectBoard1.getProjectStatus());
+//        System.out.println(projectBoard2.getProjectStatus());
+//        System.out.println(projectBoard3.getProjectStatus());
+//        System.out.println(projectBoard4.getProjectStatus());
+//        System.out.println(projectBoard5.getProjectStatus());
+//
+//        List<ProjectBoard> projectBoards = projectBoardRepository.findAllByProjectStatus(
+//            ProjectStatus.IN_PROGRESS);
+
+//        projectBoards.forEach(board -> System.out.println("ProjectBoard ID: " + board.getId()));
+
+        Page<ProjectBoard> projectBoardList = projectBoardRepository.findAllOrderByCustomStatus(
+            pageable);
+
+//        projectBoardList.forEach(board -> {
+//            System.out.println(
+//                "Title: " + board.getTitle() + " ProjectStatus: " + board.getProjectStatus());
+//            log.info(
+//                "Title: " + board.getTitle() + "ProjectStatus: " + board.getProjectStatus());
+//        });
+
+        return projectBoardList.map(board -> ProjectListRequestDto.builder()
+            .projectBoardId(board.getId())
+            .build());
     }
 
     @Override
@@ -124,7 +211,8 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
     @Transactional
     public void updateProjectBoard(Long id,
         UpdateProjectBoardRequestDto updateProjectBoardRequestDto) {
-        ProjectBoard origin = projectBoardRepository.findById(id).orElseThrow(() -> new BaseException(NO_DATA));
+        ProjectBoard origin = projectBoardRepository.findById(id)
+            .orElseThrow(() -> new BaseException(NO_DATA));
 
         ProjectBoard projectBoard = ProjectBoard.builder()
             .id(id)
@@ -132,6 +220,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .content(updateProjectBoardRequestDto.getContent())
             .writerUuid(origin.getWriterUuid()) //TODO: 나중에 실제 값으로 변경해야함
             .writerName(origin.getWriterName())
+            .contact(updateProjectBoardRequestDto.getContact())
             .projectTypeCategory(updateProjectBoardRequestDto.getProjectTypeCategory())
             .projectStartTime(updateProjectBoardRequestDto.getProjectStartTime())
             .projectEndTime(updateProjectBoardRequestDto.getProjectEndTime())

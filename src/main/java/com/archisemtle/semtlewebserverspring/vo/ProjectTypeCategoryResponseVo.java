@@ -6,18 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@Builder
 public class ProjectTypeCategoryResponseVo {
 
     private Long projectTypeCategoryId;
     private String ProjectTypeCategoryName;
-
-    @Builder
-    public ProjectTypeCategoryResponseVo(Long projectTypeCategoryId,
-        String ProjectTypeCategoryName) {
-        this.projectTypeCategoryId = projectTypeCategoryId;
-        this.ProjectTypeCategoryName = getProjectTypeCategoryName();
-    }
 
     public static ProjectTypeCategoryResponseVo dtoToVo(
         ProjectTypeCategoryResponseDto projectTypeCategoryResponseDto) {

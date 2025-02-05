@@ -6,6 +6,7 @@ import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
 import com.archisemtle.semtlewebserverspring.vo.AddProjcetBoardRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
+import com.archisemtle.semtlewebserverspring.vo.ProjectListRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.UpdateProjectBoardRequestVo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -60,12 +61,13 @@ public class ProjectBoardController {
     }
 
     @GetMapping("/projectboardlist")
-    public CommonResponse<Page<ProjectListRequestDto>> getProjectBoardList(
+    public CommonResponse<List<ProjectListRequestVo>> getProjectBoardList(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size) {
         Page<ProjectListRequestDto> projectBoardList = projectBoardService.getProjectBoardList(page,
             size);
 
-        return CommonResponse.success("게시물 리스트", projectBoardList);
+        return CommonResponse.success("게시물 리스트",
+            projectBoardList.stream().map(ProjectListRequestVo::dtoToVo).toList());
     }
 }

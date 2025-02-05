@@ -9,6 +9,7 @@ import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
 import com.archisemtle.semtlewebserverspring.dto.AddProjectBoardRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.ProjectBoardPageResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.UpdateProjectBoardRequestDto;
@@ -176,6 +177,35 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
         return projectBoardList.map(board -> ProjectListRequestDto.builder()
             .projectBoardId(board.getId())
             .build());
+    }
+
+    //게시물 한개의 리스트에서의 조회
+    @Override
+    public ProjectBoardPageResponseDto getProjectBoardPage(Long id) {
+        ProjectBoard projectBoard = projectBoardRepository.findById(id)
+            .orElseThrow(() -> new BaseException(NO_DATA)); //todo 나중에 BaseResponseStatue 수정 필요
+
+        List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddleList = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(
+            id);
+
+        if (relationFieldProjectPostMiddleList.isEmpty()) {
+            throw new BaseException(NO_EXIST_CATEGORY);
+        }
+
+        List<String> relationFieldCategoryNames = relationFieldProjectPostMiddleList.stream()
+            .map(
+                relationFieldProjectPostMiddle -> relationFieldProjectPostMiddle.getRelationFieldCategory()
+                    .getName())
+            .toList();
+
+        return ProjectBoardPageResponseDto.builder()
+            .title(projectBoard.getTitle())
+            .writerName(projectBoard.getWriterName())
+            .projectTypeCategoryName(projectBoard.getProjectTypeCategory().getName())
+            .relationFieldCategoryName(relationFieldCategoryNames)
+            .projectRecruitingEndTime(projectBoard.getProjectRecruitingEndTime())
+            .projectStatus(projectBoard.getProjectStatus())
+            .build();
     }
 
     @Override

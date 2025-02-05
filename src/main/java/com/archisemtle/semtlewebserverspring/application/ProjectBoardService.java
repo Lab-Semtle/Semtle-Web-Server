@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.application;
 
 import com.archisemtle.semtlewebserverspring.dto.AddProjectBoardRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.ProjectBoardPageResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.UpdateProjectBoardRequestDto;
@@ -14,6 +15,8 @@ public interface ProjectBoardService {
     ProjectBoardResponseDto getProjectBoard(Long id);
 
     Page<ProjectListRequestDto> getProjectBoardList(int page, int size);
+
+    ProjectBoardPageResponseDto getProjectBoardPage(Long id);
 
     void deleteProjectBoard(Long id);
 

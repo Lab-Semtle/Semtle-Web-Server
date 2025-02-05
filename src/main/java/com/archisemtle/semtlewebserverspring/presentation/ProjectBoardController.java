@@ -2,9 +2,11 @@ package com.archisemtle.semtlewebserverspring.presentation;
 
 import com.archisemtle.semtlewebserverspring.application.ProjectBoardService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
+import com.archisemtle.semtlewebserverspring.dto.ProjectBoardPageResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
 import com.archisemtle.semtlewebserverspring.vo.AddProjcetBoardRequestVo;
+import com.archisemtle.semtlewebserverspring.vo.ProjectBoardPageResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectListRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.UpdateProjectBoardRequestVo;
@@ -69,5 +71,13 @@ public class ProjectBoardController {
 
         return CommonResponse.success("게시물 리스트",
             projectBoardList.stream().map(ProjectListRequestVo::dtoToVo).toList());
+    }
+
+    @GetMapping("/projectboardlist/{projectBoardId}")
+    public CommonResponse<ProjectBoardPageResponseVo> getProjectBoardPageCommonResponse(
+        @PathVariable("projectBoardId") Long id) {
+
+        return CommonResponse.success("ok",
+            ProjectBoardPageResponseDto.dtoToVo(projectBoardService.getProjectBoardPage(id)));
     }
 }

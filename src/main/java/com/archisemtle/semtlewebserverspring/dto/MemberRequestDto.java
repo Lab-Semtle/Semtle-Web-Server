@@ -17,6 +17,7 @@ public class MemberRequestDto {
     private Date birth;
     private String phone;
     private String studentId;
+    //private String imageUrl;
 
     @Builder
     public MemberRequestDto(String email, String password, String name, Date birth, String phone,
@@ -27,6 +28,7 @@ public class MemberRequestDto {
         this.birth = birth;
         this.phone = phone;
         this.studentId = studentId;
+
     }
 
     public Member toEntity() {

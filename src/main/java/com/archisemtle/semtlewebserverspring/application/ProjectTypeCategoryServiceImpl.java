@@ -4,7 +4,6 @@ import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.dto.ProjectTypeCategoryRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectTypeCategoryResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectTypeCategoryRepository;
-import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldCategoryRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByUuid(UUID uuid);
+
+    UUID uuid(UUID uuid);
 }

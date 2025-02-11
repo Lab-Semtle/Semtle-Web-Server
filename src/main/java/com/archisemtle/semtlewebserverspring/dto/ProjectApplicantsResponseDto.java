@@ -14,7 +14,7 @@ import lombok.Setter;
 @Builder
 public class ProjectApplicantsResponseDto {
 
-    private long totalElements;
+    private int totalElements;
     private int totalPages;
     private int currentPage;
     private List<ApplicantInfo> applicants;
@@ -22,13 +22,13 @@ public class ProjectApplicantsResponseDto {
     @Getter
     @NoArgsConstructor
     public static class ApplicantInfo {
-        private Long applicantId;
+        private Integer applicantId;
         private String name;
         private Date applyDate;
         private String status;
 
         @Builder
-        public ApplicantInfo(Long applicantId, String name, Date applyDate, String status) {
+        public ApplicantInfo(Integer applicantId, String name, Date applyDate, String status) {
             this.applicantId = applicantId;
             this.name = name;
             this.applyDate = applyDate;

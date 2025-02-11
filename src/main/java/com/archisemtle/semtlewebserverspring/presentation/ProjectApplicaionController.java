@@ -33,7 +33,7 @@ public class ProjectApplicaionController {
     // 본인이 게시한 프로젝트(공고) 신청자 목록 조회 API
     @GetMapping("/{post_id}/applicants")
     public CommonResponse<ShowProjectApplicantsListResponseVo> ShowProjectApplicantsList(
-        @PathVariable("post_id") Long postId,
+        @PathVariable("post_id") Integer postId,
         @RequestParam(value = "page", defaultValue = "1") int page,
         @RequestParam(value = "limit", defaultValue = "10") int limit) throws Exception {
 
@@ -45,7 +45,7 @@ public class ProjectApplicaionController {
 
     // 본인이 게시한 프로젝트(공고) 신청자 정보(내용) 조회 API
     @GetMapping("/{post_id}/applicants/{id}")
-    public CommonResponse<ShowProjectApplicantInfoResponseVo> ShowProjectApplicantsInfo(@PathVariable("post_id") Long boardId, @PathVariable("id") Long applicantId)
+    public CommonResponse<ShowProjectApplicantInfoResponseVo> ShowProjectApplicantsInfo(@PathVariable("post_id") Integer boardId, @PathVariable("id") Integer applicantId)
         throws Exception {
 
         ShowProjectApplicantInfoResponseDto showProjectApplicantInfoResponseDto = projectApplicationService.getApplicantInfo(boardId, applicantId);
@@ -57,8 +57,8 @@ public class ProjectApplicaionController {
     // 본인이 게시한 프로젝트(공고) 신청자 승인 상태 변경 API
     @PatchMapping("/{post_id}/applicants/{id}")
     public CommonResponse<ChangeApplyStatusResponseVo> ChangeApplyStatus(
-        @PathVariable("post_id") Long boardId,
-        @PathVariable("id") Long applicantId,
+        @PathVariable("post_id") Integer boardId,
+        @PathVariable("id") Integer applicantId,
         @RequestBody ChangeApplyStatusRequestDto changeApplyStatusRequestDto
         ) throws Exception {
 
@@ -71,7 +71,7 @@ public class ProjectApplicaionController {
     // 본인이 신청한 프로젝트 목록 조회 (승인결과포함) API
     @GetMapping("/applications/{id}")
     public CommonResponse<ShowApplyingProjectListResponseVo> ShowApplyingProjectList(
-        @PathVariable("id") Long applicantId,
+        @PathVariable("id") Integer applicantId,
         @RequestParam(value = "page", defaultValue = "1") int page,
         @RequestParam(value = "limit", defaultValue = "10") int limit) throws Exception {
 

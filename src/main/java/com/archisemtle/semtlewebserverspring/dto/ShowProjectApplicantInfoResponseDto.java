@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ShowProjectApplicantInfoResponseDto {
-    private Long applicantId;
+    private Integer applicantId;
     private String name;
     private Date applyDate;
     private String status;

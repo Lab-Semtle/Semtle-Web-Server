@@ -10,13 +10,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ApplicantsRepository extends JpaRepository<Applicants, Long> {
+public interface ApplicantsRepository extends JpaRepository<Applicants, Integer> {
     @Query(value = "SELECT pa.* FROM applicants pa " +
         "JOIN applications app ON pa.applicant_id = app.applicant_id " + // 조인 조건 수정
         "WHERE app.board_id = :boardId", nativeQuery = true) // nativeQuery를 사용하여 SQL 쿼리
-    Page<Applicants> findAllWithApplication(@Param("boardId") Long boardId, Pageable pageable);
+    Page<Applicants> findAllWithApplication(@Param("boardId") Integer boardId, Pageable pageable);
 
-    Optional<Applicants> findByBoardIdAndApplicantId(Long boardId, Long applicantId);
+    Optional<Applicants> findByBoardIdAndApplicantId(Integer boardId, Integer applicantId);
 
 }
 

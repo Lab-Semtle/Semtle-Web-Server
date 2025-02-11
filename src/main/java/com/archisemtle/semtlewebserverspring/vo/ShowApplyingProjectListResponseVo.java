@@ -2,6 +2,7 @@ package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ShowApplyingProjectInfoResponseDto;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShowApplyingProjectListResponseVo {
 
-    private long totalElements;
+    private int totalElements;
     private int totalPages;
     private int currentPage;
     private List<ApplicationInfo> applications;
@@ -20,20 +21,20 @@ public class ShowApplyingProjectListResponseVo {
     @Getter
     @NoArgsConstructor
     public static class ApplicationInfo {
-        private Long applicationId;
+        private Integer applicationId;
         private String projectTitle;
-        private Long boardId;
-        private LocalDateTime applyDate;
+        private Integer boardId;
+        private Date applyDate;
         private String status;
         private String projectType;
         private String relateField;
 
         @Builder
         public ApplicationInfo(
-            Long applicationId,
+            Integer applicationId,
             String projectTitle,
-            Long boardId,
-            LocalDateTime applyDate,
+            Integer boardId,
+            Date applyDate,
             String status,
             String projectType,
             String relateField) {
@@ -48,7 +49,7 @@ public class ShowApplyingProjectListResponseVo {
     }
 
     @Builder
-    public ShowApplyingProjectListResponseVo(long totalElements, int totalPages, int currentPage,
+    public ShowApplyingProjectListResponseVo(int totalElements, int totalPages, int currentPage,
         List<ApplicationInfo> applications) {
         this.totalElements = totalElements;
         this.totalPages = totalPages;

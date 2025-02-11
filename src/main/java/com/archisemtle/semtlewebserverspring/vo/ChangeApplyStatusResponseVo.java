@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class ChangeApplyStatusResponseVo {
     String message;
     String updatedStatus;
-    Date updatedAt;
+    String updatedAt;
 
     @Builder
-    public ChangeApplyStatusResponseVo(String message, String updatedStatus, Date updatedAt) {
+    public ChangeApplyStatusResponseVo(String message, String updatedStatus, String updatedAt) {
         this.message = message;
         this.updatedStatus = updatedStatus;
         this.updatedAt = updatedAt;

@@ -33,7 +33,7 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
     private final ApplicationRepository applicationRepository;
 
     @Override
-    public ProjectApplicantsResponseDto getApplicants(Long boardId, int page, int limit)
+    public ProjectApplicantsResponseDto getApplicants(Integer boardId, int page, int limit)
         throws Exception {
 
         // 게시글 ID로 지원자 목록 조회 (페이징 처리)
@@ -63,7 +63,7 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
 
 
     @Override
-    public ShowProjectApplicantInfoResponseDto getApplicantInfo(Long boardId, Long applicantId) throws Exception {
+    public ShowProjectApplicantInfoResponseDto getApplicantInfo(Integer boardId, Integer applicantId) throws Exception {
         Applicants applicants = applicantsRepository.findByBoardIdAndApplicantId(boardId, applicantId).orElseThrow(() -> new BaseException(
             BaseResponseStatus.NO_APPLICANT_FOUND));
 
@@ -74,7 +74,7 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
 
     @Override
     @Transactional
-    public ChangeApplyStatusResponseDto changeApplyStatus(Long boardId, Long applicantId,
+    public ChangeApplyStatusResponseDto changeApplyStatus(Integer boardId, Integer applicantId,
         String status) throws Exception {
         // 신청자 정보 조회
         Applicants applicants = applicantsRepository.findByBoardIdAndApplicantId(boardId, applicantId).orElseThrow(() -> new BaseException(
@@ -91,9 +91,7 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
             .portfolioUrl(applicants.getPortfolioUrl())
             .customAnswer(applicants.getCustomAnswer())
             .additionalFile(applicants.getAdditionalFile())
-            .message(applicants.getMessage())
-            .updatedStatus(status)
-            .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
+            .updatedAt(String.valueOf(LocalDateTime.now()))
             .boardId(applicants.getBoardId())
             .build();
 
@@ -104,7 +102,7 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
     }
 
     @Override
-    public ShowApplyingProjectInfoResponseDto getApplyingProjectInfo(Long applicantId, int page, int limit)
+    public ShowApplyingProjectInfoResponseDto getApplyingProjectInfo(Integer applicantId, int page, int limit)
         throws Exception {
 
         // 게시글 ID로 지원자 목록 조회 (페이징 처리)

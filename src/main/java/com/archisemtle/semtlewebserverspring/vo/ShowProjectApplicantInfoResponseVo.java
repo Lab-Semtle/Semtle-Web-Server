@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ShowProjectApplicantInfoResponseVo {
-    private Long applicantId;
+    private Integer applicantId;
     private String name;
     private Date applyDate;
     private String status;
@@ -22,7 +22,7 @@ public class ShowProjectApplicantInfoResponseVo {
 
     @Builder
     public ShowProjectApplicantInfoResponseVo(
-        Long applicantId,
+        Integer applicantId,
         String name,
         Date applyDate,
         String status,

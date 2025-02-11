@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Applicants {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long applicantId;
+    private Integer applicantId;
 
     @Column(nullable = false)
     private String name;
@@ -41,19 +41,15 @@ public class Applicants {
 
     private String additionalFile;
 
-    private String message;
-
-    private String updatedStatus;
-
-    private Date updatedAt;
+    private String updatedAt;
 
     @Column(nullable = false)
-    private Long boardId; // 게시판 ID
+    private Integer boardId; // 게시판 ID
 
     @Builder
-    public Applicants(Long applicantId,String name, Date applyDate, String status, String email, String phone,
+    public Applicants(Integer applicantId,String name, Date applyDate, String status, String email, String phone,
         String resumeUrl, String portfolioUrl, String customAnswer,
-        String additionalFile, String message, String updatedStatus, Date updatedAt, Long boardId) {
+        String additionalFile, String updatedAt , Integer boardId) {
         this.applicantId = applicantId;
         this.name = name;
         this.applyDate = applyDate;
@@ -64,8 +60,6 @@ public class Applicants {
         this.portfolioUrl = portfolioUrl;
         this.customAnswer = customAnswer;
         this.additionalFile = additionalFile;
-        this.message = message;
-        this.updatedStatus = updatedStatus;
         this.updatedAt = updatedAt;
         this.boardId = boardId;
     }

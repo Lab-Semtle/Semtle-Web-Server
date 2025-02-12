@@ -17,7 +17,7 @@ public class ApplyProjectRequestDto {
     @Setter
     @Builder
     public static class AnswerDto {
-        private int questionId;
+        private Integer questionId;
         private String answer;
     }
 

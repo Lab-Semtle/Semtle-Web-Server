@@ -23,8 +23,8 @@ public class ApplyingController {
     // 공고 신청
     @PostMapping("/{post_id}/apply/{id}")
     public CommonResponse<ApplyProjectResponseVo> ApplyProject(
-        @PathVariable("post_id") int boardId,
-        @PathVariable("id") int applicantId,
+        @PathVariable("post_id") Integer boardId,
+        @PathVariable("id") Integer applicantId,
         @RequestBody ApplyProjectRequestDto applyProjectRequestDto
     ) throws Exception {
         ApplyProjectResponseDto applyProjectResponseDto = applyProjectService.applyProject(boardId, applicantId, applyProjectRequestDto);

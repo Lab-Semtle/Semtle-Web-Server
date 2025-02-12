@@ -19,8 +19,9 @@ public class ApplyProjectResponseDto {
 
     public static ApplyProjectResponseDto entityToDto(Application application) {
         return ApplyProjectResponseDto.builder()
+            .message("프로젝트 신청이 성공적으로 접수되었습니다.")
             .appliedId(application.getApplicationId())
-            .appliedAt(String.valueOf(application.getApplyDate()))
+            .appliedAt(LocalDateTime.now().toString())
             .build();
     }
 }

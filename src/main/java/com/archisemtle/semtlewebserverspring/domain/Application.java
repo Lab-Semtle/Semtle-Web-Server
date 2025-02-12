@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,8 +35,9 @@ public class Application {
     private Integer boardId; // 게시판 ID
 
     @Column(nullable = false)
-    private LocalDateTime applyDate; // 지원 날짜
+    private Date applyDate; // 지원 날짜
 
+    @Column(nullable = false)
     private String status; // 지원 상태
 
     private String projectType; // 프로젝트 유형
@@ -44,8 +45,9 @@ public class Application {
     private String relateField; // 관련 분야
 
     @Builder
-    public Application(String projectTitle, Integer boardId, LocalDateTime applyDate, String status,
+    public Application(Integer applicantId,String projectTitle, Integer boardId, Date applyDate, String status,
         String projectType, String relateField) {
+        this.applicantId = applicantId;
         this.projectTitle = projectTitle;
         this.boardId = boardId;
         this.applyDate = applyDate;

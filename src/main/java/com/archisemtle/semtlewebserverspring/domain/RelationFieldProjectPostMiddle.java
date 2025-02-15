@@ -26,6 +26,10 @@ public class RelationFieldProjectPostMiddle {
     @ManyToOne(fetch = FetchType.LAZY)
     private RelationFieldCategory relationFieldCategory;
 
+    public String getName(){
+        return this.relationFieldCategory.getName();
+    }
+
     @Builder
     public RelationFieldProjectPostMiddle(Long id, ProjectBoard projectBoard,
         RelationFieldCategory relationFieldCategory) {

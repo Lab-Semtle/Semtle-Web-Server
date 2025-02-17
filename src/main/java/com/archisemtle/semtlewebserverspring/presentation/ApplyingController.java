@@ -30,6 +30,10 @@ public class ApplyingController {
         ApplyProjectResponseDto applyProjectResponseDto = applyProjectService.applyProject(boardId, applicantId, applyProjectRequestDto);
         ApplyProjectResponseVo applyProjectResponseVo = ApplyProjectResponseVo.dtoToVo(applyProjectResponseDto);
 
-        return CommonResponse.success("applied successfully", applyProjectResponseVo);
+        if(applyProjectResponseVo.getAppliedAt() != null) {
+            return CommonResponse.success("applied successfully", applyProjectResponseVo);
+        }else{
+            return CommonResponse.fail(null,"apply failed");
+        }
     }
 }

@@ -15,6 +15,7 @@ import com.archisemtle.semtlewebserverspring.infrastructure.ApplicantsRepository
 import com.archisemtle.semtlewebserverspring.infrastructure.ApplicationRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -38,56 +39,66 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
     @Transactional
     public ApplyProjectResponseDto applyProject(Integer boardId,Integer applicantId, ApplyProjectRequestDto applyProjectRequestDto)
         throws Exception {
-        Member member = memberRepository.findById(applicantId).orElseThrow(()-> new BaseException(
-            BaseResponseStatus.NO_EXIST_MEMBERS));
-
         ProjectBoard projectBoard = projectBoardRepository.findById(Long.valueOf(boardId))
             .orElseThrow(() -> new BaseException(NO_DATA)); //todo 나중에 BaseResponseStatue 수정 필요
 
+        LocalDateTime now = LocalDateTime.now();
 
-        Date applyDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        LocalDateTime endDateTime = new Timestamp(projectBoard.getProjectRecruitingEndTime().getTime()).toLocalDateTime();
 
-        String updatedAt = LocalDateTime.now()
-            .atZone(ZoneId.of("UTC"))
-            .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        if(now.isBefore(endDateTime)) {
+            Member member = memberRepository.findById(applicantId)
+                .orElseThrow(() -> new BaseException(
+                    BaseResponseStatus.NO_EXIST_MEMBERS));
 
+            Date applyDate = Date.from(
+                LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
 
-        Applicants applicants = Applicants.builder()
-            .name(member.getName())
-            .applyDate(applyDate)
-            .status("대기")
-            .email(member.getEmail())
-            .phone(member.getPhone())
-            .resumeUrl(applyProjectRequestDto.getFiles().stream()
-                .filter(file -> file.getFileName().equals("resume.pdf"))
-                .map(FileDto::getFileUrl)
-                .findFirst()
-                .orElse(null))
-            .portfolioUrl(applyProjectRequestDto.getUrls().stream()
-                .findFirst()
-                .orElse(null))
-            .customAnswer("답변 내용")
-            .updatedAt(updatedAt)
-            .boardId(boardId)
-            .build();
+            String updatedAt = LocalDateTime.now()
+                .atZone(ZoneId.of("UTC"))
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
 
-        applicantsRepository.save(applicants);
+            Applicants applicants = Applicants.builder()
+                .name(member.getName())
+                .applyDate(applyDate)
+                .status("대기")
+                .email(member.getEmail())
+                .phone(member.getPhone())
+                .resumeUrl(applyProjectRequestDto.getFiles().stream()
+                    .filter(file -> file.getFileName().equals("resume.pdf"))
+                    .map(FileDto::getFileUrl)
+                    .findFirst()
+                    .orElse(null))
+                .portfolioUrl(applyProjectRequestDto.getUrls().stream()
+                    .findFirst()
+                    .orElse(null))
+                .customAnswer("답변 내용")
+                .updatedAt(updatedAt)
+                .boardId(boardId)
+                .build();
 
-        Application application = Application.builder()
-            .applicantId(applicants.getApplicantId())
-            .projectTitle(projectBoard.getTitle())
-            .boardId(boardId)
-            .applyDate(applyDate)
-            .status("대기")
-            .projectType("AI 연구") // 수정
-            .relateField("관련분야")// 수정
-            .build();
+            applicantsRepository.save(applicants);
 
-        applicationRepository.save(application);
+            Application application = Application.builder()
+                .applicantId(applicants.getApplicantId())
+                .projectTitle(projectBoard.getTitle())
+                .boardId(boardId)
+                .applyDate(applyDate)
+                .status("대기")
+                .projectType("AI 연구") // 수정
+                .relateField("관련분야")// 수정
+                .build();
 
-        // 응답 DTO 생성
-        ApplyProjectResponseDto responseDto = ApplyProjectResponseDto.entityToDto(application);
+            applicationRepository.save(application);
 
-        return responseDto;
+            // 응답 DTO 생성
+            ApplyProjectResponseDto successResponseDto = ApplyProjectResponseDto.entityToDto(application);
+
+            return successResponseDto;
+        }else{
+            ApplyProjectResponseDto failResponseDto = ApplyProjectResponseDto.entityToDto(null);
+
+            return failResponseDto;
+        }
     }
 }

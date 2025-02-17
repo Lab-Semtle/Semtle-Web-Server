@@ -18,10 +18,18 @@ public class ApplyProjectResponseDto {
     private String appliedAt;
 
     public static ApplyProjectResponseDto entityToDto(Application application) {
-        return ApplyProjectResponseDto.builder()
-            .message("프로젝트 신청이 성공적으로 접수되었습니다.")
-            .appliedId(application.getApplicationId())
-            .appliedAt(LocalDateTime.now().toString())
-            .build();
+        if(application == null) {
+            return ApplyProjectResponseDto.builder()
+                .message("모집기간이 마감되었습니다.")
+                .appliedId(null)
+                .appliedAt(null)
+                .build();
+        }else {
+            return ApplyProjectResponseDto.builder()
+                .message("프로젝트 신청이 성공적으로 접수되었습니다.")
+                .appliedId(application.getApplicationId())
+                .appliedAt(LocalDateTime.now().toString())
+                .build();
+        }
     }
 }

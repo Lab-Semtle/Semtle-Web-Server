@@ -8,6 +8,8 @@ import com.archisemtle.semtlewebserverspring.domain.Applicants;
 import com.archisemtle.semtlewebserverspring.domain.Application;
 import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
+import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
+import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
 import com.archisemtle.semtlewebserverspring.dto.ApplyProjectRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.ApplyProjectRequestDto.FileDto;
 import com.archisemtle.semtlewebserverspring.dto.ApplyProjectResponseDto;
@@ -15,10 +17,13 @@ import com.archisemtle.semtlewebserverspring.infrastructure.ApplicantsRepository
 import com.archisemtle.semtlewebserverspring.infrastructure.ApplicationRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +39,7 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
     private final ApplicationRepository applicationRepository;
     private final MemberRepository memberRepository;
     private final ProjectBoardRepository projectBoardRepository;
+    private final RelationFieldProjectPostMiddleRepository relationFieldProjectPostMiddleRepository;
 
     @Override
     @Transactional
@@ -61,7 +67,7 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
             Applicants applicants = Applicants.builder()
                 .name(member.getName())
                 .applyDate(applyDate)
-                .status("대기")
+                .status("대기") // 기본값
                 .email(member.getEmail())
                 .phone(member.getPhone())
                 .resumeUrl(applyProjectRequestDto.getFiles().stream()
@@ -79,14 +85,27 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
 
             applicantsRepository.save(applicants);
 
+            ProjectTypeCategory projectTypeName = projectBoard.getProjectTypeCategory(); // project_type_category_name 가져오기
+
+            List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddles = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(Long.valueOf(boardId));
+
+            List<String> relationFieldNames = relationFieldProjectPostMiddles.stream()
+                .map(relationField -> relationField.getRelationFieldCategory().getName()) // 이름 가져오기
+                .collect(Collectors.toList());
+
+            String questionAnswers = applyProjectRequestDto.getAnswers().stream()
+                .map(ApplyProjectRequestDto.AnswerDto::getAnswer) // answer만 추출
+                .collect(Collectors.joining("*|*")); // 구분자를 사용하여 하나의 문자열로 변환
+
             Application application = Application.builder()
                 .applicantId(applicants.getApplicantId())
                 .projectTitle(projectBoard.getTitle())
                 .boardId(boardId)
                 .applyDate(applyDate)
-                .status("대기")
-                .projectType("AI 연구") // 수정
-                .relateField("관련분야")// 수정
+                .status("대기") // 수정됨.
+                .projectType(projectTypeName.getName())
+                .relateField(relationFieldNames.toString())
+                .questionAnswer(questionAnswers)
                 .build();
 
             applicationRepository.save(application);

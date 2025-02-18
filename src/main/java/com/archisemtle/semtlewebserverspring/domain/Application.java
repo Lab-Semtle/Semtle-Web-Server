@@ -44,9 +44,17 @@ public class Application {
 
     private String relateField; // 관련 분야
 
+    private String questionAnswer;
+
     @Builder
-    public Application(Integer applicantId,String projectTitle, Integer boardId, Date applyDate, String status,
-        String projectType, String relateField) {
+    public Application(
+        Integer applicantId,String projectTitle,
+        Integer boardId,
+        Date applyDate,
+        String status,
+        String projectType,
+        String relateField,
+        String questionAnswer) {
         this.applicantId = applicantId;
         this.projectTitle = projectTitle;
         this.boardId = boardId;
@@ -54,5 +62,6 @@ public class Application {
         this.status = status;
         this.projectType = projectType;
         this.relateField = relateField;
+        this.questionAnswer = questionAnswer;
     }
 }

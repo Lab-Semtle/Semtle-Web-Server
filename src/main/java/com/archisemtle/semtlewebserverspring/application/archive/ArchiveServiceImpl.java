@@ -4,11 +4,18 @@ package com.archisemtle.semtlewebserverspring.application.archive;
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
+import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveListRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveListResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.archive.ArchiveRepository;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
 
@@ -16,21 +23,23 @@ import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
 @AllArgsConstructor
 public class ArchiveServiceImpl implements ArchiveService{
 
+
     private final ArchiveRepository archiveRepository;
 
+    //게시판 생성
     @Override
     public void createArchiveBoard(ArchiveRequestDto requestDto) {
         Archive archive = Archive.builder()
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
-            .date(new Date())
+            .createdAt(new Date())
             .build();
-
         archiveRepository.save(archive);
 
     }
 
+    //게시판 읽기
     @Override
     public ArchiveResponseDto readArchiveBoard(Long id) {
         Archive archive = archiveRepository.findById(id)
@@ -40,6 +49,7 @@ public class ArchiveServiceImpl implements ArchiveService{
         return new ArchiveResponseDto(archive);
     }
 
+    //게시판 수정
     @Override
     public void updateArchiveBoard(Long id, ArchiveRequestDto requestDto) {
         Archive prevArchive = archiveRepository.findById(id)
@@ -51,15 +61,36 @@ public class ArchiveServiceImpl implements ArchiveService{
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
-            .date(prevArchive.getDate())
+            .createdAt(prevArchive.getCreatedAt())
             .build();
 
         archiveRepository.save(updateArchive);
 
     }
 
+    //게시판 삭제
     @Override
     public void deleteArchiveBoard(Long id) {
         archiveRepository.deleteById(id);
+    }
+
+    //게시물 목록 흭득
+    @Override
+    public ArchiveListResponseDto getArchiveList(ArchiveListRequestDto requestDto){
+        int total_posts = (int)archiveRepository.count();
+        //게시물 총 갯수를 기준이 되는 게시물 갯수로 나눈 뒤 올림하는 과정
+        int total_pages = (int)Math.ceil((double) (total_posts / requestDto.getSize()));
+        Pageable pageable = PageRequest.of(requestDto.getPage()-1, requestDto.getSize(),
+                Sort.by(Direction.DESC, "createdAt"));
+        Page<Archive> archivePage = archiveRepository.findAll(pageable);
+
+        ArchiveListResponseDto responseDto = ArchiveListResponseDto.builder()
+            .total_post(total_posts)
+            .current_page(requestDto.getPage())
+            .total_pages(total_pages)
+            .posts(archivePage.getContent())
+            .build();
+
+        return responseDto;
     }
 }

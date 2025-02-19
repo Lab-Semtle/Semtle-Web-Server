@@ -1,19 +1,16 @@
-package com.archisemtle.semtlewebserverspring.dto.archive;
+package com.archisemtle.semtlewebserverspring.vo.archive;
 
 import java.util.Date;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-public class ArchiveRequestDto {
+public class ArchiveResponseVo {
 
     private String writer;
     private String content;
     private String title;
     private Date createdAt;
-    
 
 }

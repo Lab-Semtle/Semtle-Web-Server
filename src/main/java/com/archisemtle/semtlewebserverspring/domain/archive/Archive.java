@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "archive")
 @NoArgsConstructor
 public class Archive {
 
@@ -26,15 +26,15 @@ public class Archive {
     private String title;
     private String writer;
     private String content;
-    private Date date;
+    private Date createdAt;
 
     @Builder
-    public Archive(Long id, String title, String writer, String content, Date date)
+    public Archive(Long id, String title, String writer, String content, Date createdAt)
     {
         this.id = id;
         this.title = title;
         this.writer = writer;
         this.content = content;
-        this.date = date;
+        this.createdAt = createdAt;
     }
 }

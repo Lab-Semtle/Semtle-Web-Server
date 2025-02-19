@@ -2,9 +2,12 @@ package com.archisemtle.semtlewebserverspring.presentation;
 
 import com.archisemtle.semtlewebserverspring.application.ProjectBoardService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
+import com.archisemtle.semtlewebserverspring.common.ProjectBoardSearchCondition;
+import com.archisemtle.semtlewebserverspring.dto.ProjectBoardListDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardPageResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
+import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
 import com.archisemtle.semtlewebserverspring.vo.AddProjcetBoardRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardPageResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
@@ -14,6 +17,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectBoardController {
 
     private final ProjectBoardService projectBoardService;
+    private final ProjectBoardRepository projectBoardRepository;
 
     @PostMapping("/write")
     public CommonResponse<String> addProjectBoard(
@@ -71,6 +77,22 @@ public class ProjectBoardController {
 
         return CommonResponse.success("게시물 리스트",
             projectBoardList.stream().map(ProjectListRequestVo::dtoToVo).toList());
+    }
+
+    @GetMapping("/projectboardlist2")
+    public CommonResponse<Page<ProjectBoardListDto>> getProjectBoardList2(
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size,
+        @RequestParam(name = "project_type", required = false) String projectType,
+        @RequestParam(name = "relation_type", required = false) String relationType
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        ProjectBoardSearchCondition condition = ProjectBoardSearchCondition.builder()
+            .ProjectTypeCategoryName(projectType)
+            .relationFieldCategoryName(relationType)
+            .build();
+        return CommonResponse.success("게시물 리스트",
+            projectBoardRepository.searchPageComplex(condition, pageable));
     }
 
     @GetMapping("/projectboardlist/{projectBoardId}")

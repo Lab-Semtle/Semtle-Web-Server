@@ -79,7 +79,7 @@ public class ProjectBoardController {
             projectBoardList.stream().map(ProjectListRequestVo::dtoToVo).toList());
     }
 
-    @GetMapping("/projectboardlist2")
+    @GetMapping
     public CommonResponse<Page<ProjectBoardListDto>> getProjectBoardList2(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size,

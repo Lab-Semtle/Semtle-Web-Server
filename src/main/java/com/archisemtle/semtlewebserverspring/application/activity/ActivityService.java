@@ -8,9 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ActivityService {
 
-    public ActivityResponseDto createActivityBoard(ActivityRequestDto requestDto,
-        List<MultipartFile> imageFile) throws IOException;
+    public void createActivityBoard(ActivityRequestDto requestDto) throws IOException;
     public ActivityResponseDto readActivityBoard(Long id);
-    public Long updateActivityBoard(Long id, ActivityRequestDto requestDto);
-    public Long deleteActivityBoard(Long id);
+    public void updateActivityBoard(Long id, ActivityRequestDto requestDto);
+    public void deleteActivityBoard(Long id);
 }

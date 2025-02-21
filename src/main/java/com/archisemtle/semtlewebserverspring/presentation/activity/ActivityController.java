@@ -6,9 +6,13 @@ import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityResponseDto;
+import com.archisemtle.semtlewebserverspring.vo.activity.ActivityRequestVo;
+import com.archisemtle.semtlewebserverspring.vo.activity.ActivityResponseVo;
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -30,40 +34,42 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping("/api1/activity")
+@RequestMapping("/api/v1/activity")
 @RequiredArgsConstructor
 public class ActivityController {
 
     private static final Logger log = LoggerFactory.getLogger(ActivityController.class);
     private final ActivityService activityService;
 
-    @PostMapping(/*consumes = "multipart/form-data",*/ produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse<String> createActivity(
-        @RequestBody @Valid ActivityRequestDto requestDto//,
-        /*@RequestPart(value = "files", required = false) List<MultipartFile> files*/)
+    //게시물 생성
+    @PostMapping
+    public CommonResponse<String> createActivity(@RequestBody ActivityRequestVo requestVo)
         throws IOException {
-//        if(files == null || files.isEmpty()){
-//            log.info("no file");
-//        }
-        ActivityResponseDto saveDto = activityService.createActivityBoard(requestDto, null);
+
+
+        activityService.createActivityBoard(ActivityRequestVo.voToDto(requestVo));
         return CommonResponse.success("게시글 작성 성공");
     }
 
+    //게시물 읽기
     @GetMapping("/{id}")
-    public CommonResponse<ActivityResponseDto> getActivity(@PathVariable Long id){
+    public CommonResponse<ActivityResponseVo> getActivity(@PathVariable Long id){
+        log.info("컨트롤러 진입");
         ActivityResponseDto dto = activityService.readActivityBoard(id);
-        return CommonResponse.success("ok", dto);
+        log.info("dto발견");
+        return CommonResponse.success("게시물 읽기 성공", ActivityResponseDto.dtoToVo(dto));
     }
 
+    //게시물 수정 성공
     @PutMapping("/{id}")
-    public CommonResponse<String> updateActivity(@PathVariable Long id, @RequestBody ActivityRequestDto requestDto
-                                                /*,@RequestPart(value = "files", required = false) List<MultipartFile> files*/)
+    public CommonResponse<String> updateActivity(@PathVariable Long id, @RequestBody ActivityRequestVo requestVo)
         throws IOException
     {
-        Long updateId = activityService.updateActivityBoard(id, requestDto);
+        activityService.updateActivityBoard(id, ActivityRequestVo.voToDto(requestVo));
         return CommonResponse.success("게시글 수정 성공");
     }
 
+    //게시물 삭제 성공
     @DeleteMapping("/{id}")
     public CommonResponse<String> deleteActivity(@PathVariable Long id) {
         activityService.deleteActivityBoard(id);

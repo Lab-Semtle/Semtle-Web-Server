@@ -3,39 +3,35 @@ package com.archisemtle.semtlewebserverspring.domain.activity;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.*;
 import jakarta.persistence.*;
 import java.util.Date;
 
 @Getter
-@Setter
-@NoArgsConstructor
 @Entity(name = "activity")
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@Builder
 public class Activity {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column
     private Long boardId;
 
     @Column(nullable = false, unique = false)
     private String title;
+    @Column(nullable = false, unique = false)
     private String content;
+    @Column(nullable = false, unique = false)
     private String writer;
-
     @Column(nullable = true, unique = false)
     @Temporal(TemporalType.DATE)
-    private Date createDate;
-
+    private Date createdAt;
+    @Column(nullable = true, unique = true)
+    private UUID uuid;
     @Column(nullable = true, unique = false)
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ActivityImage> images = new ArrayList<>();
+    private List<String> images;
 
-    public Activity(ActivityRequestDto requestDto){
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
-        this.writer = requestDto.getWriter();
-        this.createDate = requestDto.getCreateDate();
-    }
 }

@@ -1,30 +1,39 @@
 package com.archisemtle.semtlewebserverspring.dto.activity;
 
 import com.archisemtle.semtlewebserverspring.domain.activity.Activity;
+import com.archisemtle.semtlewebserverspring.vo.activity.ActivityResponseVo;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class ActivityResponseDto {
 
-    private Long boardId;
     private String title;
     private String content;
     private String writer;
-    private Date createDate;
-    private List<ActivityImageResponseDto> images;
+    private Date createdAt;
+    private List<String> images;
 
+    @Builder
     public ActivityResponseDto(Activity activity){
-        this.boardId = activity.getBoardId();
         this.title = activity.getTitle();
         this.content = activity.getContent();
         this.writer = activity.getWriter();
-        this.createDate = activity.getCreateDate();
-        this.images = activity.getImages() != null ? activity.getImages().stream()
-            .map(ActivityImageResponseDto::new).collect(Collectors.toList()) : List.of();
+        this.createdAt = activity.getCreatedAt();
+        this.images = activity.getImages();
+    }
+
+    public static ActivityResponseVo dtoToVo(ActivityResponseDto responseDto){
+        return ActivityResponseVo.builder()
+            .title(responseDto.getTitle())
+            .content(responseDto.getContent())
+            .writer(responseDto.getWriter())
+            .createdAt(responseDto.getCreatedAt())
+            .images(responseDto.getImages())
+            .build();
     }
 }

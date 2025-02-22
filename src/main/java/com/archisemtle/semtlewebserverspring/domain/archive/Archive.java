@@ -2,6 +2,7 @@ package com.archisemtle.semtlewebserverspring.domain.archive;
 
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveResponseDto;
+import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveResponseVo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,5 +37,14 @@ public class Archive {
         this.writer = writer;
         this.content = content;
         this.createdAt = createdAt;
+    }
+
+    public static ArchiveResponseVo entityToVo(Archive archive){
+        return ArchiveResponseVo.builder()
+            .writer(archive.getWriter())
+            .content(archive.getContent())
+            .title(archive.getTitle())
+            .createdAt(archive.getCreatedAt())
+            .build();
     }
 }

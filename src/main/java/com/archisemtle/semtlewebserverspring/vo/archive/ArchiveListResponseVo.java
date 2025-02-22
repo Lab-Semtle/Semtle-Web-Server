@@ -12,6 +12,6 @@ public class ArchiveListResponseVo {
     private int total_post;
     private int current_page;
     private int total_pages;
-    private List<Archive> posts;
+    private List<ArchiveResponseVo> posts;
 
 }

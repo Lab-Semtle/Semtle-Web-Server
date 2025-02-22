@@ -79,7 +79,7 @@ public class ArchiveServiceImpl implements ArchiveService{
     public ArchiveListResponseDto getArchiveList(ArchiveListRequestDto requestDto){
         int total_posts = (int)archiveRepository.count();
         //게시물 총 갯수를 기준이 되는 게시물 갯수로 나눈 뒤 올림하는 과정
-        int total_pages = (int)Math.ceil((double) (total_posts / requestDto.getSize()));
+        int total_pages = (int) Math.ceil((double) total_posts / requestDto.getSize());
         Pageable pageable = PageRequest.of(requestDto.getPage()-1, requestDto.getSize(),
                 Sort.by(Direction.DESC, "createdAt"));
         Page<Archive> archivePage = archiveRepository.findAll(pageable);

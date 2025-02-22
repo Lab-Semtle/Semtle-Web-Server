@@ -46,7 +46,6 @@ public class ActivityController {
     public CommonResponse<String> createActivity(@RequestBody ActivityRequestVo requestVo)
         throws IOException {
 
-
         activityService.createActivityBoard(ActivityRequestVo.voToDto(requestVo));
         return CommonResponse.success("게시글 작성 성공");
     }
@@ -54,9 +53,7 @@ public class ActivityController {
     //게시물 읽기
     @GetMapping("/{id}")
     public CommonResponse<ActivityResponseVo> getActivity(@PathVariable Long id){
-        log.info("컨트롤러 진입");
         ActivityResponseDto dto = activityService.readActivityBoard(id);
-        log.info("dto발견");
         return CommonResponse.success("게시물 읽기 성공", ActivityResponseDto.dtoToVo(dto));
     }
 

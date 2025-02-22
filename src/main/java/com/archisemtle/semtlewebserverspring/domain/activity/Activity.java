@@ -29,9 +29,11 @@ public class Activity {
     @Column(nullable = true, unique = false)
     @Temporal(TemporalType.DATE)
     private Date createdAt;
-    @Column(nullable = true, unique = true)
+    @Column(nullable = true, unique = true, columnDefinition = "uuid")
     private UUID uuid;
-    @Column(nullable = true, unique = false)
+    @ElementCollection
+    @CollectionTable(name = "activity_image", joinColumns = @JoinColumn(name = "activity_id"))
+    @Column(name = "image", nullable = true, unique = false)
     private List<String> images;
 
 }

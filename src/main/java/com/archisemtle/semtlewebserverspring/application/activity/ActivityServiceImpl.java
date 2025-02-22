@@ -28,6 +28,8 @@ public class ActivityServiceImpl implements ActivityService{
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
+            .images(requestDto.getImages())
+            .uuid(requestDto.getUuid())
             .createdAt(new Date())
             .build();
 
@@ -57,6 +59,7 @@ public class ActivityServiceImpl implements ActivityService{
                 .writer(requestDto.getWriter())
                 .createdAt(requestDto.getCreatedAt())
                 .uuid(activity.getUuid())
+                .images(requestDto.getImages())
                 .build();
 
 

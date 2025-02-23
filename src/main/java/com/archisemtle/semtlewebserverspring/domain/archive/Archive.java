@@ -30,7 +30,7 @@ public class Archive {
     private String content;
     private Date createdAt;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private UUID uuid;
 
     @Builder

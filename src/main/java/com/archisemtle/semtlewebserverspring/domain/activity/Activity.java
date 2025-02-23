@@ -31,7 +31,7 @@ public class Activity {
 
     @Column(nullable = true, unique = false)
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ActivityImage> images = new ArrayList<>();
+    private List<ActivityImage> images;
 
     public Activity(ArchiveRequestDto requestDto){
         this.title = requestDto.getTitle();

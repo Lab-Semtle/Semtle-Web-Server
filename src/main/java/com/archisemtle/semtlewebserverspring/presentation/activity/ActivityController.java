@@ -70,4 +70,5 @@ public class ActivityController {
         return CommonResponse.success("게시글 삭제 성공");
     }
 
+
 }

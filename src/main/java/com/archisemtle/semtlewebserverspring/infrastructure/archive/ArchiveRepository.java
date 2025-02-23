@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.infrastructure.archive;
 
 import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,7 @@ public interface ArchiveRepository extends JpaRepository<Archive, Long> {
         String contentKeyword,
         Pageable pageable
     );
+
+    Page<Archive> findByUuid(UUID uuid, Pageable pageable);
 
 }

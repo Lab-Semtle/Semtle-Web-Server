@@ -10,6 +10,7 @@ import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.archive.ArchiveRepository;
 import java.util.Date;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -100,5 +101,27 @@ public class ArchiveServiceImpl implements ArchiveService{
             .build();
 
         return responseDto;
+    }
+
+    @Override
+    public ArchiveListResponseDto getOwnArchiveList(int page, int limit, UUID uuid){
+        Page<Archive> archivePage;
+
+        Pageable pageable = PageRequest.of(page-1, limit,
+            Sort.by(Direction.DESC, "createdAt"));
+
+        archivePage = archiveRepository.findByUuid(uuid, pageable);
+        int total_posts = (int)archivePage.getTotalElements();
+        int total_pages = (int) Math.ceil((double) total_posts / limit);
+
+        ArchiveListResponseDto responseDto = ArchiveListResponseDto.builder()
+            .total_post(total_posts)
+            .current_page(page)
+            .total_pages(total_pages)
+            .posts(archivePage.getContent())
+            .build();
+
+        return responseDto;
+
     }
 }

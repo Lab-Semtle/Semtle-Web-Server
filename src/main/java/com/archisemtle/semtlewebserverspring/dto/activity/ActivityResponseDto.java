@@ -12,19 +12,23 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ActivityResponseDto {
 
+    private Long board_id;
     private String title;
     private String content;
     private String writer;
     private Date createdAt;
     private List<String> images;
+    private String type;
 
     @Builder
     public ActivityResponseDto(Activity activity){
+        this.board_id = activity.getBoardId();
         this.title = activity.getTitle();
         this.content = activity.getContent();
         this.writer = activity.getWriter();
         this.createdAt = activity.getCreatedAt();
         this.images = activity.getImages();
+        this.type = activity.getType();
     }
 
     public static ActivityResponseVo dtoToVo(ActivityResponseDto responseDto){
@@ -34,6 +38,8 @@ public class ActivityResponseDto {
             .writer(responseDto.getWriter())
             .createdAt(responseDto.getCreatedAt())
             .images(responseDto.getImages())
+            .type(responseDto.getType())
+            .board_id(responseDto.getBoard_id())
             .build();
     }
 }

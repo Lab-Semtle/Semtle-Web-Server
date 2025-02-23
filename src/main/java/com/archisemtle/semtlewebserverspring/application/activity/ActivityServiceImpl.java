@@ -3,15 +3,23 @@ package com.archisemtle.semtlewebserverspring.application.activity;
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.domain.activity.Activity;
+import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.activity.ActivityRepository;
+import com.archisemtle.semtlewebserverspring.vo.activity.ActivityListResponseVo;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +39,7 @@ public class ActivityServiceImpl implements ActivityService{
             .images(requestDto.getImages())
             .uuid(requestDto.getUuid())
             .createdAt(new Date())
+            .type(requestDto.getType())
             .build();
 
         activityRepository.save(activity);
@@ -60,6 +69,7 @@ public class ActivityServiceImpl implements ActivityService{
                 .createdAt(requestDto.getCreatedAt())
                 .uuid(activity.getUuid())
                 .images(requestDto.getImages())
+                .type(requestDto.getType())
                 .build();
 
 
@@ -70,6 +80,30 @@ public class ActivityServiceImpl implements ActivityService{
     @Override
     public void deleteActivityBoard(Long id){
         activityRepository.deleteById(id);
+    }
+
+    @Override
+    public ActivityListResponseDto readActivityListBoard(ActivityListRequestDto requestDto){
+        Page<Activity> activityPage;
+
+        Pageable pageable = PageRequest.of(requestDto.getPage()-1, requestDto.getSize(),
+            Sort.by(Direction.DESC, "createdAt"));
+
+        activityPage = activityRepository.findByTypeContainingIgnoreCase(requestDto.getType(), pageable);
+
+        int total_posts = (int)activityPage.getTotalElements();
+        int total_pages = (int) Math.ceil((double) total_posts / requestDto.getSize());
+
+        ActivityListResponseDto responseDto = ActivityListResponseDto.builder()
+            .total_post(total_posts)
+            .current_page(requestDto.getPage())
+            .total_pages(total_pages)
+            .posts(activityPage.getContent())
+            .build();
+
+        return responseDto;
+
+
     }
 }
 

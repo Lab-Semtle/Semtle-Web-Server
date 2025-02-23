@@ -17,6 +17,7 @@ public class ActivityRequestVo {
     private Date createdAt;
     private UUID uuid;
     private List<String> images;
+    private String type;
 
     public static ActivityRequestDto voToDto(ActivityRequestVo requestVo){
         return ActivityRequestDto.builder()
@@ -26,6 +27,7 @@ public class ActivityRequestVo {
             .images(requestVo.getImages())
             .createdAt(requestVo.getCreatedAt())
             .uuid(requestVo.getUuid())
+            .type(requestVo.getType())
             .build();
     }
 }

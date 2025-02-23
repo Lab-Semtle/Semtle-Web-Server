@@ -17,6 +17,7 @@ public class ActivityRequestDto {
     private String writer;
     private UUID uuid;
     private Date createdAt;
+    private String type;
     private List<String> images;
 
 }

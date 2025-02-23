@@ -4,8 +4,12 @@ import com.archisemtle.semtlewebserverspring.application.activity.ActivityServic
 import com.archisemtle.semtlewebserverspring.application.activity.ActivityServiceImpl;
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
+import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityResponseDto;
+import com.archisemtle.semtlewebserverspring.vo.activity.ActivityListRequestVo;
+import com.archisemtle.semtlewebserverspring.vo.activity.ActivityListResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityResponseVo;
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
@@ -71,6 +75,21 @@ public class ActivityController {
     public CommonResponse<String> deleteActivity(@PathVariable Long id) {
         activityService.deleteActivityBoard(id);
         return CommonResponse.success("게시글 삭제 성공");
+    }
+
+    @GetMapping
+    public CommonResponse<ActivityListResponseVo> getActivityList(
+        @RequestParam(name = "page", defaultValue = "1") int page,
+        @RequestParam(name = "size", defaultValue = "15") int size,
+        @RequestParam(name = "type", defaultValue = "기타") String type){
+        ActivityListRequestVo requestVo = ActivityListRequestVo.builder()
+            .page(page)
+            .size(size)
+            .type(type)
+            .build();
+
+        ActivityListResponseDto responseDto = activityService.readActivityListBoard(ActivityListRequestVo.voToDto(requestVo));
+        return CommonResponse.success("활동 게시물 목록 읽어오기 성공", ActivityListResponseDto.dtoToVo(responseDto));
     }
 
 }

@@ -92,4 +92,12 @@ public class ActivityController {
         return CommonResponse.success("활동 게시물 목록 읽어오기 성공", ActivityListResponseDto.dtoToVo(responseDto));
     }
 
+    @GetMapping("/recent")
+    public CommonResponse<ActivityListResponseVo> getCurActivityList(
+        @RequestParam(name = "limit", defaultValue = "3") int limit){
+
+        ActivityListResponseDto responseDto = activityService.readRecentActivityListBoard(limit);
+        return CommonResponse.success("최근 활동 게시물 목록 읽어오기 성공", ActivityListResponseDto.dtoToVo(responseDto));
+    }
+
 }

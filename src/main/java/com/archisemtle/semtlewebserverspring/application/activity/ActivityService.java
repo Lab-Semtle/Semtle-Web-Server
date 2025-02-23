@@ -16,4 +16,6 @@ public interface ActivityService {
     public void updateActivityBoard(Long id, ActivityRequestDto requestDto);
     public void deleteActivityBoard(Long id);
     public ActivityListResponseDto readActivityListBoard(ActivityListRequestDto requestDto);
+    public ActivityListResponseDto readRecentActivityListBoard(int limit);
+
 }

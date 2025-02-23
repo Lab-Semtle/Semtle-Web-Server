@@ -10,6 +10,7 @@ import com.archisemtle.semtlewebserverspring.dto.activity.ActivityResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.activity.ActivityRepository;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityListResponseVo;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
 import java.io.IOException;
 import java.util.Date;
 import lombok.AllArgsConstructor;
@@ -72,8 +73,6 @@ public class ActivityServiceImpl implements ActivityService{
                 .type(requestDto.getType())
                 .build();
 
-
-
         activityRepository.save(changedActivity);
     }
 
@@ -87,7 +86,8 @@ public class ActivityServiceImpl implements ActivityService{
         Page<Activity> activityPage;
 
         Pageable pageable = PageRequest.of(requestDto.getPage()-1, requestDto.getSize(),
-            Sort.by(Direction.DESC, "createdAt"));
+            Sort.by(Direction.ASC, "createdAt"));
+
 
         activityPage = activityRepository.findByTypeContainingIgnoreCase(requestDto.getType(), pageable);
 
@@ -102,8 +102,22 @@ public class ActivityServiceImpl implements ActivityService{
             .build();
 
         return responseDto;
+    }
 
+    @Override
+    public ActivityListResponseDto readRecentActivityListBoard(int limit){
+        Pageable pageable = PageRequest.of(0,limit, Sort.by(Direction.DESC, "boardId"));
 
+        Page<Activity> page = activityRepository.findAll(pageable);
+
+        ActivityListResponseDto responseDto = ActivityListResponseDto.builder()
+            .total_post(page.getContent().size())
+            .current_page(1)
+            .total_pages(1)
+            .posts(page.getContent())
+            .build();
+
+        return responseDto;
     }
 }
 

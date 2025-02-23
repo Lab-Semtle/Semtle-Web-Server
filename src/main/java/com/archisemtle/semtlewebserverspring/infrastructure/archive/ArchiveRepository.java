@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArchiveRepository extends JpaRepository<Archive, Long> {
 
-    Page<Archive> findByTitleContainingIgnoreCase(String title, Pageable pageable);
-    Page<Archive> findByContentContainingIgnoreCase(String content, Pageable pageable);
+    Page<Archive> findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(
+        String titleKeyword,
+        String contentKeyword,
+        Pageable pageable
+    );
 
 }

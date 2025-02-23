@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.Date;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,14 +30,18 @@ public class Archive {
     private String content;
     private Date createdAt;
 
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
+
     @Builder
-    public Archive(Long id, String title, String writer, String content, Date createdAt)
+    public Archive(Long id, String title, String writer, String content, Date createdAt, UUID uuid)
     {
         this.id = id;
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.createdAt = createdAt;
+        this.uuid = uuid;
     }
 
     public static ArchiveResponseVo entityToVo(Archive archive){
@@ -45,6 +50,7 @@ public class Archive {
             .content(archive.getContent())
             .title(archive.getTitle())
             .createdAt(archive.getCreatedAt())
+            .board_id(archive.getId())
             .build();
     }
 }

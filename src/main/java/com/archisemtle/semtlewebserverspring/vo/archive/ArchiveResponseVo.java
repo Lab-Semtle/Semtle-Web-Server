@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 public class ArchiveResponseVo {
 
+    private Long board_id;
     private String writer;
     private String content;
     private String title;

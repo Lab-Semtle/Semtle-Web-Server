@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArchiveResponseDto {
 
+    private Long board_id;
     private String writer;
     private String content;
     private String title;
@@ -21,6 +22,7 @@ public class ArchiveResponseDto {
         writer = archive.getWriter();
         content = archive.getContent();
         title = archive.getTitle();
+        board_id = archive.getId();
         createdAt = archive.getCreatedAt();
     }
 
@@ -30,6 +32,7 @@ public class ArchiveResponseDto {
             .content(responseDto.getContent())
             .title(responseDto.getTitle())
             .createdAt(responseDto.getCreatedAt())
+            .board_id(responseDto.getBoard_id())
             .build();
     }
 

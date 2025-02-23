@@ -72,11 +72,8 @@ public class ArchiveController {
         @RequestParam(name = "search_keyword", defaultValue = "") String search_keyword
     ){
         ArchiveListRequestVo requestVo = new ArchiveListRequestVo(page, size, search_keyword);
-        log.info("vo 호출 받음");
         ArchiveListRequestDto requestDto = ArchiveListRequestVo.voToDto(requestVo);
-        log.info("dto 호출 받음");
         ArchiveListResponseDto responseDto = archiveService.getArchiveList(requestDto);
-        log.debug("ArchiveListRequestVo를 DTO로 변환");
         return CommonResponse.success("족보 게시판 목록 얻어오기 성공", ArchiveListResponseDto.dtoToVo(responseDto));
 
     }

@@ -34,6 +34,7 @@ public class ArchiveServiceImpl implements ArchiveService{
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
             .createdAt(new Date())
+            .uuid(requestDto.getUuid())
             .build();
         archiveRepository.save(archive);
 
@@ -77,12 +78,19 @@ public class ArchiveServiceImpl implements ArchiveService{
     //게시물 목록 흭득
     @Override
     public ArchiveListResponseDto getArchiveList(ArchiveListRequestDto requestDto){
-        int total_posts = (int)archiveRepository.count();
+        Page<Archive> archivePage;
         //게시물 총 갯수를 기준이 되는 게시물 갯수로 나눈 뒤 올림하는 과정
-        int total_pages = (int) Math.ceil((double) total_posts / requestDto.getSize());
+
         Pageable pageable = PageRequest.of(requestDto.getPage()-1, requestDto.getSize(),
                 Sort.by(Direction.DESC, "createdAt"));
-        Page<Archive> archivePage = archiveRepository.findAll(pageable);
+
+        if(requestDto.getSearch_keyword() == null && requestDto.getSearch_keyword().isEmpty())
+            archivePage = archiveRepository.findAll(pageable);
+        else
+            archivePage = archiveRepository.findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(requestDto.getSearch_keyword(),requestDto.getSearch_keyword(),pageable);
+
+        int total_posts = (int)archivePage.getTotalElements();
+        int total_pages = (int) Math.ceil((double) total_posts / requestDto.getSize());
 
         ArchiveListResponseDto responseDto = ArchiveListResponseDto.builder()
             .total_post(total_posts)

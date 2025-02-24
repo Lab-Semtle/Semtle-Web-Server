@@ -50,7 +50,6 @@ public class Activity {
             .writer(activity.getWriter())
             .createdAt(activity.getCreatedAt())
             .build();
-
     }
 
 }

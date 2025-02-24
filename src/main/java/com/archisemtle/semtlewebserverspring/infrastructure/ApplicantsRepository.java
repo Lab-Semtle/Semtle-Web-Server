@@ -17,6 +17,5 @@ public interface ApplicantsRepository extends JpaRepository<Applicants, Integer>
     Page<Applicants> findAllWithApplication(@Param("boardId") Integer boardId, Pageable pageable);
 
     Optional<Applicants> findByBoardIdAndApplicantId(Integer boardId, Integer applicantId);
-
 }
 

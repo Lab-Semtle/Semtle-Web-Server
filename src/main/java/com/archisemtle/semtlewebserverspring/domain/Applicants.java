@@ -63,4 +63,6 @@ public class Applicants {
         this.updatedAt = updatedAt;
         this.boardId = boardId;
     }
+
 }
+

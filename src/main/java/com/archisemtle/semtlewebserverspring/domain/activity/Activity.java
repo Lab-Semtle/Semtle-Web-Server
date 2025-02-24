@@ -36,7 +36,6 @@ public class Activity {
     @CollectionTable(name = "activity_image", joinColumns = @JoinColumn(name = "activity_id"))
     @Column(name = "image", nullable = true, unique = false)
     private List<String> images;
-
     @Column(nullable = false, unique = false)
     private String type;
 

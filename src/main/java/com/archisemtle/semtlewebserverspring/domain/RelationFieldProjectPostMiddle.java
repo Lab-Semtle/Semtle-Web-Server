@@ -29,6 +29,10 @@ public class RelationFieldProjectPostMiddle {
     @JoinColumn(name = "relation_field_category_id")
     private RelationFieldCategory relationFieldCategory;
 
+    public String getName(){
+        return this.relationFieldCategory.getName();
+    }
+
     @Builder
     public RelationFieldProjectPostMiddle(Long id, ProjectBoard projectBoard,
         RelationFieldCategory relationFieldCategory) {

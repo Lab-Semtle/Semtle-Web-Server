@@ -1,7 +1,6 @@
 package com.archisemtle.semtlewebserverspring.infrastructure;
 
 import com.archisemtle.semtlewebserverspring.domain.Member;
-import com.archisemtle.semtlewebserverspring.domain.ShowMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -11,5 +10,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByUuid(UUID uuid);
 
-    UUID uuid(UUID uuid);
+    Optional<Member> findByEmail(String email);
+
 }
+

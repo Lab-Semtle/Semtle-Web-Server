@@ -1,23 +1,21 @@
-package com.archisemtle.semtlewebserverspring.dto.activity;
+package com.archisemtle.semtlewebserverspring.vo.activity;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 
 @Getter
-@AllArgsConstructor
 @Builder
-public class ActivityRequestDto {
+public class ActivityResponseVo {
+
+    private Long board_id;
     private String title;
     private String content;
     private String writer;
-    private UUID uuid;
     private Date createdAt;
-    private String type;
     private List<String> images;
+    private String type;
 
 }

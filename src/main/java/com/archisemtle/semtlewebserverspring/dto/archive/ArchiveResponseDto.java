@@ -3,6 +3,7 @@ package com.archisemtle.semtlewebserverspring.dto.archive;
 import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
 import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveResponseVo;
 import java.util.Date;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,8 @@ public class ArchiveResponseDto {
     private String content;
     private String title;
     private Date createdAt;
+    private List<String> imageUrl;
+    private List<String> fileUrl;
 
     @Builder
     public ArchiveResponseDto(Archive archive) {
@@ -24,6 +27,8 @@ public class ArchiveResponseDto {
         title = archive.getTitle();
         board_id = archive.getId();
         createdAt = archive.getCreatedAt();
+        imageUrl = archive.getImageUrl();
+        fileUrl = archive.getFileUrl();
     }
 
     public static ArchiveResponseVo dtoToVo(ArchiveResponseDto responseDto){
@@ -33,6 +38,8 @@ public class ArchiveResponseDto {
             .title(responseDto.getTitle())
             .createdAt(responseDto.getCreatedAt())
             .board_id(responseDto.getBoard_id())
+            .imageUrl(responseDto.getImageUrl())
+            .fileUrl(responseDto.getFileUrl())
             .build();
     }
 

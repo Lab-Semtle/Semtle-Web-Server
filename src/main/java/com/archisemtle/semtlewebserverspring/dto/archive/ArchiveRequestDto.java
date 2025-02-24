@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.dto.archive;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,8 @@ public class ArchiveRequestDto {
     private String title;
     private UUID uuid;
     private Date createdAt;
+    private List<String> imageUrl;
+    private List<String> fileUrl;
     
 
 }

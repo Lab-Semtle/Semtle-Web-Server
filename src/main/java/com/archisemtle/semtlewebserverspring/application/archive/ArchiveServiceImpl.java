@@ -36,6 +36,8 @@ public class ArchiveServiceImpl implements ArchiveService{
             .writer(requestDto.getWriter())
             .createdAt(new Date())
             .uuid(requestDto.getUuid())
+            .imageUrl(requestDto.getImageUrl())
+            .fileUrl(requestDto.getFileUrl())
             .build();
         archiveRepository.save(archive);
 
@@ -64,6 +66,9 @@ public class ArchiveServiceImpl implements ArchiveService{
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
             .createdAt(prevArchive.getCreatedAt())
+            .uuid(prevArchive.getUuid())
+            .fileUrl(requestDto.getFileUrl())
+            .imageUrl(requestDto.getImageUrl())
             .build();
 
         archiveRepository.save(updateArchive);

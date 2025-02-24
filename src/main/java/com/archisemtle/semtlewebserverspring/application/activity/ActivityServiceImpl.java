@@ -32,7 +32,7 @@ public class ActivityServiceImpl implements ActivityService{
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
-            .createDate(new Date())
+            .createdAt(new Date())
             .build();
 
         activityRepository.save(activity);

@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.domain.activity;
 
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveRequestDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
@@ -26,16 +27,16 @@ public class Activity {
 
     @Column(nullable = true, unique = false)
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdAt;
 
     @Column(nullable = true, unique = false)
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityImage> images = new ArrayList<>();
 
-    public Activity(ActivityRequestDto requestDto){
+    public Activity(ArchiveRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.writer = requestDto.getWriter();
-        this.createDate = requestDto.getCreateDate();
+        this.createdAt = requestDto.getCreatedAt();
     }
 }

@@ -23,7 +23,7 @@ public class ActivityResponseDto {
         this.title = activity.getTitle();
         this.content = activity.getContent();
         this.writer = activity.getWriter();
-        this.createDate = activity.getCreateDate();
+        this.createDate = activity.getCreatedAt();
         this.images = activity.getImages() != null ? activity.getImages().stream()
             .map(ActivityImageResponseDto::new).collect(Collectors.toList()) : List.of();
     }

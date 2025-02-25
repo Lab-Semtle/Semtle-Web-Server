@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.infrastructure;
 
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
+import com.archisemtle.semtlewebserverspring.domain.ProjectPromotion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,18 +10,18 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface PromotionRepository  extends JpaRepository<ProjectBoard, Long> {
+public interface PromotionRepository  extends JpaRepository<ProjectPromotion, Long> {
 
     @Query("""
-            SELECT DISTINCT pb FROM project_board pb 
-            LEFT JOIN FETCH pb.images img 
-            JOIN FETCH pb.projectTypeCategory pt 
-            LEFT JOIN FETCH pb.relationFieldProjectPostMiddleList rf 
-             WHERE pb.useYn='Y' AND ( COALESCE(:keyword, '') = '' OR pb.title LIKE CONCAT('%', :keyword, '%') OR pb.content LIKE CONCAT('%', :keyword, '%') )
+            SELECT DISTINCT pp FROM project_promotion pp
+            LEFT JOIN FETCH pp.images img 
+            JOIN FETCH pp.projectTypeCategory pt 
+            LEFT JOIN FETCH pp.relationFieldProjectPostMiddleList rf 
+             WHERE pp.useYn='Y' AND ( COALESCE(:keyword, '') = '' OR pp.title LIKE CONCAT('%', :keyword, '%') OR pp.content LIKE CONCAT('%', :keyword, '%') )
     """)
-    Page<ProjectBoard> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
+    Page<ProjectPromotion> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT pb FROM project_board pb WHERE pb.id = :id AND pb.useYn = 'Y'")
-    ProjectBoard findOneById(@Param("id") Long id);
+    @Query("SELECT pp FROM project_promotion pp WHERE pp.id = :id AND pp.useYn = 'Y'")
+    ProjectPromotion findOneById(@Param("id") Long id);
 
 }

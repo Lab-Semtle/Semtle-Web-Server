@@ -16,5 +16,5 @@ public class PromotionResponseDto {
     @JsonProperty("total_page")
     private int totalPage;
     @JsonProperty("projects")
-    private List<ProjectBoardResponseDto2> projects;
+    private List<ProjectPromotionResponseDto2> projects;
 }

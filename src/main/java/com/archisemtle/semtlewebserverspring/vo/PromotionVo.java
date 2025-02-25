@@ -1,7 +1,6 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
-import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto2;
-import com.archisemtle.semtlewebserverspring.dto.PromotionCUDDtos;
+import com.archisemtle.semtlewebserverspring.dto.ProjectPromotionResponseDto2;
 import com.archisemtle.semtlewebserverspring.dto.PromotionResponseDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -19,7 +18,7 @@ public class PromotionVo {
     @JsonProperty("total_page")
     private int totalPage;
     @JsonProperty("projects")
-    private List<ProjectBoardResponseDto2> projects;
+    private List<ProjectPromotionResponseDto2> projects;
 
     public static PromotionVo dtoToVo(
             PromotionResponseDto dto)

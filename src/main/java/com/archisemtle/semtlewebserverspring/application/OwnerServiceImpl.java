@@ -4,18 +4,13 @@ import com.archisemtle.semtlewebserverspring.common.utils.ConvertUtils;
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.archisemtle.semtlewebserverspring.dto.OwnerResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.OwnertBoardResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto2;
-import com.archisemtle.semtlewebserverspring.dto.PromotionResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.OwnerRepository;
-import com.archisemtle.semtlewebserverspring.infrastructure.PromotionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

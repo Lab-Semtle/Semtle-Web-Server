@@ -38,7 +38,7 @@ public class SecurityConfig {
                     "/v3/api-docs.yaml",    // YAML 형식 문서(필요 시)
                     "/swagger-ui.html" ).permitAll() //특정 경로 토큰 인증X
 
-                .anyRequest().authenticated() // 이외에는 토큰 인증 필요
+                .anyRequest().permitAll() // 이외에는 토큰 인증 필요
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

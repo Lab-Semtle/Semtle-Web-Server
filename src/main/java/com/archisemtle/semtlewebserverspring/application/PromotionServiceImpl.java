@@ -68,46 +68,23 @@ public class PromotionServiceImpl implements PromotionService {
         Date dueDate = ConvertUtils.parseDate(reqDto.getDueDate());
         Date recruitingEndDate = ConvertUtils.parseDate(reqDto.getRecruitingEndTime());
 
-        ProjectBoard projectBoard;
-
-        // 🛠️ reqDto.getBoardId()가 null이면 새로운 ID 생성
-        if (reqDto.getBoardId() == null) {
-            projectBoard = ProjectBoard.builder()
-                    .title(reqDto.getTitle())
-                    .content(reqDto.getContents())
-                    .writerUuid("UUID-PLACEHOLDER")
-                    .writerName(reqDto.getWriter())
-                    .contact(null)
-                    .projectTypeCategory(category)
-                    .projectStartTime(startDate)
-                    .projectEndTime(dueDate)
-                    .projectRecruitingEndTime(recruitingEndDate)
-                    .projectStatus(ProjectStatus.RECRUITING)
-                    .useYn("Y")
-                    .projectLink(ConvertUtils.changeHTMLToString(reqDto.getResultLink()))
-                    .projectMember(ConvertUtils.getNumber(reqDto.getMember()))
-                    .build();
-
-            entityManager.persist(projectBoard);  // 신규 엔티티 저장
-            entityManager.flush();  // DB에 반영하여 ID 생성
-        } else {
-            projectBoard = ProjectBoard.builder()
-                    .id(reqDto.getBoardId()) // 기존 ID 사용
-                    .title(reqDto.getTitle())
-                    .content(reqDto.getContents())
-                    .writerUuid("UUID-PLACEHOLDER")
-                    .writerName(reqDto.getWriter())
-                    .contact(null)
-                    .projectTypeCategory(category)
-                    .projectStartTime(startDate)
-                    .projectEndTime(dueDate)
-                    .projectRecruitingEndTime(recruitingEndDate)
-                    .projectStatus(ProjectStatus.RECRUITING)
-                    .useYn("Y")
-                    .projectLink(ConvertUtils.changeHTMLToString(reqDto.getResultLink()))
-                    .projectMember(ConvertUtils.getNumber(reqDto.getMember()))
-                    .build();
-        }
+        ProjectBoard projectBoard = ProjectBoard.builder()
+            .id(reqDto.getBoardId())
+            .title(reqDto.getTitle())
+            .subTitle(reqDto.getSubtitle())
+            .content(reqDto.getContents())
+            .writerUuid("UUID-PLACEHOLDER")
+            .writerName(reqDto.getWriter())
+            .contact(null)
+            .projectTypeCategory(category)
+            .projectStartTime(startDate)
+            .projectEndTime(dueDate)
+            .projectRecruitingEndTime(recruitingEndDate)
+            .projectStatus(ProjectStatus.RECRUITING)
+            .useYn("Y")
+            .projectLink(ConvertUtils.changeHTMLToString(reqDto.getResultLink()))
+            .projectMember(ConvertUtils.getNumber(reqDto.getMember()))
+            .build();
 
         ProjectBoard mergedProject  = entityManager.merge(projectBoard);
         entityManager.flush();
@@ -192,7 +169,7 @@ public class PromotionServiceImpl implements PromotionService {
         return new ProjectBoardResponseDto2(
                 projectBoard.getId(),           // board_id
                 projectBoard.getTitle(),        //title
-//                projectBoard.getSubTitle(),     //subtitle
+                projectBoard.getSubTitle(),     //subtitle
                 projectBoard.getWriterName(),   //wrtier
                 ConvertUtils.changeStringToHTML(projectBoard.getProjectLink()),  //result_link
                 imageUrls,     //image_url

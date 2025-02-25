@@ -3,7 +3,6 @@ package com.archisemtle.semtlewebserverspring.presentation;
 
 import com.archisemtle.semtlewebserverspring.application.PromotionService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
-import com.archisemtle.semtlewebserverspring.common.MessageConstants;
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.archisemtle.semtlewebserverspring.dto.*;
 import com.archisemtle.semtlewebserverspring.infrastructure.PromotionRepository;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.*;
@@ -25,6 +23,7 @@ import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.*;
 public class PromotionController {
 
     private final PromotionService promotionService;
+    private final PromotionRepository promotionRepository;
 
     @GetMapping("")
     public ResponseEntity<CommonResponse<?>> getPromotions(
@@ -45,10 +44,8 @@ public class PromotionController {
 
         try{
             PromotionResponseDto responseDto = promotionService.getPromotions(keyword, page, size);
-            //리턴문 Dto -> Vo 변경 0226
-            PromotionVo responseVo = PromotionVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(responseVo));
+                    .ok(CommonResponse.success(responseDto));
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -83,7 +80,7 @@ public class PromotionController {
 
     @PostMapping("")
     public ResponseEntity<CommonResponse<?>> createPromotion(
-            @Validated @RequestBody ProjectBoardRequestDto reqDto,
+            @RequestBody ProjectBoardRequestDto reqDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
@@ -96,10 +93,8 @@ public class PromotionController {
                     "프로젝트 홍보 게시물이 성공적으로 등록되었습니다"
                     ,response.getBoardId()
                     ,response.getCreateDt());
-            //리턴문 Dto -> Vo 변경 0226
-            PromotionCreateVo responseVo = PromotionCreateVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(MessageConstants.PROMOTION_CREATE_SUCCESS, responseVo));
+                    .ok(CommonResponse.success(responseDto));
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -133,12 +128,10 @@ public class PromotionController {
             reqDto.setBoardId(id);
             ProjectBoardCUDResponseDto response = promotionService.mergePromotion(reqDto);
             PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
-                    MessageConstants.PROMOTION_UPDATE_SUCCESS
+                    "프로젝트 홍보 게시물이 성공적으로 수정되었습니다"
                     ,response.getUpdateDt());
-            //리턴문 Dto -> Vo 변경 0226
-            PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(MessageConstants.PROMOTION_UPDATE_SUCCESS, responseVo));
+                    .ok(CommonResponse.success(responseDto));
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -164,13 +157,10 @@ public class PromotionController {
 
             ProjectBoardCUDResponseDto response = promotionService.deletePromotion(id);
             PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
-                    MessageConstants.PROMOTION_DELETE_SUCCESS
+                    "프로젝트 홍보 게시물이 성공적으로 삭제되었습니다"
                     ,response.getUpdateDt());
-            //리턴문 Dto -> Vo 변경 0226
-            PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(MessageConstants.PROMOTION_DELETE_SUCCESS, responseVo));
-
+                    .ok(CommonResponse.success(responseDto));
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)

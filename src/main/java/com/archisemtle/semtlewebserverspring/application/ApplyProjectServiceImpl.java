@@ -98,14 +98,14 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
                 .collect(Collectors.joining("*|*")); // 구분자를 사용하여 하나의 문자열로 변환
 
             Application application = Application.builder()
-//                .applicantId(applicants.getApplicantId())
+                .applicantId(applicants.getApplicantId())
                 .projectTitle(projectBoard.getTitle())
                 .boardId(boardId)
                 .applyDate(applyDate)
                 .status("대기") // 수정됨.
                 .projectType(projectTypeName.getName())
                 .relateField(relationFieldNames.toString())
-//                .questionAnswer(questionAnswers)
+                .questionAnswer(questionAnswers)
                 .build();
 
             applicationRepository.save(application);

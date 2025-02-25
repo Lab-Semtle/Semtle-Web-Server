@@ -1,6 +1,5 @@
 package com.archisemtle.semtlewebserverspring.infrastructure;
 
-import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.archisemtle.semtlewebserverspring.domain.ProjectPromotion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

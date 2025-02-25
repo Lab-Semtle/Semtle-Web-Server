@@ -96,7 +96,7 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
             String questionAnswers = applyProjectRequestDto.getAnswers().stream()
                 .map(ApplyProjectRequestDto.AnswerDto::getAnswer) // answer만 추출
                 .collect(Collectors.joining("*|*")); // 구분자를 사용하여 하나의 문자열로 변환
-
+            // remerge
             Application application = Application.builder()
                 .applicantId(applicants.getApplicantId())
                 .projectTitle(projectBoard.getTitle())

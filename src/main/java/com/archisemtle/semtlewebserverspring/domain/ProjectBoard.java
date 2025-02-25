@@ -29,9 +29,9 @@ public class ProjectBoard {
     @Comment("제목")
     private String title;
 
-//    @Column(name = "project_board_sub_title", length = 50, nullable = false)//0210 추가
-//    @Comment("소제목")
-//    private String subTitle;
+    @Column(name = "project_board_sub_title", length = 50, nullable = false)//0210 추가
+    @Comment("소제목")
+    private String subTitle;
 
     @Column(name = "project_board_content", length = 1000)
     @Comment("내용")
@@ -62,7 +62,7 @@ public class ProjectBoard {
     @Comment("프로젝트 종료일")
     private Date projectEndTime;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "project_recruiting_end_time", nullable = false)
     @Comment("프로젝트 모집 종료일")
     private Date projectRecruitingEndTime;
 
@@ -106,13 +106,13 @@ public class ProjectBoard {
     }
 
     @Builder
-    public ProjectBoard(Long id, String title, String content, String writerUuid, String writerName,
+    public ProjectBoard(Long id, String title, String subTitle, String content, String writerUuid, String writerName,
                         String contact, ProjectTypeCategory projectTypeCategory, Date projectStartTime,
                         Date projectEndTime, Date projectRecruitingEndTime, ProjectStatus projectStatus, String useYn,
                         String projectLink, String projectMember) {
         this.id = id;
         this.title = title;
-//        this.subTitle = subTitle;
+        this.subTitle = subTitle;
         this.content = content;
         this.writerUuid = writerUuid;
         this.writerName = writerName;

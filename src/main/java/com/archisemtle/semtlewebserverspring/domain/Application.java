@@ -44,7 +44,7 @@ public class Application {
 
     private String relateField; // 관련 분야
 
-    private String questionAnswer;
+    private String questionAnswer; // 질문
 
     @Builder
     public Application(

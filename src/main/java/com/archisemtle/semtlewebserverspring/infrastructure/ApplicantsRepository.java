@@ -18,3 +18,4 @@ public interface ApplicantsRepository extends JpaRepository<Applicants, Integer>
 
     Optional<Applicants> findByBoardIdAndApplicantId(Integer boardId, Integer applicantId);
 }
+

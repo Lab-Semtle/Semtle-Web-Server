@@ -82,6 +82,7 @@ public class JwtTokenProvider {
     // 인증 정보 추출
     public Authentication getAuthentication(String token) {
         String username = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
-        return new UsernamePasswordAuthenticationToken(username, null, User.withUsername(username).authorities("USER").build().getAuthorities());
+        log.info("username : {}", username);                                                                //패스워드 default값 추가, 추후 패스워드 입력 받을 경우 따로 로직 지정 필요
+        return new UsernamePasswordAuthenticationToken(username, null, User.withUsername(username).password("N/A").authorities("USER").build().getAuthorities());
     }
 }

@@ -1,6 +1,5 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

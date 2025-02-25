@@ -5,6 +5,7 @@ import com.archisemtle.semtlewebserverspring.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,7 +29,16 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless 설정
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // 모든 경로 허용
+
+                .requestMatchers(HttpMethod.POST, "/api/v1/members", "/auth/signin").permitAll()
+
+                .requestMatchers(
+                    "/swagger-ui/**",       // Swagger UI 리소스
+                    "/v3/api-docs/**",      // OpenAPI 문서
+                    "/v3/api-docs.yaml",    // YAML 형식 문서(필요 시)
+                    "/swagger-ui.html" ).permitAll() //특정 경로 토큰 인증X
+
+                .anyRequest().authenticated() // 이외에는 토큰 인증 필요
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

@@ -65,7 +65,7 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
                 .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
 
             Applicants applicants = Applicants.builder()
-                .name(member.getName())
+                .name(member.getUsername())
                 .applyDate(applyDate)
                 .status("대기") // 기본값
                 .email(member.getEmail())

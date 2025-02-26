@@ -1,6 +1,5 @@
 package com.archisemtle.semtlewebserverspring.domain;
 
-import com.archisemtle.semtlewebserverspring.domain.activity.Activity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +7,7 @@ import lombok.*;
 @Setter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProjectImage {
+public class ProjectPromotionImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +15,8 @@ public class ProjectImage {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="project_image_board_id")
-    private ProjectBoard projectBoard;
+    @JoinColumn(name="project_promotion_id")
+    private ProjectPromotion projectPromotion;
 
     @Column(name = "project_image_board_url", length = 50)
     private String url;
@@ -26,9 +25,9 @@ public class ProjectImage {
     private boolean thumbnail;          //0210추가
 
     @Builder
-    public ProjectImage(Long id, ProjectBoard projectBoard, String url) {
+    public ProjectPromotionImage(Long id,  ProjectPromotion projectPromotion, String url) {
         this.id = id;
-        this.projectBoard = projectBoard;
+        this.projectPromotion = projectPromotion;
         this.url = url;
     }
 }

@@ -3,15 +3,15 @@ package com.archisemtle.semtlewebserverspring.presentation;
 
 import com.archisemtle.semtlewebserverspring.application.PromotionService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
-import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
+import com.archisemtle.semtlewebserverspring.common.MessageConstants;
 import com.archisemtle.semtlewebserverspring.dto.*;
-import com.archisemtle.semtlewebserverspring.infrastructure.PromotionRepository;
 import com.archisemtle.semtlewebserverspring.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.*;
@@ -23,7 +23,6 @@ import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.*;
 public class PromotionController {
 
     private final PromotionService promotionService;
-    private final PromotionRepository promotionRepository;
 
     @GetMapping("")
     public ResponseEntity<CommonResponse<?>> getPromotions(
@@ -44,8 +43,10 @@ public class PromotionController {
 
         try{
             PromotionResponseDto responseDto = promotionService.getPromotions(keyword, page, size);
+            //리턴문 Dto -> Vo 변경 0226
+            PromotionVo responseVo = PromotionVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(responseDto));
+                    .ok(CommonResponse.success(responseVo));
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -62,7 +63,7 @@ public class PromotionController {
                     .body(CommonResponse.fail(WRONG_PARAM));
         }
         try{
-            ProjectBoardResponseDto2 responseDto = promotionService.getPromotionsById(id);
+            ProjectPromotionResponseDto2 responseDto = promotionService.getPromotionsById(id);
             if(responseDto == null){
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
@@ -80,7 +81,7 @@ public class PromotionController {
 
     @PostMapping("")
     public ResponseEntity<CommonResponse<?>> createPromotion(
-            @RequestBody ProjectBoardRequestDto reqDto,
+            @Validated @RequestBody ProjectPromotionRequestDto reqDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
@@ -88,13 +89,15 @@ public class PromotionController {
                     .body(CommonResponse.fail(WRONG_PARAM,errorMessage));
         }
         try{
-            ProjectBoardCUDResponseDto response = promotionService.mergePromotion(reqDto);
+            ProjectPromotionCUDResponseDto response = promotionService.mergePromotion(reqDto);
             PromotionCUDDtos.Create responseDto = new PromotionCUDDtos.Create(
                     "프로젝트 홍보 게시물이 성공적으로 등록되었습니다"
                     ,response.getBoardId()
                     ,response.getCreateDt());
+            //리턴문 Dto -> Vo 변경 0226
+            PromotionCreateVo responseVo = PromotionCreateVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(responseDto));
+                    .ok(CommonResponse.success(MessageConstants.PROMOTION_CREATE_SUCCESS, responseVo));
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -104,7 +107,7 @@ public class PromotionController {
 
     @PatchMapping("/{promotionId}")
     public ResponseEntity<CommonResponse<?>> updatePromotion(
-            @RequestBody ProjectBoardRequestDto reqDto,
+            @RequestBody ProjectPromotionRequestDto reqDto,
             @PathVariable("promotionId") Long id,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -118,7 +121,7 @@ public class PromotionController {
                     .body(CommonResponse.fail(WRONG_PARAM));
         }
         try{
-            ProjectBoardResponseDto2 checkPromotion = promotionService.getPromotionsById(id);
+            ProjectPromotionResponseDto2 checkPromotion = promotionService.getPromotionsById(id);
             if(checkPromotion == null){
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
@@ -126,12 +129,14 @@ public class PromotionController {
             }
 
             reqDto.setBoardId(id);
-            ProjectBoardCUDResponseDto response = promotionService.mergePromotion(reqDto);
+            ProjectPromotionCUDResponseDto response = promotionService.mergePromotion(reqDto);
             PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
-                    "프로젝트 홍보 게시물이 성공적으로 수정되었습니다"
+                    MessageConstants.PROMOTION_UPDATE_SUCCESS
                     ,response.getUpdateDt());
+            //리턴문 Dto -> Vo 변경 0226
+            PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(responseDto));
+                    .ok(CommonResponse.success(MessageConstants.PROMOTION_UPDATE_SUCCESS, responseVo));
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -148,19 +153,22 @@ public class PromotionController {
                     .body(CommonResponse.fail(WRONG_PARAM));
         }
         try{
-            ProjectBoardResponseDto2 checkPromotion = promotionService.getPromotionsById(id);
+            ProjectPromotionResponseDto2 checkPromotion = promotionService.getPromotionsById(id);
             if(checkPromotion == null){
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body(CommonResponse.fail(NONE_DATA));
             }
 
-            ProjectBoardCUDResponseDto response = promotionService.deletePromotion(id);
+            ProjectPromotionCUDResponseDto response = promotionService.deletePromotion(id);
             PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
-                    "프로젝트 홍보 게시물이 성공적으로 삭제되었습니다"
+                    MessageConstants.PROMOTION_DELETE_SUCCESS
                     ,response.getUpdateDt());
+            //리턴문 Dto -> Vo 변경 0226
+            PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
             return ResponseEntity
-                    .ok(CommonResponse.success(responseDto));
+                    .ok(CommonResponse.success(MessageConstants.PROMOTION_DELETE_SUCCESS, responseVo));
+
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)

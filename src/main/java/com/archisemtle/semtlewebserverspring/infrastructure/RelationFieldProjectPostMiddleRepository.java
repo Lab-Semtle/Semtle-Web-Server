@@ -13,5 +13,4 @@ public interface RelationFieldProjectPostMiddleRepository extends
     List<RelationFieldProjectPostMiddle> findAllByProjectBoardId(Long projectBoardId);
     void deleteAllByProjectBoardId(Long projectBoardId);
 
-    Optional<RelationFieldProjectPostMiddle> findByProjectBoardAndRelationFieldCategory(ProjectBoard projectBoard, RelationFieldCategory relationFieldCategory);
 }

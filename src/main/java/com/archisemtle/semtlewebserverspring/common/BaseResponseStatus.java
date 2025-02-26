@@ -22,6 +22,9 @@ public enum BaseResponseStatus {
     WRONG_PARAM(HttpStatus.BAD_REQUEST, false, 400, "잘못된 요청 (필수 값 누락 또는 잘못된 입력)"),
     WRONG_PAGE_NUM_MAX(HttpStatus.BAD_REQUEST, false, 400, "잘못된 size 값입니다. (1~100)"),
     WRONG_JWT_TOKEN(HttpStatus.UNAUTHORIZED, false, 401, "다시 로그인 해주세요"),
+    WRONG_USER(HttpStatus.FORBIDDEN, false, 403, "권한이 없는 사용자"),
+    WRONG_USER_UPDATE(HttpStatus.FORBIDDEN, false, 403, "수정 권한이 없는 사용자"),
+    WRONG_USER_DELETE(HttpStatus.FORBIDDEN, false, 403, "삭제 권한이 없는 사용자"),
     NOT_FOUND_DATA(HttpStatus.NOT_FOUND, false, 404, "해당 프로젝트 홍보 게시물을 찾을 수 없음"),
 
     /**

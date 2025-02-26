@@ -59,6 +59,12 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
+    public Boolean checkPermission(String uuid, Long id) {
+        ProjectPromotion projectPromotion = promotionRepository.findOneByIdAndWriterUuid(uuid, id);
+        return projectPromotion == null ? false:true;
+    }
+
+    @Override
     @Transactional
     public ProjectPromotionCUDResponseDto mergePromotion(ProjectPromotionRequestDto reqDto) {
 
@@ -75,7 +81,7 @@ public class PromotionServiceImpl implements PromotionService {
             projectPromotion = ProjectPromotion.builder()
                     .title(reqDto.getTitle())
                     .content(reqDto.getContents())
-                    .writerUuid("UUID-PLACEHOLDER")
+                    .writerUuid(reqDto.getUserUuid())
                     .writerName(reqDto.getWriter())
                     .contact(null)
                     .projectTypeCategory(category)

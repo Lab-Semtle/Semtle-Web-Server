@@ -23,4 +23,7 @@ public interface PromotionRepository  extends JpaRepository<ProjectPromotion, Lo
     @Query("SELECT pp FROM project_promotion pp WHERE pp.id = :id AND pp.useYn = 'Y'")
     ProjectPromotion findOneById(@Param("id") Long id);
 
+    @Query("SELECT pp FROM project_promotion pp WHERE pp.writerUuid = :uuid AND pp.id = :id AND pp.useYn = 'Y'")
+    ProjectPromotion findOneByIdAndWriterUuid(@Param("uuid") String uuid, @Param("id") Long id);
+
 }

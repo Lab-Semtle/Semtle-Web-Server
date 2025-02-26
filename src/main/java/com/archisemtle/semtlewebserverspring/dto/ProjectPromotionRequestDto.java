@@ -40,7 +40,7 @@ public class ProjectPromotionRequestDto {
     private String dueDate;
 
     @NotEmpty(message = "프로젝트 모집 종료일은 필수 입력값입니다.")
-    @JsonProperty("recruiting_end_time")
+    @JsonProperty("end_date")
     private String recruitingEndTime;
 
     @NotEmpty(message = "프로젝트 유형은 필수 입력값입니다.")
@@ -57,4 +57,6 @@ public class ProjectPromotionRequestDto {
     @NotEmpty(message = "내용은 유형은 필수 입력값입니다.")
     @JsonProperty("contents")
     private String contents;
+
+    private String userUuid;
 }

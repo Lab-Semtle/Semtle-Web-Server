@@ -21,11 +21,9 @@ public class OwnerServiceImpl implements OwnerService {
     private final OwnerRepository ownerRepository;
 
     @Override
-    public OwnerResponseDto getPromotionsByOwnerId(int page, int size) {
+    public OwnerResponseDto getPromotionsByOwnerId(int page, int size, String uuid) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        //ToDo userId를 토큰에서 긁어올것.
-        String userID = "UUID-PLACEHOLDER";
-        Page<ProjectPromotion> projectBoardPage = ownerRepository.findByOwnerId(userID, pageable);
+        Page<ProjectPromotion> projectBoardPage = ownerRepository.findByOwnerId(uuid, pageable);
 
         // ProjectBoard -> PromotionResponseDto 변환
         List<OwnertBoardResponseDto> projectOwnerDtos = projectBoardPage.getContent().stream()

@@ -4,12 +4,15 @@ package com.archisemtle.semtlewebserverspring.presentation;
 import com.archisemtle.semtlewebserverspring.application.PromotionService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.common.MessageConstants;
+import com.archisemtle.semtlewebserverspring.common.utils.UserUtils;
+import com.archisemtle.semtlewebserverspring.config.jwt.JwtAuthenticationFilter;
 import com.archisemtle.semtlewebserverspring.dto.*;
 import com.archisemtle.semtlewebserverspring.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,8 @@ import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.*;
 public class PromotionController {
 
     private final PromotionService promotionService;
+
+    private final UserUtils userUtils;
 
     @GetMapping("")
     public ResponseEntity<CommonResponse<?>> getPromotions(
@@ -81,6 +86,7 @@ public class PromotionController {
 
     @PostMapping("")
     public ResponseEntity<CommonResponse<?>> createPromotion(
+            @RequestHeader("Authorization") String authorizationHeader,
             @Validated @RequestBody ProjectPromotionRequestDto reqDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -89,6 +95,8 @@ public class PromotionController {
                     .body(CommonResponse.fail(WRONG_PARAM,errorMessage));
         }
         try{
+            String userUuid = userUtils.getUserUuid(authorizationHeader);
+            reqDto.setUserUuid(userUuid);
             ProjectPromotionCUDResponseDto response = promotionService.mergePromotion(reqDto);
             PromotionCUDDtos.Create responseDto = new PromotionCUDDtos.Create(
                     "프로젝트 홍보 게시물이 성공적으로 등록되었습니다"
@@ -107,6 +115,7 @@ public class PromotionController {
 
     @PatchMapping("/{promotionId}")
     public ResponseEntity<CommonResponse<?>> updatePromotion(
+            @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody ProjectPromotionRequestDto reqDto,
             @PathVariable("promotionId") Long id,
             BindingResult bindingResult) {
@@ -121,22 +130,31 @@ public class PromotionController {
                     .body(CommonResponse.fail(WRONG_PARAM));
         }
         try{
+            String userUuid = userUtils.getUserUuid(authorizationHeader);
+            reqDto.setUserUuid(userUuid);
             ProjectPromotionResponseDto2 checkPromotion = promotionService.getPromotionsById(id);
-            if(checkPromotion == null){
+            Boolean checkPermission = promotionService.checkPermission(userUuid, id);
+            if(Boolean.FALSE.equals(checkPermission)){
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(CommonResponse.fail(WRONG_USER_UPDATE));
+            }
+            else if(checkPromotion == null){
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body(CommonResponse.fail(NOT_FOUND_DATA));
-            }
+            }else{
 
-            reqDto.setBoardId(id);
-            ProjectPromotionCUDResponseDto response = promotionService.mergePromotion(reqDto);
-            PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
-                    MessageConstants.PROMOTION_UPDATE_SUCCESS
-                    ,response.getUpdateDt());
-            //리턴문 Dto -> Vo 변경 0226
-            PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
-            return ResponseEntity
-                    .ok(CommonResponse.success(MessageConstants.PROMOTION_UPDATE_SUCCESS, responseVo));
+                reqDto.setBoardId(id);
+                ProjectPromotionCUDResponseDto response = promotionService.mergePromotion(reqDto);
+                PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
+                        MessageConstants.PROMOTION_UPDATE_SUCCESS
+                        ,response.getUpdateDt());
+                //리턴문 Dto -> Vo 변경 0226
+                PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
+                return ResponseEntity
+                        .ok(CommonResponse.success(MessageConstants.PROMOTION_UPDATE_SUCCESS, responseVo));
+            }
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -146,6 +164,7 @@ public class PromotionController {
 
     @DeleteMapping("/{promotionId}")
     public ResponseEntity<CommonResponse<?>> deletePromotion(
+            @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable("promotionId") Long id) {
         if(id == null || id<0){
             return ResponseEntity
@@ -153,22 +172,27 @@ public class PromotionController {
                     .body(CommonResponse.fail(WRONG_PARAM));
         }
         try{
+            String userUuid = userUtils.getUserUuid(authorizationHeader);
             ProjectPromotionResponseDto2 checkPromotion = promotionService.getPromotionsById(id);
-            if(checkPromotion == null){
+            Boolean checkPermission = promotionService.checkPermission(userUuid, id);
+            if(Boolean.FALSE.equals(checkPermission)){
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(CommonResponse.fail(WRONG_USER_DELETE));
+            } else if(checkPromotion == null){
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body(CommonResponse.fail(NONE_DATA));
+            }else{
+                ProjectPromotionCUDResponseDto response = promotionService.deletePromotion(id);
+                PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
+                        MessageConstants.PROMOTION_DELETE_SUCCESS
+                        ,response.getUpdateDt());
+                //리턴문 Dto -> Vo 변경 0226
+                PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
+                return ResponseEntity
+                        .ok(CommonResponse.success(MessageConstants.PROMOTION_DELETE_SUCCESS, responseVo));
             }
-
-            ProjectPromotionCUDResponseDto response = promotionService.deletePromotion(id);
-            PromotionCUDDtos.Update responseDto = new PromotionCUDDtos.Update(
-                    MessageConstants.PROMOTION_DELETE_SUCCESS
-                    ,response.getUpdateDt());
-            //리턴문 Dto -> Vo 변경 0226
-            PromotionUpdateVo responseVo = PromotionUpdateVo.dtoToVo(responseDto);
-            return ResponseEntity
-                    .ok(CommonResponse.success(MessageConstants.PROMOTION_DELETE_SUCCESS, responseVo));
-
         }catch(Exception e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)

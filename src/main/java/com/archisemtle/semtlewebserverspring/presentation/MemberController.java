@@ -10,6 +10,7 @@ import com.archisemtle.semtlewebserverspring.vo.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ShowMemberResponseVo;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(value = "*")
 public class MemberController {
 
     private final MemberService memberService;

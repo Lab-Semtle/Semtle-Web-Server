@@ -14,6 +14,7 @@ import com.archisemtle.semtlewebserverspring.vo.ShowProjectApplicantInfoResponse
 import com.archisemtle.semtlewebserverspring.vo.ShowProjectApplicantsListResponseVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/own/projects")
+@CrossOrigin(value = "*")
 public class ProjectApplicaionController {
 
     private final ProjectApplicationService projectApplicationService;

@@ -9,6 +9,7 @@ import com.archisemtle.semtlewebserverspring.vo.BannerListResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.BannerResponseVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/index")
+@CrossOrigin(value = "*")
 public class BannerController {
 
     private final BannerService bannerService;

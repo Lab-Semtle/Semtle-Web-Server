@@ -46,14 +46,17 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
 
                 .requestMatchers(HttpMethod.POST, "/api/v1/members", "/auth/signin").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/index", "/api/v1/projectboard/**","/promotions/**").permitAll()
 
                 .requestMatchers(
                     "/swagger-ui/**",       // Swagger UI 리소스
                     "/v3/api-docs/**",      // OpenAPI 문서
                     "/v3/api-docs.yaml",    // YAML 형식 문서(필요 시)
-                    "/swagger-ui.html").permitAll() //특정 경로 토큰 인증X
+                    "/swagger-ui.html",
+                    "/health",
+                    "/api/v1/projecttypecategory/**"
+                ).permitAll() //특정 경로 토큰 인증X
 
-                .requestMatchers("/health").permitAll()
                 .anyRequest().authenticated() // 이외에는 토큰 인증 필요
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

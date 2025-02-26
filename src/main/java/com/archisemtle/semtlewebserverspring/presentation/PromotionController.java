@@ -20,6 +20,7 @@ import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/promotions")
+@CrossOrigin(value = "*")
 public class PromotionController {
 
     private final PromotionService promotionService;

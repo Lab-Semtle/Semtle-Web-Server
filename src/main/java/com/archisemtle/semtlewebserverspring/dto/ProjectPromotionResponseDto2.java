@@ -14,8 +14,8 @@ public class ProjectPromotionResponseDto2 {
     @JsonProperty("title")
     private String title;
 
-//    @JsonProperty("subtitle")
-//    private String subtitle;
+    @JsonProperty("subtitle")
+    private String subtitle;
 
     @JsonProperty("writer")
     private String writer;

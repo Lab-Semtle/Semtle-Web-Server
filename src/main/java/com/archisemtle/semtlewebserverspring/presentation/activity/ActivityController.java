@@ -23,6 +23,7 @@ import org.apache.coyote.Response;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ import org.slf4j.LoggerFactory;
 @RestController
 @RequestMapping("/api/v1/activity")
 @RequiredArgsConstructor
+@CrossOrigin(value = "*")
 public class ActivityController {
 
     private static final Logger log = LoggerFactory.getLogger(ActivityController.class);

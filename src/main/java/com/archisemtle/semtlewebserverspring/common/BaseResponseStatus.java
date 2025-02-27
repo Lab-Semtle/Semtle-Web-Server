@@ -18,6 +18,10 @@ public enum BaseResponseStatus {
      * 400 : security 에러
      */
     WRONG_JWT_TOKEN(HttpStatus.UNAUTHORIZED, false, 401, "다시 로그인 해주세요"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, false, 401, "인증 실패 (로그인되지 않은 사용자)"),
+    FORBIDDEN(HttpStatus.FORBIDDEN, false, 403, "권한이 없습니다."),
+    INVALID_PASSWORD(HttpStatus.FORBIDDEN, false, 403, "비밀번호가 올바르지 않습니다."),
+    NOT_APPROVAL_MEMBER(HttpStatus.UNAUTHORIZED, false, 403, "관리자에게 인가되지 않은 계정입니다."),
 
     /**
      * 900: 기타 에러
@@ -61,6 +65,7 @@ public enum BaseResponseStatus {
     PASSWORD_CONTAIN_NUM_FAILED(HttpStatus.BAD_REQUEST, false, 2109, "휴대폰 번호를 포함한 비밀번호 입니다."),
     PASSWORD_CONTAIN_EMAIL_FAILED(HttpStatus.BAD_REQUEST, false, 2110, "이메일이 포함된 비밀번호 입니다."),
     NO_EXIST_AUTH(HttpStatus.NOT_FOUND, false, 2106, "인증 정보가 없습니다"),
+
 
     DUPLICATE_SNS_MEMBERS(HttpStatus.CONFLICT, false, 2100, "이미 사용중인 SNS 회원입니다."),
     NO_EXIST_SNS_MEMBERS(HttpStatus.NOT_FOUND, false, 2106, "가입되지 않은 SNS 멤버 정보입니다."),

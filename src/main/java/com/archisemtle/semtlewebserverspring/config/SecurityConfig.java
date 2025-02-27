@@ -46,7 +46,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
 
                 .requestMatchers(HttpMethod.POST, "/api/v1/members", "/auth/signin").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/index", "/api/v1/projectboard/**","/promotions/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/index/**", "/api/v1/projectboard/**","/promotions/**", "api/v1/activity/**").permitAll()
 
                 .requestMatchers(
                     "/swagger-ui/**",       // Swagger UI 리소스

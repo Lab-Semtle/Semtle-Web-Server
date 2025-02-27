@@ -6,22 +6,17 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//@Configuration
-public class CorsConfig
-//    implements WebMvcConfigurer
-{
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
 
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                    .allowedOriginPatterns("*") // allowedOrigins("*") 대신 사용
-//                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-//                    .allowCredentials(true);
-//            }
-//        };
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//            .allowedOriginPatterns("*") // allowedOrigins("*") 대신 사용
+//            .allowedHeaders(CorsConfiguration.ALL)
+//            .allowedMethods(CorsConfiguration.ALL)
+//            .exposedHeaders(CorsConfiguration.ALL)
+//            .allowCredentials(true);
 //    }
 }
 

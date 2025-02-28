@@ -1,14 +1,11 @@
 package com.archisemtle.semtlewebserverspring.presentation;
 
-import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.INTERNAL_SERVER_ERROR;
-
 import com.archisemtle.semtlewebserverspring.application.member.MemberService;
 import com.archisemtle.semtlewebserverspring.application.member.PasswordResetService;
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.domain.Member;
-import com.archisemtle.semtlewebserverspring.dto.member.ExcelAddMemberResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.LoginRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberPasswordResetEmailRequestDto;
@@ -18,18 +15,15 @@ import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationReques
 import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
-import com.archisemtle.semtlewebserverspring.vo.member.ExcelAddMemberResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberPasswordResetResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberReadResponseVo;
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -46,30 +40,6 @@ public class MemberController {
     public CommonResponse<MemberReadResponseVo> save(@RequestBody MemberRegistrationRequestDto memberRegistrationRequestDto) {
         memberService.save(memberRegistrationRequestDto);
         return CommonResponse.success("Member Showed successfully");
-    }
-
-    @PostMapping(value = "/signup", consumes = "multipart/form-data")
-    public CommonResponse<ExcelAddMemberResponseVo> excelAddMember(
-        @RequestPart("file")
-        @io.swagger.v3.oas.annotations.Parameter(
-            required = true
-        ) MultipartFile file) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UUID uuid = UUID.fromString(authentication.getName());
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
-            BaseResponseStatus.NO_EXIST_MEMBERS));
-        if (!"ADMIN".equals(member.getRole())) {
-            throw new BaseException(BaseResponseStatus.UNAUTHORIZED);
-        }
-
-        try {
-            ExcelAddMemberResponseDto responseDto = memberService.excelAddMember(file);
-            ExcelAddMemberResponseVo responseVo = ExcelAddMemberResponseVo.dtoToVo(responseDto);
-            return CommonResponse.success("회원들이 성공적으로 등록되었습니다.", responseVo);
-        } catch (IOException e) {
-            return CommonResponse.fail(INTERNAL_SERVER_ERROR, "파일 처리 중 오류가 발생했습니다.");
-        }
     }
 
     // 개인 정보 조회

@@ -37,6 +37,7 @@ dependencies {
 
     runtimeOnly 'org.postgresql:postgresql'
 
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -48,21 +49,8 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
-    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-jar {
-    enabled = false
-}
-
-clean {
-	delete file('src/main/generated')
 }

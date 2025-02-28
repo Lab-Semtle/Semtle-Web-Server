@@ -33,8 +33,6 @@ public enum BaseResponseStatus {
      */
     WRONG_SERVER(HttpStatus.INTERNAL_SERVER_ERROR, false, 500, "서버 내부 오류가 발생"),
 
-
-
     /**
      * 900: 기타 에러
      */

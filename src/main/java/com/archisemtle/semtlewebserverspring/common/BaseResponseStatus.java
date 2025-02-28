@@ -13,15 +13,26 @@ public enum BaseResponseStatus {
      * 200: 요청 성공
      **/
     SUCCESS(HttpStatus.OK, true, 200, "요청에 성공했습니다."),
+    NONE_DATA(HttpStatus.OK, true, 200, "조회할 게시물이 없습니다."),
 
     /**
      * 400 : security 에러
      */
+    WRONG_PAGE_NUM_MIN(HttpStatus.BAD_REQUEST, false, 400, "잘못된 페이지 번호입니다. (최소 1 이상)"),
+    WRONG_PARAM(HttpStatus.BAD_REQUEST, false, 400, "잘못된 요청 (필수 값 누락 또는 잘못된 입력)"),
+    WRONG_PAGE_NUM_MAX(HttpStatus.BAD_REQUEST, false, 400, "잘못된 size 값입니다. (1~100)"),
     WRONG_JWT_TOKEN(HttpStatus.UNAUTHORIZED, false, 401, "다시 로그인 해주세요"),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, false, 401, "인증 실패 (로그인되지 않은 사용자)"),
     FORBIDDEN(HttpStatus.FORBIDDEN, false, 403, "권한이 없습니다."),
     INVALID_PASSWORD(HttpStatus.FORBIDDEN, false, 403, "비밀번호가 올바르지 않습니다."),
     NOT_APPROVAL_MEMBER(HttpStatus.UNAUTHORIZED, false, 403, "관리자에게 인가되지 않은 계정입니다."),
+    NOT_FOUND_DATA(HttpStatus.NOT_FOUND, false, 404, "해당 프로젝트 홍보 게시물을 찾을 수 없음"),
+
+    /**
+     * 500 : security 에러
+     */
+    WRONG_SERVER(HttpStatus.INTERNAL_SERVER_ERROR, false, 500, "서버 내부 오류가 발생"),
+
 
     /**
      * 900: 기타 에러
@@ -66,11 +77,8 @@ public enum BaseResponseStatus {
     PASSWORD_CONTAIN_EMAIL_FAILED(HttpStatus.BAD_REQUEST, false, 2110, "이메일이 포함된 비밀번호 입니다."),
     NO_EXIST_AUTH(HttpStatus.NOT_FOUND, false, 2106, "인증 정보가 없습니다"),
 
-
     DUPLICATE_SNS_MEMBERS(HttpStatus.CONFLICT, false, 2100, "이미 사용중인 SNS 회원입니다."),
     NO_EXIST_SNS_MEMBERS(HttpStatus.NOT_FOUND, false, 2106, "가입되지 않은 SNS 멤버 정보입니다."),
-
-
 
     // Address
     NO_EXIST_ADDRESS(HttpStatus.NOT_FOUND, false, 2300, "존재하지 않는 주소입니다."),
@@ -80,6 +88,13 @@ public enum BaseResponseStatus {
      */
     NO_EXIST_REVIEW(HttpStatus.NOT_FOUND, false, 5001, "존재하지 않는 리뷰 입니다"),
 
+    /**
+     * 5000 : Applicant & Application Service Error
+     */
+    NO_APPLICANT_FOUND(HttpStatus.NOT_FOUND, false, 5001, "신청자를 찾을 수 없습니다."),
+    INVALID_APPLICATION_STATUS(HttpStatus.BAD_REQUEST, false, 5002, "유효하지 않은 신청 상태입니다."),
+    APPLICATION_ALREADY_PROCESSED(HttpStatus.CONFLICT, false, 5003, "이미 처리된 신청입니다."),
+    APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, false, 5004, "신청 정보를 찾을 수 없습니다."),
 
     /**
      * 6000 : Cart & WishProductList Service Error

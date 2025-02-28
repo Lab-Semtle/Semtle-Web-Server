@@ -83,4 +83,5 @@ public class JwtTokenProvider {
         String uuid = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
         return new UsernamePasswordAuthenticationToken(uuid, null, List.of());
     }
+
 }

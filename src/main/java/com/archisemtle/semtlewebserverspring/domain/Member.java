@@ -1,13 +1,11 @@
 package com.archisemtle.semtlewebserverspring.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
+import lombok.*;
+import jakarta.persistence.*;
+
+import java.util.Date;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,10 +44,9 @@ public class Member implements UserDetails {
     private String phone;
 
     @Column(nullable = false)
-    private String role;
+    private String role = "USER";
 
     private boolean manageApprovalStatus;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -75,4 +72,5 @@ public class Member implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 
@@ -38,6 +37,7 @@ public class JwtTokenProvider {
             .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
+
 
         // Access Token 생성
         String accessToken = Jwts.builder()

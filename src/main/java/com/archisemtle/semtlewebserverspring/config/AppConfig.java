@@ -15,6 +15,7 @@ public class AppConfig {
         this.customUserDetailsServiceImpl = customUserDetailsServiceImpl;
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

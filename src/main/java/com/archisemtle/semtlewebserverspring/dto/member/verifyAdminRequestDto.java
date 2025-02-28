@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MemberPasswordResetEmailRequestDto {
-    private String email;
+public class verifyAdminRequestDto {
+    String password;
 }

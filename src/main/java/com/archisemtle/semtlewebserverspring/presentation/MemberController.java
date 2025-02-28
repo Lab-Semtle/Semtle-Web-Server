@@ -1,35 +1,29 @@
 package com.archisemtle.semtlewebserverspring.presentation;
 
-import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.INTERNAL_SERVER_ERROR;
-
 import com.archisemtle.semtlewebserverspring.application.member.MemberService;
 import com.archisemtle.semtlewebserverspring.application.member.PasswordResetService;
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.domain.Member;
-import com.archisemtle.semtlewebserverspring.dto.member.ExcelAddMemberResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.member.LoginRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberPasswordResetEmailRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberPasswordResetEmailResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberPasswordResetRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.member.*;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
+
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
 import com.archisemtle.semtlewebserverspring.vo.member.ExcelAddMemberResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberPasswordResetResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberReadResponseVo;
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.INTERNAL_SERVER_ERROR;
 
 @RequiredArgsConstructor
 @RestController
@@ -136,4 +130,27 @@ public class MemberController {
             memberPasswordResetRequestDto.getConfirmNewPassword());
         return CommonResponse.success("비밀번호가 성공적으로 변경되었습니다.", null);
     }
+
+    @PutMapping("/auth/password/manager")
+    public CommonResponse<String> verifyAdmin(
+        @RequestBody verifyAdminRequestDto verifyAdminRequestDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID uuid = UUID.fromString(authentication.getName());
+        Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
+            BaseResponseStatus.NO_EXIST_MEMBERS));
+        if (!"ADMIN".equals(member.getRole())) {
+            throw new BaseException(BaseResponseStatus.UNAUTHORIZED);
+        }
+
+        boolean isVerified = memberService.verifyAdmin(uuid, verifyAdminRequestDto);
+
+        if (!isVerified) {
+            return CommonResponse.fail(BaseResponseStatus.INVALID_PASSWORD, "비밀번호가 올바르지 않습니다.");
+        }
+
+        return CommonResponse.success("관리자 2차인증에 성공하셨습니다.");
+
+    }
+
 }

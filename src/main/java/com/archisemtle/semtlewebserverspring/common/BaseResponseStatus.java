@@ -28,7 +28,6 @@ public enum BaseResponseStatus {
     NOT_APPROVAL_MEMBER(HttpStatus.UNAUTHORIZED, false, 403, "관리자에게 인가되지 않은 계정입니다."),
     NOT_FOUND_DATA(HttpStatus.NOT_FOUND, false, 404, "해당 프로젝트 홍보 게시물을 찾을 수 없음"),
 
-
     /**
      * 500 : security 에러
      */

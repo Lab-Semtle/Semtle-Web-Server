@@ -1,19 +1,21 @@
 package com.archisemtle.semtlewebserverspring.domain;
 
-import java.util.ArrayList;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.*;
-import jakarta.persistence.*;
-
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-
 
 @Builder
 @Data
@@ -28,71 +30,48 @@ public class Member implements UserDetails {
     @Column(nullable = false, unique = true)
     private UUID uuid;
 
-    private String studentId;
+    @Column(nullable = false, unique = true)
+    private String email;
 
+    @Column(nullable = false)
     private String password;
+
+    private String studentId;
 
     private String username;
 
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
 
     private String phone;
 
-    private String email;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
-    }
+    @Column(nullable = false)
+    private String role;
 
     private boolean manageApprovalStatus;
 
     @Override
-    public String getUsername() {
-        return studentId;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return UserDetails.super.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return UserDetails.super.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return UserDetails.super.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
-    }
-
-    @Builder
-    public Member(UUID uuid, String studentId, String password, String username, Date birth, String phone, String email, List<String> roles, boolean manageApprovalStatus) {
-        this.uuid = uuid;
-        this.studentId = studentId;
-        this.password = password;
-        this.username = username;
-        this.birth = birth;
-        this.phone = phone;
-        this.email = email;
-        this.roles = roles;
-        this.manageApprovalStatus = manageApprovalStatus;
+        return UserDetails.super.isEnabled();
     }
 }

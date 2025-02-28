@@ -1,32 +1,22 @@
 package com.archisemtle.semtlewebserverspring.config;
 
-import com.archisemtle.semtlewebserverspring.application.CustomUserDetailsService;
+import com.archisemtle.semtlewebserverspring.application.member.CustomUserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
 @Configuration
 public class AppConfig {
 
-    private final CustomUserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
+    private final CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
 
-    public AppConfig(CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
+    public AppConfig(CustomUserDetailsServiceImpl customUserDetailsServiceImpl) {
+        this.customUserDetailsServiceImpl = customUserDetailsServiceImpl;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder builder =
-            http.getSharedObject(AuthenticationManagerBuilder.class);
-
-        return builder.userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder)
-            .and()
-            .build();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

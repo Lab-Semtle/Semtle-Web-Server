@@ -192,5 +192,4 @@ public class MemberController {
         return CommonResponse.success("관리자 2차인증에 성공하셨습니다.");
 
     }
-
 }

@@ -20,8 +20,16 @@ public class CommonResponse<T> {
         return new CommonResponse<>(true, message, data,null);
     }
 
+    public static <T> CommonResponse<T> success(T data) {
+        return new CommonResponse<>(true, null, data,null);
+    }
+
     public static <T> CommonResponse<T> fail(BaseResponseStatus code, String message) {
         return new CommonResponse<>(false, message, null, new Error(code));
+    }
+
+    public static <T> CommonResponse<T> fail(BaseResponseStatus code) {
+        return new CommonResponse<>(false, code.getMessage(), null, new Error(code));
     }
 
     public static <T> CommonResponse<T> fail(BaseResponseStatus code, T data, String message) {

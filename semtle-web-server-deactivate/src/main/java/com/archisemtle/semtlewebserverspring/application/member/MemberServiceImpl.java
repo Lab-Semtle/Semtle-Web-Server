@@ -5,24 +5,16 @@ import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.config.jwt.JwtToken;
 import com.archisemtle.semtlewebserverspring.config.jwt.JwtTokenProvider;
 import com.archisemtle.semtlewebserverspring.domain.Member;
-import com.archisemtle.semtlewebserverspring.dto.member.ExcelAddMemberResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.LoginRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.LoginResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
+import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
+import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,8 +22,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 
 @Service
 @RequiredArgsConstructor
@@ -47,80 +37,6 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Member save(MemberRegistrationRequestDto memberRegistrationRequestDto) {
         return memberRepository.save(memberRegistrationRequestDto.toEntity(passwordEncoder));
-    }
-
-    @Override
-    @Transactional
-    public ExcelAddMemberResponseDto excelAddMember(MultipartFile file) throws IOException {
-
-        List<Member> membersToSave = new ArrayList<>();
-        List<String> errorMessages = new ArrayList<>();
-        int successCount = 0;
-        int failedCount = 0;
-
-        try (InputStream inputStream = file.getInputStream(); Workbook workbook = WorkbookFactory.create(inputStream)) {
-            Sheet sheet = workbook.getSheetAt(0);
-            for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue;
-
-                String email = getCellValue(row.getCell(0));
-                String studentId = getCellValue(row.getCell(1));
-                String username = getCellValue(row.getCell(2));
-                String phone = getCellValue(row.getCell(3));
-                String role = getCellValue(row.getCell(4));
-
-                if (email.isBlank() || !email.contains("@")) {
-                    errorMessages.add("이메일 형식이 올바르지 않음: " + email);
-                    failedCount++;
-                    continue;
-                }
-                if (memberRepository.findByEmail(email).isPresent()) {
-                    errorMessages.add("이메일 중복: " + email);
-                    failedCount++;
-                    continue;
-                }
-
-                membersToSave.add(Member.builder()
-                    .uuid(UUID.randomUUID())
-                    .email(email)
-                    .password(passwordEncoder.encode("#semtle308"))
-                    .studentId(studentId)
-                    .username(username)
-                    .birth(parseDate("2025-01-01"))
-                    .phone(phone)
-                    .role(role)
-                    .manageApprovalStatus(false)
-                    .build()
-                );
-                successCount++;
-            }
-        }
-
-        memberRepository.saveAll(membersToSave);
-
-        return ExcelAddMemberResponseDto.builder()
-            .successCount(successCount)
-            .failedCount(failedCount)
-            .errors(errorMessages)
-            .build();
-    }
-
-    private String getCellValue(Cell cell) {
-        if (cell == null) return "";
-        return switch (cell.getCellType()) {
-            case STRING -> cell.getStringCellValue().trim();
-            case NUMERIC -> String.valueOf((long) cell.getNumericCellValue());
-            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
-            default -> "";
-        };
-    }
-
-    private Date parseDate(String dateStr) {
-        try {
-            return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
-        } catch (Exception e) {
-            return new Date();
-        }
     }
 
     // Member 조회 메서드

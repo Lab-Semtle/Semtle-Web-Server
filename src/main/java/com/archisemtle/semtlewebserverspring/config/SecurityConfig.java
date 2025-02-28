@@ -1,6 +1,5 @@
 package com.archisemtle.semtlewebserverspring.config;
 
-import com.archisemtle.semtlewebserverspring.application.CustomUserDetailsService;
 import com.archisemtle.semtlewebserverspring.config.jwt.JwtAuthenticationFilter;
 import com.archisemtle.semtlewebserverspring.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +25,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (REST API 환경)
+            .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless 설정
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/api/v1/**",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-resources/**",
-                    "/webjars/**"
-                ).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll() // 모든 경로 허용
             )
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -46,5 +38,10 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // 비밀번호 암호화를 위한 BCrypt 사용
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtTokenProvider);
     }
 }

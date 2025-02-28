@@ -8,7 +8,6 @@ import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto
 import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.verifyAdminRequestDto;
 import java.io.IOException;
 import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,5 +19,4 @@ public interface MemberService {
     void update(UUID uuid , MemberUpdateRequestDto memberUpdateRequestDto);
     public void deactivateMember(UUID uuid, MemberDeactiveRequestDto memberDeactiveRequestDto);
     LoginResponseDto login(LoginRequestDto loginRequestDto);
-    boolean verifyAdmin(UUID uuid, verifyAdminRequestDto verifyAdminRequestDto);
 }

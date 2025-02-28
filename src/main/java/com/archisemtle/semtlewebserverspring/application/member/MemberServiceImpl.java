@@ -12,7 +12,6 @@ import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto
 import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.verifyAdminRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import java.io.IOException;
 import java.io.InputStream;
@@ -207,14 +206,5 @@ public class MemberServiceImpl implements MemberService {
             log.error("인증 실패 : {}", e.getMessage());
             throw new RuntimeException("정확한 이메일과 비밀번호를 입력해주세요.");
         }
-    }
-
-    @Override
-    public boolean verifyAdmin(UUID uuid, verifyAdminRequestDto verifyAdminRequestDto) {
-        Member member = memberRepository.findByUuid(uuid)
-            .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_MEMBERS));
-
-        // 비밀번호 검증
-        return passwordEncoder.matches(verifyAdminRequestDto.getPassword(), member.getPassword());
     }
 }

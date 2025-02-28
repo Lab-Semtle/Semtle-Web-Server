@@ -1,6 +1,8 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ApplyProjectResponseDto;
+import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

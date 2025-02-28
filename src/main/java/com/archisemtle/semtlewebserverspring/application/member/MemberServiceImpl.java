@@ -9,9 +9,8 @@ import com.archisemtle.semtlewebserverspring.dto.member.ExcelAddMemberResponseDt
 import com.archisemtle.semtlewebserverspring.dto.member.LoginRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.LoginResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberListResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
+import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.verifyAdminRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
@@ -23,10 +22,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,6 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 
 @Service
 @RequiredArgsConstructor
@@ -178,30 +180,6 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
     }
-
-    @Override
-    public Page<MemberListResponseDto> getMemberList(int page, int size, String searchName) {
-        PageRequest pageable = PageRequest.of(page, size);
-        Page<Member> memberPage;
-
-        if (searchName != null && !searchName.isBlank()) {
-            memberPage = memberRepository.findByUsernameContaining(searchName, pageable);
-        } else {
-            memberPage = memberRepository.findAll(pageable);
-        }
-
-        if (memberPage.isEmpty()) {
-            return Page.empty();
-        }
-
-        return memberPage.map(member -> MemberListResponseDto.builder()
-            .totalMembers((int) memberPage.getTotalElements())
-            .currentPage(memberPage.getNumber() + 1)
-            .totalPages(memberPage.getTotalPages())
-            .members(memberPage.map(Member::getUuid).toList())
-            .build());
-    }
-
 
     @Override
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {

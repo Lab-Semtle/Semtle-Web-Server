@@ -4,6 +4,7 @@ import com.archisemtle.semtlewebserverspring.domain.Member;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter

@@ -9,13 +9,14 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 
@@ -30,8 +31,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // 토큰 생성
-    public JwtToken generateToken(Authentication authentication) {
+    public JwtToken generateToken(Authentication authentication, UUID uuid) {
         String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
@@ -40,7 +40,7 @@ public class JwtTokenProvider {
 
         // Access Token 생성
         String accessToken = Jwts.builder()
-            .setSubject(authentication.getName())
+            .setSubject(String.valueOf(uuid))
             .claim("authorities", authorities)
             .setExpiration(new Date(now + 3600000))
             .signWith(key, SignatureAlgorithm.HS256)
@@ -59,7 +59,6 @@ public class JwtTokenProvider {
             .build();
     }
 
-    // 토큰 검증
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -79,10 +78,8 @@ public class JwtTokenProvider {
         return false;
     }
 
-    // 인증 정보 추출
     public Authentication getAuthentication(String token) {
-        String username = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
-        log.info("username : {}", username);                                                                //패스워드 default값 추가, 추후 패스워드 입력 받을 경우 따로 로직 지정 필요
-        return new UsernamePasswordAuthenticationToken(username, null, User.withUsername(username).password("N/A").authorities("USER").build().getAuthorities());
+        String uuid = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+        return new UsernamePasswordAuthenticationToken(uuid, null, List.of());
     }
 }

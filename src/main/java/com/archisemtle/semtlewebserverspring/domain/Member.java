@@ -1,56 +1,70 @@
 package com.archisemtle.semtlewebserverspring.domain;
 
+import java.util.Collection;
+import java.util.List;
 import lombok.*;
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.UUID;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+@Builder
 @Data
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "member")
-public class Member {
-
+public class Member implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int memberId;
 
     @Column(nullable = false, unique = true)
-    private UUID uuid = UUID.randomUUID();
+    private UUID uuid;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
-    private String name;
+    private String studentId;
+
+    private String username;
 
     //    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
 
     private String phone;
 
-    private String studentId;
-
-    private String role;
+    @Column(nullable = false)
+    private String role = "USER";
 
     private boolean manageApprovalStatus;
 
-    //private String imageUrl;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 
-    @Builder
-    public Member(int memberId,UUID uuid, String email, String password, String name, Date birth,
-        String phone,
-        String studentId, String role, boolean manageApprovalStatus) {
-        this.memberId = memberId;
-        this.uuid = uuid;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.birth = birth;
-        this.phone = phone;
-        this.studentId = studentId;
-        this.role = role;
-        this.manageApprovalStatus = manageApprovalStatus;
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }

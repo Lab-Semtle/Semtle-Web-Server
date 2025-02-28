@@ -38,6 +38,7 @@ public class JwtTokenProvider {
 
         long now = (new Date()).getTime();
 
+
         // Access Token 생성
         String accessToken = Jwts.builder()
             .setSubject(String.valueOf(uuid))

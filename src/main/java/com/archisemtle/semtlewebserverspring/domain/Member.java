@@ -49,6 +49,7 @@ public class Member implements UserDetails {
 
     private boolean manageApprovalStatus;
 
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

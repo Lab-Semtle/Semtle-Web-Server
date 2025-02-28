@@ -1,16 +1,23 @@
 package com.archisemtle.semtlewebserverspring.presentation;
 
 import com.archisemtle.semtlewebserverspring.application.member.MemberService;
+import com.archisemtle.semtlewebserverspring.common.BaseException;
+import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
+import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.dto.member.LoginRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberReadResponseVo;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -46,6 +53,23 @@ public class MemberController {
         memberService.update(uuid, memberUpdateRequestDto);
 
         return CommonResponse.success("회원 정보 수정에 성공하였습니다.");
+    }
+
+    @PatchMapping("/{uuid}/deactivate")
+    public CommonResponse<String> deactivateMember(
+        @PathVariable UUID uuid,
+        @RequestBody MemberDeactiveRequestDto memberDeactiveRequestDto
+    ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID userUuid = UUID.fromString(authentication.getName());
+        Member member = memberRepository.findByUuid(userUuid).orElseThrow(()-> new BaseException(
+            BaseResponseStatus.NO_EXIST_MEMBERS));
+        if (!"ADMIN".equals(member.getRole())) {
+            throw new BaseException(BaseResponseStatus.UNAUTHORIZED);
+        }
+
+        memberService.deactivateMember(uuid, memberDeactiveRequestDto);
+        return CommonResponse.success("회원의 활동 가능 여부가 변경되었습니다.", "deactivate-at : " + ZonedDateTime.now());
     }
 
     // 로그인

@@ -9,8 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ProjectBoardRepository extends JpaRepository<ProjectBoard, Long>,
-    ProjectBoardRepositoryCustom {
+public interface ProjectBoardRepository extends JpaRepository<ProjectBoard, Long> {
 
     @Override
     Optional<ProjectBoard> findById(Long id);

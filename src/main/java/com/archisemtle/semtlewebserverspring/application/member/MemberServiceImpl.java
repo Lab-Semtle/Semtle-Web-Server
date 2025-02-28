@@ -7,6 +7,7 @@ import com.archisemtle.semtlewebserverspring.config.jwt.JwtTokenProvider;
 import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.dto.member.LoginRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.LoginResponseDto;
+import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
@@ -78,6 +79,17 @@ public class MemberServiceImpl implements MemberService {
             .build();
 
         memberRepository.save(updatedMember);
+    }
+
+    @Override
+    @Transactional
+    public void deactivateMember(UUID uuid, MemberDeactiveRequestDto memberDeactiveRequestDto) {
+        Member member = memberRepository.findByUuid(uuid)
+            .orElseThrow(() -> new RuntimeException("해당 UUID의 회원을 찾을 수 없습니다."));
+
+        member.setManageApprovalStatus(memberDeactiveRequestDto.isManageApprovalStatus());
+
+        memberRepository.save(member);
     }
 
     @Override

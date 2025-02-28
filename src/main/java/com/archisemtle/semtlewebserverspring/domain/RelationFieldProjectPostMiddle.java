@@ -6,7 +6,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,12 +22,9 @@ public class RelationFieldProjectPostMiddle {
     @Column(name = "relation_field_project_post_middle_id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_board_id")
     private ProjectBoard projectBoard;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "relation_field_category_id")
     private RelationFieldCategory relationFieldCategory;
-
 
     @Builder
     public RelationFieldProjectPostMiddle(Long id, ProjectBoard projectBoard,

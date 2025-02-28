@@ -1,31 +1,8 @@
 package com.archisemtle.semtlewebserverspring.presentation;
 
-import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.INTERNAL_SERVER_ERROR;
-
-import com.archisemtle.semtlewebserverspring.application.member.MemberService;
-import com.archisemtle.semtlewebserverspring.application.member.PasswordResetService;
-import com.archisemtle.semtlewebserverspring.common.BaseException;
-import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
-import com.archisemtle.semtlewebserverspring.common.CommonResponse;
-import com.archisemtle.semtlewebserverspring.domain.Member;
-import com.archisemtle.semtlewebserverspring.dto.member.ExcelAddMemberResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.member.LoginRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberDeactiveRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberPasswordResetEmailRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberPasswordResetEmailResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberPasswordResetRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberRegistrationRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
-import com.archisemtle.semtlewebserverspring.dto.member.MemberUpdateRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.member.verifyAdminRequestDto;
-import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
-import com.archisemtle.semtlewebserverspring.vo.member.ExcelAddMemberResponseVo;
-import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
-import com.archisemtle.semtlewebserverspring.vo.member.MemberPasswordResetResponseVo;
-import com.archisemtle.semtlewebserverspring.vo.member.MemberReadResponseVo;
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.UUID;
+import com.example.test.application.MemberService;
+import com.example.test.domain.Member;
+import com.example.test.dto.MemberRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

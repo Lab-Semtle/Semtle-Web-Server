@@ -4,8 +4,10 @@ import com.archisemtle.semtlewebserverspring.domain.activity.Activity;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityResponseVo;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class ActivityResponseDto {
@@ -31,13 +33,13 @@ public class ActivityResponseDto {
 
     public static ActivityResponseVo dtoToVo(ActivityResponseDto responseDto){
         return ActivityResponseVo.builder()
-                .title(responseDto.getTitle())
-                .content(responseDto.getContent())
-                .writer(responseDto.getWriter())
-                .createdAt(responseDto.getCreatedAt())
-                .images(responseDto.getImages())
-                .type(responseDto.getType())
-                .board_id(responseDto.getBoard_id())
-                .build();
+            .title(responseDto.getTitle())
+            .content(responseDto.getContent())
+            .writer(responseDto.getWriter())
+            .createdAt(responseDto.getCreatedAt())
+            .images(responseDto.getImages())
+            .type(responseDto.getType())
+            .board_id(responseDto.getBoard_id())
+            .build();
     }
 }

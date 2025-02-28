@@ -1,7 +1,6 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ChangeApplyStatusResponseDto;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

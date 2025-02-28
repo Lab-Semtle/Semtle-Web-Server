@@ -6,6 +6,7 @@ import com.archisemtle.semtlewebserverspring.domain.activity.Activity;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
+import com.archisemtle.semtlewebserverspring.dto.activity.ActivityResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.activity.ActivityRepository;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityListResponseVo;
 import jakarta.transaction.Transactional;

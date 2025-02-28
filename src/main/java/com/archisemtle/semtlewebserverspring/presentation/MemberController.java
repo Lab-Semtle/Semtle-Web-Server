@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(value = "*")
 public class MemberController {
 
     private final MemberService memberService;

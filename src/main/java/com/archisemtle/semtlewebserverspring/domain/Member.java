@@ -11,12 +11,13 @@ import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -49,7 +50,7 @@ public class Member implements UserDetails {
 
     private boolean manageApprovalStatus;
 
-    
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

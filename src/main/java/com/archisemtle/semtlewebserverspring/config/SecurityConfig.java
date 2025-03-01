@@ -30,8 +30,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource () {
         return request -> {
             var cors= new org.springframework.web.cors.CorsConfiguration();
-            cors.setAllowedOriginPatterns(List.of("*"));
-            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            cors.setAllowedOriginPatterns(List.of("*", "http://localhost:3000"));
+            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             cors.setAllowedHeaders(List.of("*"));
             return cors;
         };
@@ -40,13 +40,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS)) // Stateless 설정
             .authorizeHttpRequests(auth -> auth
 
-                .requestMatchers(HttpMethod.POST, "/members", "/auth/signin").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/index/**", "/api/v1/projectboard/**","/promotions/**", "api/v1/activity/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/members", "/api/v1/auth/signin").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/index/**", "/api/v1/projectboard/**","/api/v1/promotions/**", "api/v1/activity/**").permitAll()
 
                 .requestMatchers(
                     "/swagger-ui/**",       // Swagger UI 리소스

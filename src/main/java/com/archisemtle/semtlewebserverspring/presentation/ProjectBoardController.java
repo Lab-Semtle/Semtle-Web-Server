@@ -3,6 +3,7 @@ package com.archisemtle.semtlewebserverspring.presentation;
 import com.archisemtle.semtlewebserverspring.application.ProjectBoardService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.common.ProjectBoardSearchCondition;
+import com.archisemtle.semtlewebserverspring.config.jwt.JwtTokenProvider;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardListDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardPageResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
@@ -14,11 +15,14 @@ import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectListRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.UpdateProjectBoardRequestVo;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +46,9 @@ public class ProjectBoardController {
     @PostMapping("/write")
     public CommonResponse<String> addProjectBoard(
         @RequestBody AddProjcetBoardRequestVo addProjcetBoardRequestVo) {
-        projectBoardService.addProjectBoard(
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID uuid = UUID.fromString(authentication.getName());
+        projectBoardService.addProjectBoard(uuid,
             AddProjcetBoardRequestVo.voToDto(addProjcetBoardRequestVo));
         return CommonResponse.success("게시글 작성 성공");
     }
@@ -57,7 +63,9 @@ public class ProjectBoardController {
 
     @DeleteMapping("/{projectBoardId}")
     public CommonResponse<String> deleteProjectBoard(@PathVariable("projectBoardId") Long id) {
-        projectBoardService.deleteProjectBoard(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID uuid = UUID.fromString(authentication.getName());
+        projectBoardService.deleteProjectBoard(uuid, id);
         return CommonResponse.success("게시글 삭제 성공");
     }
 
@@ -65,7 +73,9 @@ public class ProjectBoardController {
     public CommonResponse<String> updateProjectBoard(@PathVariable("projectBoardId") Long id,
         @RequestBody
         UpdateProjectBoardRequestVo updateProjectBoardRequestVo) {
-        projectBoardService.updateProjectBoard(id,
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID uuid = UUID.fromString(authentication.getName());
+        projectBoardService.updateProjectBoard(uuid, id,
             UpdateProjectBoardRequestVo.voToDto(updateProjectBoardRequestVo));
         return CommonResponse.success("게시물 수정 성공");
     }

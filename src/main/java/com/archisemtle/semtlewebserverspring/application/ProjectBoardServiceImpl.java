@@ -1,10 +1,14 @@
 package com.archisemtle.semtlewebserverspring.application;
 
+import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.FAIL_TO_DELETE;
+import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.FAIL_TO_UPDATE;
 import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.NO_DATA;
 import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.NO_EXIST_CATEGORY;
+import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.NO_EXIST_MEMBERS;
 
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
+import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
@@ -13,10 +17,12 @@ import com.archisemtle.semtlewebserverspring.dto.ProjectBoardPageResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.UpdateProjectBoardRequestDto;
+import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldCategoryRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,16 +41,21 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
     private final ProjectBoardRepository projectBoardRepository;
     private final RelationFieldProjectPostMiddleRepository relationFieldProjectPostMiddleRepository;
     private final RelationFieldCategoryRepository relationFieldCategoryRepository;
+    private final MemberRepository memberRepository;
 
     //게시물작성
     @Override
     @Transactional
-    public void addProjectBoard(AddProjectBoardRequestDto addProjectBoardRequestDto) {
+    public void addProjectBoard(UUID uuid, AddProjectBoardRequestDto addProjectBoardRequestDto) {
+
+        Member member = memberRepository.findByUuid(uuid)
+            .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
         ProjectBoard projectBoard = ProjectBoard.builder()
             .title(addProjectBoardRequestDto.getTitle())
             .content(addProjectBoardRequestDto.getContent())
-            .writerUuid("temp") //TODO: 나중에 실제 값으로 변경해야함
-            .writerName("tempName")
+            .writerUuid(uuid.toString())
+            .writerName(member.getUsername())
             .contact(addProjectBoardRequestDto.getContact())
             .projectTypeCategory(addProjectBoardRequestDto.getProjectTypeCategory())
             .projectStartTime(addProjectBoardRequestDto.getProjectStartTime())
@@ -104,7 +115,6 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .projectStatus(projectBoard.getProjectStatus())
             .build();
     }
-
 
 
     @Override
@@ -210,9 +220,14 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
 
     @Override
     @Transactional
-    public void deleteProjectBoard(Long id) {
+    public void deleteProjectBoard(UUID uuid, Long id) {
+
         ProjectBoard projectBoard = projectBoardRepository.findById(id)
             .orElseThrow(() -> new BaseException(NO_DATA));
+
+        if (!uuid.toString().equals(projectBoard.getWriterUuid())) {
+            throw new BaseException(FAIL_TO_DELETE);
+        }
 
         List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddleList = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(
             id);
@@ -227,10 +242,14 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
 
     @Override
     @Transactional
-    public void updateProjectBoard(Long id,
+    public void updateProjectBoard(UUID uuid, Long id,
         UpdateProjectBoardRequestDto updateProjectBoardRequestDto) {
         ProjectBoard origin = projectBoardRepository.findById(id)
             .orElseThrow(() -> new BaseException(NO_DATA));
+
+        if (!uuid.toString().equals(origin.getWriterUuid())) {
+            throw new BaseException(FAIL_TO_UPDATE);
+        }
 
         ProjectBoard projectBoard = ProjectBoard.builder()
             .id(id)

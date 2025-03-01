@@ -8,13 +8,21 @@ import com.archisemtle.semtlewebserverspring.application.OwnerService;
 import com.archisemtle.semtlewebserverspring.application.archive.ArchiveService;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.dto.OwnerResponseDto;
+import com.archisemtle.semtlewebserverspring.dto.ProjectBoardListDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveListResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveResponseDto;
+import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepositoryImpl;
+import com.archisemtle.semtlewebserverspring.vo.ProjectBoardPageResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveListResponseVo;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +37,7 @@ public class OwnController {
 
     private final ArchiveService archiveService;
     private final OwnerService ownerService;
+    private final ProjectBoardRepositoryImpl projectBoardRepository;
 
     @GetMapping("/archives")
     public CommonResponse<ArchiveListResponseVo> getOwnArchiveList(
@@ -58,14 +67,26 @@ public class OwnController {
                 .body(CommonResponse.fail(WRONG_PAGE_NUM_MAX));
         }
 
-        try{
+        try {
             OwnerResponseDto responseDto = ownerService.getPromotionsByOwnerId(page, size);
             return ResponseEntity
                 .ok(CommonResponse.success(responseDto));
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(CommonResponse.fail(WRONG_SERVER));
         }
+    }
+
+    @GetMapping("/mywritingprojectboard")
+    public CommonResponse<Page<ProjectBoardListDto>> getMyWritingProjectBoard(
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID uuid = UUID.fromString(authentication.getName());
+        Pageable pageable = PageRequest.of(page, size);
+
+        return CommonResponse.success(projectBoardRepository.myProjectBoardPage(uuid, pageable));
     }
 }

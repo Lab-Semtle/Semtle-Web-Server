@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,8 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
             .select(relationFieldProjectPostMiddle.projectBoard.id)
             .from(relationFieldProjectPostMiddle)
             .leftJoin(relationFieldCategory)
-            .on(relationFieldProjectPostMiddle.relationFieldCategory.id.eq(relationFieldCategory.id))
+            .on(relationFieldProjectPostMiddle.relationFieldCategory.id.eq(
+                relationFieldCategory.id))
             .where(relationFieldCategoryNameEq(condition.getRelationFieldCategoryName()))
             .fetch();
 
@@ -152,6 +154,86 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
         return pageResult;
     }
 
+    @Override
+    public Page<ProjectBoardListDto> myProjectBoardPage(UUID uuid, Pageable pageable) {
+
+        List<Tuple> result = queryFactory
+            .select(
+                projectBoard.id,
+                projectBoard.title,
+                projectBoard.writerName,
+                projectTypeCategory.name,
+                relationFieldCategory.id,
+                relationFieldCategory.name,
+                projectBoard.projectRecruitingEndTime
+            )
+            .from(projectBoard)
+            .leftJoin(projectTypeCategory)
+            .on(projectBoard.projectTypeCategory.id.eq(projectTypeCategory.id))
+            .leftJoin(relationFieldProjectPostMiddle)
+            .on(projectBoard.id.eq(relationFieldProjectPostMiddle.projectBoard.id))
+            .leftJoin(relationFieldCategory)
+            .on(relationFieldProjectPostMiddle.relationFieldCategory.id.eq(
+                relationFieldCategory.id))
+            .where(projectBoard.writerUuid.eq(uuid.toString()))
+            .orderBy(
+                new CaseBuilder()
+                    .when(projectBoard.projectStatus.eq(ProjectStatus.RECRUITING)).then(1)
+                    .when(projectBoard.projectStatus.eq(ProjectStatus.IN_PROGRESS)).then(2)
+                    .when(projectBoard.projectStatus.eq(ProjectStatus.CLOSED)).then(3)
+                    .otherwise(4)
+                    .asc()
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        // DTO 변환 (List<String>으로 relationFieldCategoryName 합치기)
+        Map<Long, List<Tuple>> groupedByProjectId = result.stream()
+            .collect(Collectors.groupingBy(tuple -> tuple.get(projectBoard.id)));
+
+        List<ProjectBoardListDto> dtoList = groupedByProjectId.values().stream()
+            .map(grouped -> {
+                Tuple first = grouped.get(0);
+
+                List<String> relationNames = grouped.stream()
+                    .map(t -> t.get(relationFieldCategory.name))
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList()); // ✅ relation_type 리스트는 모든 값 유지
+
+                ProjectBoardListDto dto = new ProjectBoardListDto(
+                    first.get(projectBoard.id),
+                    first.get(projectBoard.title),
+                    first.get(projectBoard.writerName),
+                    first.get(projectTypeCategory.name),
+                    relationNames,
+                    first.get(projectBoard.projectRecruitingEndTime)
+                );
+
+                return dto;
+            })
+            .toList();
+
+        // 페이징 적용 (총 개수 조회)
+        JPQLQuery<Long> countQuery = queryFactory
+            .select(projectBoard.count())
+            .from(projectBoard)
+            .leftJoin(projectTypeCategory)
+            .on(projectBoard.projectTypeCategory.id.eq(projectTypeCategory.id))
+            .leftJoin(relationFieldProjectPostMiddle)
+            .on(projectBoard.id.eq(relationFieldProjectPostMiddle.projectBoard.id))
+            .leftJoin(relationFieldCategory)
+            .on(relationFieldProjectPostMiddle.relationFieldCategory.id.eq(
+                relationFieldCategory.id))
+            .where((projectBoard.writerUuid.eq(uuid.toString())));
+
+        Page<ProjectBoardListDto> pageResult = PageableExecutionUtils.getPage(dtoList, pageable,
+            countQuery::fetchOne);
+
+        return pageResult;
+    }
+
     private BooleanExpression projectTypeCategoryNameEq(String projectTypeCategoryName) {
         return hasText(projectTypeCategoryName) ? projectBoard.projectTypeCategory.name.eq(
             projectTypeCategoryName) : null;
@@ -161,4 +243,6 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
         return hasText(relationFieldCategoryName) ?
             relationFieldCategory.name.containsIgnoreCase(relationFieldCategoryName) : null;
     }
+
+
 }

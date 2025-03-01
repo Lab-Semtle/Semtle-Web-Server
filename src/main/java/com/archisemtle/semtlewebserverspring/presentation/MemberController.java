@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(value = "*")
+@RequestMapping("/api/v1/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -47,8 +48,9 @@ public class MemberController {
 
 
     // 회원 입력
-    @PostMapping("/members")
-    public CommonResponse<MemberReadResponseVo> save(@RequestBody MemberRegistrationRequestDto memberRegistrationRequestDto) {
+    @PostMapping
+    public CommonResponse<MemberReadResponseVo> save(
+        @RequestBody MemberRegistrationRequestDto memberRegistrationRequestDto) {
         memberService.save(memberRegistrationRequestDto);
         return CommonResponse.success("Member Showed successfully");
     }
@@ -62,7 +64,7 @@ public class MemberController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID uuid = UUID.fromString(authentication.getName());
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
+        Member member = memberRepository.findByUuid(uuid).orElseThrow(() -> new BaseException(
             BaseResponseStatus.NO_EXIST_MEMBERS));
         if (!"ADMIN".equals(member.getRole())) {
             throw new BaseException(BaseResponseStatus.UNAUTHORIZED);
@@ -80,23 +82,24 @@ public class MemberController {
     // 개인 정보 조회
     // 입력 - uuid
     // 출력 - 이름, 생년월일, 전화번호, 학번, 프로필 사진
-    @GetMapping("/members/{uuid}")
-    public CommonResponse<MemberReadResponseVo> showMember(@PathVariable UUID uuid){
-        MemberReadResponseDto showMemberDto =  memberService.show(uuid);
+    @GetMapping("/{uuid}")
+    public CommonResponse<MemberReadResponseVo> showMember(@PathVariable UUID uuid) {
+        MemberReadResponseDto showMemberDto = memberService.show(uuid);
         MemberReadResponseVo responseVo = MemberReadResponseVo.dtoToVo(showMemberDto);
         return CommonResponse.success("해당하는 멤버의 정보를 조회하는데 성공하였습니다.", responseVo);
     }
 
     // 개인 정보 수정
     // uuid, 이름, 생년월일, 전화번호, 학번, 프로필 사진
-    @PatchMapping("/members/{uuid}")
-    public CommonResponse<Void> updateMember(@PathVariable UUID uuid, @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
+    @PatchMapping("/{uuid}")
+    public CommonResponse<Void> updateMember(@PathVariable UUID uuid,
+        @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
         memberService.update(uuid, memberUpdateRequestDto);
 
         return CommonResponse.success("회원 정보 수정에 성공하였습니다.");
     }
 
-    @GetMapping("/members")
+    @GetMapping
     public CommonResponse<MemberListResponseVo> getMemberList(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size,
@@ -104,13 +107,14 @@ public class MemberController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID uuid = UUID.fromString(authentication.getName());
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
+        Member member = memberRepository.findByUuid(uuid).orElseThrow(() -> new BaseException(
             BaseResponseStatus.NO_EXIST_MEMBERS));
         if (!"ADMIN".equals(member.getRole())) {
             throw new BaseException(BaseResponseStatus.UNAUTHORIZED);
         }
 
-        Page<MemberListResponseDto> memberPage = memberService.getMemberList(page, size, searchName);
+        Page<MemberListResponseDto> memberPage = memberService.getMemberList(page, size,
+            searchName);
 
         if (memberPage.isEmpty()) {
             // 검색 결과가 없을 경우 빈 결과 반환
@@ -122,7 +126,8 @@ public class MemberController {
                 .build());
         }
 
-        return CommonResponse.success("회원 리스트", MemberListResponseVo.dtoToVo(memberPage.getContent().get(0)));
+        return CommonResponse.success("회원 리스트",
+            MemberListResponseVo.dtoToVo(memberPage.getContent().get(0)));
     }
 
     @PatchMapping("/{uuid}/deactivate")
@@ -132,64 +137,15 @@ public class MemberController {
     ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID userUuid = UUID.fromString(authentication.getName());
-        Member member = memberRepository.findByUuid(userUuid).orElseThrow(()-> new BaseException(
+        Member member = memberRepository.findByUuid(userUuid).orElseThrow(() -> new BaseException(
             BaseResponseStatus.NO_EXIST_MEMBERS));
         if (!"ADMIN".equals(member.getRole())) {
             throw new BaseException(BaseResponseStatus.UNAUTHORIZED);
         }
 
         memberService.deactivateMember(uuid, memberDeactiveRequestDto);
-        return CommonResponse.success("회원의 활동 가능 여부가 변경되었습니다.", "deactivate-at : " + ZonedDateTime.now());
-    }
-
-    // 로그인
-    @PostMapping("/auth/signin")
-    public CommonResponse<LoginResponseVo> Login(@RequestBody LoginRequestDto loginRequestDto) {
-        LoginResponseVo loginResponseVo = LoginResponseVo.dtoToVo(memberService.login(loginRequestDto));
-        return CommonResponse.success("로그인에 성공하였습니다.", loginResponseVo);
-    }
-
-    @PostMapping("/auth/password/reset/email")
-    public CommonResponse<MemberPasswordResetResponseVo> requestPasswordReset(
-        @RequestBody MemberPasswordResetEmailRequestDto memberPasswordResetEmailRequestDto
-    ) {
-        MemberPasswordResetEmailResponseDto memberPasswordResetEmailResponseDto = passwordResetService.sendPasswordResetEmail(
-            memberPasswordResetEmailRequestDto.getEmail());
-        MemberPasswordResetResponseVo memberPasswordResetResponseVo = MemberPasswordResetResponseVo.dtoToVo(
-            memberPasswordResetEmailResponseDto);
-        return CommonResponse.success("비밀번호 재설정 이메일이 성공적으로 발송되었습니다.", memberPasswordResetResponseVo);
-    }
-
-    @PostMapping("/auth/password/reset")
-    public CommonResponse<String> confirmPasswordReset(
-        @RequestBody MemberPasswordResetRequestDto memberPasswordResetRequestDto
-    ) {
-        passwordResetService.resetPassword(memberPasswordResetRequestDto.getToken(),
-            memberPasswordResetRequestDto.getCurrentPassword(),
-            memberPasswordResetRequestDto.getNewPassword(),
-            memberPasswordResetRequestDto.getConfirmNewPassword());
-        return CommonResponse.success("비밀번호가 성공적으로 변경되었습니다.", null);
-    }
-
-    @PutMapping("/auth/password/manager")
-    public CommonResponse<String> verifyAdmin(
-        @RequestBody verifyAdminRequestDto verifyAdminRequestDto) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UUID uuid = UUID.fromString(authentication.getName());
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
-            BaseResponseStatus.NO_EXIST_MEMBERS));
-        if (!"ADMIN".equals(member.getRole())) {
-            throw new BaseException(BaseResponseStatus.UNAUTHORIZED);
-        }
-
-        boolean isVerified = memberService.verifyAdmin(uuid, verifyAdminRequestDto);
-
-        if (!isVerified) {
-            return CommonResponse.fail(BaseResponseStatus.INVALID_PASSWORD, "비밀번호가 올바르지 않습니다.");
-        }
-
-        return CommonResponse.success("관리자 2차인증에 성공하셨습니다.");
+        return CommonResponse.success("회원의 활동 가능 여부가 변경되었습니다.",
+            "deactivate-at : " + ZonedDateTime.now());
     }
 
 }

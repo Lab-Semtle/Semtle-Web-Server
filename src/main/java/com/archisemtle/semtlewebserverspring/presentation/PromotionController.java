@@ -19,13 +19,13 @@ import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/promotions")
+@RequestMapping("/api/v1/promotions")
 @CrossOrigin(value = "*")
 public class PromotionController {
 
     private final PromotionService promotionService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<CommonResponse<?>> getPromotions(
             @RequestParam(name = "keyword",  required = false) String keyword,
             @RequestParam(name = "page", defaultValue = "1", required = false) int page,
@@ -80,7 +80,7 @@ public class PromotionController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<CommonResponse<?>> createPromotion(
             @Validated @RequestBody ProjectPromotionRequestDto reqDto,
             BindingResult bindingResult) {

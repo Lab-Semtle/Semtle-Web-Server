@@ -1,4 +1,4 @@
-package com.archisemtle.semtlewebserverspring.dto;
+package com.archisemtle.semtlewebserverspring.dto.member;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

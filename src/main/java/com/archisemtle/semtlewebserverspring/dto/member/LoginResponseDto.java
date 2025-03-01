@@ -1,6 +1,5 @@
-package com.archisemtle.semtlewebserverspring.dto;
+package com.archisemtle.semtlewebserverspring.dto.member;
 
-import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +15,4 @@ public class LoginResponseDto {
     private String accessToken;
     private String refreshToken;
     private String username;
-    private List<String> roles;
-    private boolean manageApprovalStatus;
 }

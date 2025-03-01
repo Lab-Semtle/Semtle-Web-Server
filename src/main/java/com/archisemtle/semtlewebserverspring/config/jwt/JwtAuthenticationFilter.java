@@ -28,6 +28,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         chain.doFilter(request, response);
     }
 
+//    private boolean shouldNotFilter(HttpServletRequest request) {
+//        String path = request.getRequestURI();
+//        return path.startsWith("/auth/**") || path.startsWith("/members"); // 로그인 및 회원가입 예외 처리
+//    }
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");

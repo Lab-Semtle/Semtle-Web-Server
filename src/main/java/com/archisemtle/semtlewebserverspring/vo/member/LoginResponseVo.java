@@ -1,8 +1,6 @@
-package com.archisemtle.semtlewebserverspring.vo;
+package com.archisemtle.semtlewebserverspring.vo.member;
 
-import com.archisemtle.semtlewebserverspring.dto.AddProjectBoardRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.LoginResponseDto;
-import java.util.List;
+import com.archisemtle.semtlewebserverspring.dto.member.LoginResponseDto;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +12,6 @@ public class LoginResponseVo {
     private String accessToken;
     private String refreshToken;
     private String username;
-    private List<String> roles;
-    private boolean manageApprovalStatus;
 
     public static LoginResponseVo dtoToVo(LoginResponseDto loginResponseDto) {
         return LoginResponseVo.builder()
@@ -23,8 +19,6 @@ public class LoginResponseVo {
             .accessToken(loginResponseDto.getAccessToken())
             .refreshToken(loginResponseDto.getRefreshToken())
             .username(loginResponseDto.getUsername())
-            .roles(loginResponseDto.getRoles())
-            .manageApprovalStatus(loginResponseDto.isManageApprovalStatus())
             .build();
     }
 }

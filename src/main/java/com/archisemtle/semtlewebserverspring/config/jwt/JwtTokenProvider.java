@@ -42,13 +42,13 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
             .setSubject(String.valueOf(uuid))
             .claim("authorities", authorities)
-            .setExpiration(new Date(now + 3600000))
+            .setExpiration(new Date(now + 86400000))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-            .setExpiration(new Date(now + 3600000))
+            .setExpiration(new Date(now + 86400000))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
 

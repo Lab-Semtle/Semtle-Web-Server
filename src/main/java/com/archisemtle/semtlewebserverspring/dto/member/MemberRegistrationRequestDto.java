@@ -15,6 +15,7 @@ public class MemberRegistrationRequestDto {
     private String password;
     private String role;
     private String name;
+    private String profileUrl;
     private boolean manageApprovalStatus;
 
     public Member toEntity(PasswordEncoder passwordEncoder) {
@@ -24,6 +25,7 @@ public class MemberRegistrationRequestDto {
             .password(passwordEncoder.encode(password))
             .role(role)
             .username(name)
+            .profileImageUrl(profileUrl)
             .manageApprovalStatus(manageApprovalStatus)
             .build();
     }

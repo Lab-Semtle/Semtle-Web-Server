@@ -8,10 +8,12 @@ import lombok.Getter;
 @Getter
 @Builder
 public class LoginResponseVo {
+
     private UUID uuid;
     private String accessToken;
     private String refreshToken;
     private String username;
+    private String profileUrl;
 
     public static LoginResponseVo dtoToVo(LoginResponseDto loginResponseDto) {
         return LoginResponseVo.builder()
@@ -19,6 +21,7 @@ public class LoginResponseVo {
             .accessToken(loginResponseDto.getAccessToken())
             .refreshToken(loginResponseDto.getRefreshToken())
             .username(loginResponseDto.getUsername())
+            .profileUrl(loginResponseDto.getProfileUrl())
             .build();
     }
 }

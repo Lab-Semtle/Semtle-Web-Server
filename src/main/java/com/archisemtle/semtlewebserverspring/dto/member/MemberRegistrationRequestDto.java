@@ -14,6 +14,7 @@ public class MemberRegistrationRequestDto {
     private String email;
     private String password;
     private String role;
+    private String name;
     private boolean manageApprovalStatus;
 
     public Member toEntity(PasswordEncoder passwordEncoder) {
@@ -22,6 +23,7 @@ public class MemberRegistrationRequestDto {
             .email(email)
             .password(passwordEncoder.encode(password))
             .role(role)
+            .username(name)
             .manageApprovalStatus(manageApprovalStatus)
             .build();
     }

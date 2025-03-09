@@ -31,7 +31,7 @@ public class SecurityConfig {
         return request -> {
             var cors = new org.springframework.web.cors.CorsConfiguration();
             cors.setAllowedOriginPatterns(
-                List.of("http://localhost:3000", "https://semtle-web-client-1-0.vercel.app",
+                List.of("http://localhost:3000", "https://archisemtle.com",
                     "https://archisemtle.site"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             cors.setAllowedHeaders(List.of("*"));

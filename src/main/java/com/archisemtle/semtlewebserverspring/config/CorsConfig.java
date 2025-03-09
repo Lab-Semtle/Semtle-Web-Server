@@ -14,7 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")  // 특정 URL 경로에만 CORS 적용 (예: /api/**)
             .allowedOriginPatterns("http://localhost:3000",
-                "https://semtle-web-client-1-0.vercel.app",
+                "https://archisemtle.com",
                 "https://archisemtle.site")
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .allowedHeaders("*")

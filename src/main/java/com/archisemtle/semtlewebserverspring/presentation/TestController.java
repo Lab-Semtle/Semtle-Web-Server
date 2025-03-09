@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/api/v1")
-@CrossOrigin(value = "*")
 public class TestController {
 
     @GetMapping("/health")

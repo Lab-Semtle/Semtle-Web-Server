@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/members", "/api/v1/auth/signin")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/index/**", "/api/v1/projectboard/**",
-                    "/api/v1/promotions/**", "api/v1/activity/**").permitAll()
+                    "/api/v1/promotions/**", "/api/v1/activity/**").permitAll()
 
                 .requestMatchers(
                     "/swagger-ui/**",       // Swagger UI 리소스

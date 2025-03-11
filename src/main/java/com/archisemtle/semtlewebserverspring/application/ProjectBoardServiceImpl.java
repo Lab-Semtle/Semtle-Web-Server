@@ -10,6 +10,7 @@ import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
 import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
+import com.archisemtle.semtlewebserverspring.domain.ProjectBoardImage;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
 import com.archisemtle.semtlewebserverspring.dto.AddProjectBoardRequestDto;
@@ -18,6 +19,7 @@ import com.archisemtle.semtlewebserverspring.dto.ProjectBoardResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.UpdateProjectBoardRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardImageRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldCategoryRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
@@ -42,6 +44,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
     private final RelationFieldProjectPostMiddleRepository relationFieldProjectPostMiddleRepository;
     private final RelationFieldCategoryRepository relationFieldCategoryRepository;
     private final MemberRepository memberRepository;
+    private final ProjectBoardImageRepository projectBoardImageRepository;
 
     //게시물작성
     @Override
@@ -81,6 +84,16 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .collect(Collectors.toList());
 
         relationFieldProjectPostMiddleRepository.saveAll(relationFieldProjectPostMiddles);
+
+        List<ProjectBoardImage> projectBoardImages = addProjectBoardRequestDto.getProjectBoardImages()
+            .stream().map(
+                image -> ProjectBoardImage.builder()
+                    .projectBoard(projectBoard)
+                    .projectBoardImageUrl(image)
+                    .build())
+            .collect(Collectors.toList());
+
+        projectBoardImageRepository.saveAll(projectBoardImages);
     }
 
     //게시물 한개 조회

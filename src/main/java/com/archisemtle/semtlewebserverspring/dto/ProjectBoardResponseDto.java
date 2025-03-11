@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
 import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
+import com.archisemtle.semtlewebserverspring.domain.ProjectBoardImage;
 import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
@@ -25,6 +26,7 @@ public class ProjectBoardResponseDto {
     private Date projectEndTime;
     private Date projectRecruitingEndTime;
     private ProjectStatus projectStatus;
+    private List<ProjectBoardImage> projectBoardImages;
 
     public static ProjectBoardResponseVo dtoToVo(ProjectBoardResponseDto projectBoardResponseDto) {
         return ProjectBoardResponseVo.builder()
@@ -38,6 +40,7 @@ public class ProjectBoardResponseDto {
             .projectEndTime(projectBoardResponseDto.getProjectEndTime())
             .projectRecruitingEndTime(projectBoardResponseDto.getProjectRecruitingEndTime())
             .projectStatus(projectBoardResponseDto.getProjectStatus())
+            .projectBoardImages(projectBoardResponseDto.getProjectBoardImages())
             .build();
     }
 }

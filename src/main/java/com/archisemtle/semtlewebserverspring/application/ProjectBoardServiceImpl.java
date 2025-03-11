@@ -115,6 +115,9 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
                     .getName())
             .toList();
 
+        List<ProjectBoardImage> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
+            id);
+
         return ProjectBoardResponseDto.builder()
             .title(projectBoard.getTitle())
             .content(projectBoard.getContent())
@@ -126,6 +129,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .projectEndTime(projectBoard.getProjectEndTime())
             .projectRecruitingEndTime(projectBoard.getProjectRecruitingEndTime())
             .projectStatus(projectBoard.getProjectStatus())
+            .projectBoardImages(projectBoardImages)
             .build();
     }
 

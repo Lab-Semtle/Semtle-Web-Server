@@ -16,16 +16,18 @@ public class ProjectBoardListDto {
     private String projectTypeCategoryName;
     private List<String> relationFieldCategoryName;
     private Date projectRecruitingEndTime;
+    private String projectBoardImage;
 
     @QueryProjection
     public ProjectBoardListDto(Long projectBoardId, String title, String writerName,
         String projectTypeCategoryName, List<String> relationFieldCategoryName,
-        Date projectRecruitingEndTime) {
+        Date projectRecruitingEndTime, String projectBoardImage) {
         this.ProjectBoardId = projectBoardId;
         this.title = title;
         this.writerName = writerName;
         this.projectTypeCategoryName = projectTypeCategoryName;
         this.relationFieldCategoryName = relationFieldCategoryName;
         this.projectRecruitingEndTime = projectRecruitingEndTime;
+        this.projectBoardImage = projectBoardImage;
     }
 }

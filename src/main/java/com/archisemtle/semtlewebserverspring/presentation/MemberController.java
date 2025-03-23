@@ -38,7 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(value = "*")
 @RequestMapping("/api/v1/members")
 public class MemberController {
 

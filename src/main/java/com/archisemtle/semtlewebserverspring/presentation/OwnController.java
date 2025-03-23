@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/own")
 @RequiredArgsConstructor
-@CrossOrigin(value = "*")
 public class OwnController {
 
     private final ArchiveService archiveService;

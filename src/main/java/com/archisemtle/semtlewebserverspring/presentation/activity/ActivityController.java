@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
 @RestController
 @RequestMapping("/api/v1/activity")
 @RequiredArgsConstructor
-@CrossOrigin(value = "*")
 public class ActivityController {
 
     private static final Logger log = LoggerFactory.getLogger(ActivityController.class);

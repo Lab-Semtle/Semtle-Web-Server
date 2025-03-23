@@ -27,12 +27,15 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider; // JWT 관련 유틸리티 클래스
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource () {
+    public CorsConfigurationSource corsConfigurationSource() {
         return request -> {
-            var cors= new org.springframework.web.cors.CorsConfiguration();
-            cors.setAllowedOriginPatterns(List.of("*", "http://localhost:3000"));
+            var cors = new org.springframework.web.cors.CorsConfiguration();
+            cors.setAllowedOriginPatterns(
+                List.of("http://localhost:3000", "https://archisemtle.com",
+                    "https://archisemtle.site"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             cors.setAllowedHeaders(List.of("*"));
+            cors.setAllowCredentials(true);
             return cors;
         };
     }
@@ -46,8 +49,10 @@ public class SecurityConfig {
                 SessionCreationPolicy.STATELESS)) // Stateless 설정
             .authorizeHttpRequests(auth -> auth
 
-                .requestMatchers(HttpMethod.POST, "/api/v1/members", "/api/v1/auth/signin").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/index/**", "/api/v1/projectboard/**","/api/v1/promotions/**", "api/v1/activity/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/members", "/api/v1/auth/signin")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/index/**", "/api/v1/projectboard/**",
+                    "/api/v1/promotions/**", "/api/v1/activity/**").permitAll()
 
                 .requestMatchers(
                     "/swagger-ui/**",       // Swagger UI 리소스

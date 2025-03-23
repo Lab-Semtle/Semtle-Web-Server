@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/index")
-@CrossOrigin(value = "*")
 public class BannerController {
 
     private final BannerService bannerService;

@@ -19,6 +19,7 @@ public class AddProjcetBoardRequestVo {
     private Date projectStartTime;
     private Date projectEndTime;
     private Date projectRecruitingEndTime;
+    private List<String> projectBoardImages;
 
     public static AddProjectBoardRequestDto voToDto(
         AddProjcetBoardRequestVo addProjcetBoardRequestVo) {
@@ -31,6 +32,7 @@ public class AddProjcetBoardRequestVo {
             .projectStartTime(addProjcetBoardRequestVo.getProjectStartTime())
             .projectEndTime(addProjcetBoardRequestVo.getProjectEndTime())
             .projectRecruitingEndTime(addProjcetBoardRequestVo.getProjectRecruitingEndTime())
+            .projectBoardImages(addProjcetBoardRequestVo.getProjectBoardImages())
             .build();
     }
 }

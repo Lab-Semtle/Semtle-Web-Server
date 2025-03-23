@@ -24,4 +24,5 @@ public class AddProjectBoardRequestDto {
     private Date projectStartTime;
     private Date projectEndTime;
     private Date projectRecruitingEndTime;
+    private List<String> projectBoardImages;
 }

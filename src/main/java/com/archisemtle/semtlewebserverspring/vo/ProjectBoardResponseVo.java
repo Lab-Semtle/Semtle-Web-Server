@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
+import com.archisemtle.semtlewebserverspring.domain.ProjectBoardImage;
 import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import java.util.Date;
@@ -22,4 +23,5 @@ public class ProjectBoardResponseVo {
     private Date projectEndTime;
     private Date projectRecruitingEndTime;
     private ProjectStatus projectStatus;
+    private List<ProjectBoardImage> projectBoardImages;
 }

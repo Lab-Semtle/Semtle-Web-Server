@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.infrastructure;
 
 import static com.archisemtle.semtlewebserverspring.domain.QProjectBoard.projectBoard;
+import static com.archisemtle.semtlewebserverspring.domain.QProjectBoardImage.projectBoardImage;
 import static com.archisemtle.semtlewebserverspring.domain.QProjectTypeCategory.projectTypeCategory;
 import static com.archisemtle.semtlewebserverspring.domain.QRelationFieldCategory.relationFieldCategory;
 import static com.archisemtle.semtlewebserverspring.domain.QRelationFieldProjectPostMiddle.relationFieldProjectPostMiddle;
@@ -67,7 +68,8 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                 projectTypeCategory.name,
                 relationFieldCategory.id,
                 relationFieldCategory.name,
-                projectBoard.projectRecruitingEndTime
+                projectBoard.projectRecruitingEndTime,
+                projectBoardImage.projectBoardImageUrl
             )
             .from(projectBoard)
             .leftJoin(projectTypeCategory)
@@ -77,6 +79,8 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
             .leftJoin(relationFieldCategory)
             .on(relationFieldProjectPostMiddle.relationFieldCategory.id.eq(
                 relationFieldCategory.id))
+            .leftJoin(projectBoardImage)
+            .on(projectBoard.id.eq(projectBoardImage.projectBoard.id))
             .where(filterCondition)
             .orderBy(
                 new CaseBuilder()
@@ -86,6 +90,7 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                     .otherwise(4)
                     .asc()
             )
+            .orderBy(projectBoardImage.id.asc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -123,7 +128,8 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                     first.get(projectBoard.writerName),
                     first.get(projectTypeCategory.name),
                     relationNames,
-                    first.get(projectBoard.projectRecruitingEndTime)
+                    first.get(projectBoard.projectRecruitingEndTime),
+                    first.get(projectBoardImage.projectBoardImageUrl)
                 );
 
                 log.info("Converted DTO: {}", dto.getRelationFieldCategoryName());
@@ -208,7 +214,8 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                     first.get(projectBoard.writerName),
                     first.get(projectTypeCategory.name),
                     relationNames,
-                    first.get(projectBoard.projectRecruitingEndTime)
+                    first.get(projectBoard.projectRecruitingEndTime),
+                    first.get(projectBoardImage.projectBoardImageUrl)
                 );
 
                 return dto;

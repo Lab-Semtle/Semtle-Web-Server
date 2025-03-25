@@ -1,9 +1,11 @@
 package com.archisemtle.semtlewebserverspring.domain;
 
+import com.archisemtle.semtlewebserverspring.common.BaseTimeEntity;
 import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
 import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +19,7 @@ import org.hibernate.annotations.*;
 @Getter
 @Entity(name = "project_board")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProjectBoard {
+public class ProjectBoard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,15 +49,15 @@ public class ProjectBoard {
 
     @Column(name = "project_start_time", nullable = false)
     @Comment("프로젝트 시작일")
-    private Date projectStartTime;
+    private LocalDate projectStartTime;
 
     @Column(name = "project_end_time", nullable = false)
     @Comment("프로젝트 종료일")
-    private Date projectEndTime;
+    private LocalDate projectEndTime;
 
     @Column(name = "end_date", nullable = false)
     @Comment("프로젝트 모집 종료일")
-    private Date projectRecruitingEndTime;
+    private LocalDate projectRecruitingEndTime;
 
     @Column(name = "project_status", nullable = false)
     @Comment("프로젝트 상태")
@@ -65,12 +67,10 @@ public class ProjectBoard {
 
     @Builder
     public ProjectBoard(Long id, String title, String content, String writerUuid, String writerName,
-                        String contact, ProjectTypeCategory projectTypeCategory, Date projectStartTime,
-                        Date projectEndTime, Date projectRecruitingEndTime, ProjectStatus projectStatus, String useYn,
-                        String projectLink, String projectMember) {
+        String contact, ProjectTypeCategory projectTypeCategory, LocalDate projectStartTime,
+        LocalDate projectEndTime, LocalDate projectRecruitingEndTime, ProjectStatus projectStatus) {
         this.id = id;
         this.title = title;
-//        this.subTitle = subTitle;
         this.content = content;
         this.writerUuid = writerUuid;
         this.writerName = writerName;

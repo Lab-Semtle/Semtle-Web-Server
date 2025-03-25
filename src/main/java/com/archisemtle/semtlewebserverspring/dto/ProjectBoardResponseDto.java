@@ -5,6 +5,7 @@ import com.archisemtle.semtlewebserverspring.domain.ProjectBoardImage;
 import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.Builder;
@@ -22,9 +23,9 @@ public class ProjectBoardResponseDto {
     private String contact;
     private String projectTypeCategoryName;
     private List<String> relationFieldCategoryName;
-    private Date projectStartTime;
-    private Date projectEndTime;
-    private Date projectRecruitingEndTime;
+    private LocalDate projectStartTime;
+    private LocalDate projectEndTime;
+    private LocalDate projectRecruitingEndTime;
     private ProjectStatus projectStatus;
     private List<ProjectBoardImage> projectBoardImages;
 

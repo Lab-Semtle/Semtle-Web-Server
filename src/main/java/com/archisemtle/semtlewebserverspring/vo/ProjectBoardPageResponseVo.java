@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.Builder;
@@ -14,6 +15,6 @@ public class ProjectBoardPageResponseVo {
     private String writerName;
     private String projectTypeCategory;
     private List<String> relationFieldCategory;
-    private Date projectRecruitingEndTime;
+    private LocalDate projectRecruitingEndTime;
     private ProjectStatus projectStatus;
 }

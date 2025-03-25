@@ -3,6 +3,7 @@ package com.archisemtle.semtlewebserverspring.dto;
 import com.archisemtle.semtlewebserverspring.common.ProjectStatus;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardPageResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.Builder;
@@ -18,7 +19,7 @@ public class ProjectBoardPageResponseDto {
     private String writerName;
     private String projectTypeCategoryName;
     private List<String> relationFieldCategoryName;
-    private Date projectRecruitingEndTime;
+    private LocalDate projectRecruitingEndTime;
     private ProjectStatus projectStatus;
 
     public static ProjectBoardPageResponseVo dtoToVo(ProjectBoardPageResponseDto projectBoardPageResponseDto) {

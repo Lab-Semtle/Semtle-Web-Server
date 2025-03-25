@@ -19,8 +19,10 @@ import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,9 +52,9 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        LocalDateTime endDateTime = new Timestamp(projectBoard.getProjectRecruitingEndTime().getTime()).toLocalDateTime();
+        LocalDate endDateTime = projectBoard.getProjectRecruitingEndTime();
 
-        if(now.isBefore(endDateTime)) {
+        if(now.isBefore(ChronoLocalDateTime.from(endDateTime))) {
             Member member = memberRepository.findById(applicantId)
                 .orElseThrow(() -> new BaseException(
                     BaseResponseStatus.NO_EXIST_MEMBERS));

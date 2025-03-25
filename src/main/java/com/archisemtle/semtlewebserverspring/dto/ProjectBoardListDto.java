@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.Builder;
@@ -15,13 +16,13 @@ public class ProjectBoardListDto {
     private String writerName;
     private String projectTypeCategoryName;
     private List<String> relationFieldCategoryName;
-    private Date projectRecruitingEndTime;
+    private LocalDate projectRecruitingEndTime;
     private String projectBoardImage;
 
     @QueryProjection
     public ProjectBoardListDto(Long projectBoardId, String title, String writerName,
         String projectTypeCategoryName, List<String> relationFieldCategoryName,
-        Date projectRecruitingEndTime, String projectBoardImage) {
+        LocalDate projectRecruitingEndTime, String projectBoardImage) {
         this.ProjectBoardId = projectBoardId;
         this.title = title;
         this.writerName = writerName;

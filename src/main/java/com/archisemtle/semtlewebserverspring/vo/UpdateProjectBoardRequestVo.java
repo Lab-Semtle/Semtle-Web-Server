@@ -3,6 +3,7 @@ package com.archisemtle.semtlewebserverspring.vo;
 import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldCategory;
 import com.archisemtle.semtlewebserverspring.dto.UpdateProjectBoardRequestDto;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.Getter;
@@ -14,9 +15,9 @@ public class UpdateProjectBoardRequestVo {
     private String contact;
     private ProjectTypeCategory projectTypeCategory;
     private List<RelationFieldCategory> relationFieldCategories;
-    private Date projectStartTime;
-    private Date projectEndTime;
-    private Date projectRecruitingEndTime;
+    private LocalDate projectStartTime;
+    private LocalDate projectEndTime;
+    private LocalDate projectRecruitingEndTime;
 
     public static UpdateProjectBoardRequestDto voToDto(
         UpdateProjectBoardRequestVo updateProjectBoardRequestVo) {

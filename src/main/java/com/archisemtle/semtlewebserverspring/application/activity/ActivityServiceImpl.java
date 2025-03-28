@@ -88,8 +88,8 @@ public class ActivityServiceImpl implements ActivityService{
         Pageable pageable = PageRequest.of(requestDto.getPage()-1, requestDto.getSize(),
             Sort.by(Direction.ASC, "createdAt"));
 
-
-        activityPage = activityRepository.findByTypeContainingIgnoreCase(requestDto.getType(), pageable);
+            activityPage = requestDto.getType().isEmpty() ? activityRepository.findAll(pageable) :
+                activityRepository.findByTypeContainingIgnoreCase(requestDto.getType(), pageable);
 
         int total_posts = (int)activityPage.getTotalElements();
         int total_pages = (int) Math.ceil((double) total_posts / requestDto.getSize());

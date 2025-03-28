@@ -82,7 +82,7 @@ public class ActivityController {
     public CommonResponse<ActivityListResponseVo> getActivityList(
         @RequestParam(name = "page", defaultValue = "1") int page,
         @RequestParam(name = "size", defaultValue = "15") int size,
-        @RequestParam(name = "type", defaultValue = "기타") String type){
+        @RequestParam(name = "type", defaultValue = "") String type){
         ActivityListRequestVo requestVo = ActivityListRequestVo.builder()
             .page(page)
             .size(size)

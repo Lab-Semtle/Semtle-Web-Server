@@ -68,7 +68,7 @@ public class ArchiveServiceImpl implements ArchiveService{
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
-            .createdAt(requestDto.getCreatedAt())
+            .createdAt(prevArchive.getCreatedAt())
             .uuid(prevArchive.getUuid())
             .fileUrl(requestDto.getFileUrl())
             .imageUrl(requestDto.getImageUrl())

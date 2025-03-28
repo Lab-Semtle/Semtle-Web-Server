@@ -22,7 +22,7 @@ import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
 
 @Service
 @AllArgsConstructor
-public class ArchiveServiceImpl implements ArchiveService{
+public class   ArchiveServiceImpl implements ArchiveService{
 
 
     private final ArchiveRepository archiveRepository;

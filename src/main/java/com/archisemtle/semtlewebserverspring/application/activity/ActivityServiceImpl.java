@@ -36,10 +36,10 @@ public class ActivityServiceImpl implements ActivityService{
         Activity activity = Activity.builder()
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
+            .createdAt(requestDto.getCreatedAt())
             .writer(requestDto.getWriter())
             .images(requestDto.getImages())
             .uuid(requestDto.getUuid())
-            .createdAt(new Date())
             .type(requestDto.getType())
             .build();
 

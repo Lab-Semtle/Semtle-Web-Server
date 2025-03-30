@@ -45,6 +45,7 @@ public class ArchiveController {
     @GetMapping("/{id}")
     public CommonResponse<ArchiveResponseVo> readArchive(@PathVariable Long id){
         ArchiveResponseDto responseDto = archiveService.readArchiveBoard(id);
+
         return CommonResponse.success("족보 게시판 흭득 성공", ArchiveResponseDto.dtoToVo(responseDto));
     }
 

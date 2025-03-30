@@ -2,7 +2,7 @@ package com.archisemtle.semtlewebserverspring.dto.archive;
 
 import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
 import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveResponseVo;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class ArchiveResponseDto {
     private String writer;
     private String content;
     private String title;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private List<String> imageUrl;
     private List<String> fileUrl;
 

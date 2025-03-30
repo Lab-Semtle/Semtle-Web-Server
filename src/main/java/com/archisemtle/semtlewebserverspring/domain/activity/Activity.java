@@ -2,6 +2,7 @@ package com.archisemtle.semtlewebserverspring.domain.activity;
 
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityResponseVo;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -27,10 +28,9 @@ public class Activity {
     private String content;
     @Column(nullable = false, unique = false)
     private String writer;
-    @Column(nullable = true, unique = false)
-    @Temporal(TemporalType.DATE)
-    private Date createdAt;
-    @Column(nullable = true, unique = false, columnDefinition = "uuid")
+    @Column(nullable = false, unique = false)
+    private LocalDateTime createdAt;
+    @Column(nullable = false, unique = false, columnDefinition = "uuid")
     private UUID uuid;
     @ElementCollection
     @CollectionTable(name = "activity_image", joinColumns = @JoinColumn(name = "activity_id"))

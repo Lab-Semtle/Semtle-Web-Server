@@ -23,6 +23,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # ✅ application.yml 생성 (여기에 추가)
+      - name: Create application.yml
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" > src/main/resources/application.yml
+
       # Gradle 캐싱
       - name: Gradle Caching
         uses: actions/cache@v3
@@ -38,7 +44,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Gradle 빌드
+      # Gradle 빌드 (application.yml이 필요하므로 이 전에 생성해야 함)
       - name: Build with Gradle
         run: ./gradlew build
 
@@ -71,7 +77,7 @@ jobs:
         run: |
           if sudo docker ps -a | grep -q spring_container; then
             sudo docker stop spring_container
-            sudo docker rm springr_container
+            sudo docker rm spring_container
           fi
 
       # 최신 Docker 이미지 가져오기

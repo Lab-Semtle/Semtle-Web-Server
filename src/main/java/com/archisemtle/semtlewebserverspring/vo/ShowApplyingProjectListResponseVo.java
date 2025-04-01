@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ShowApplyingProjectInfoResponseDto;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -21,26 +22,26 @@ public class ShowApplyingProjectListResponseVo {
     @Getter
     @NoArgsConstructor
     public static class ApplicationInfo {
-        private Integer applicationId;
+        private Long applicationId;
         private String projectTitle;
-        private Integer boardId;
-        private Date applyDate;
+        private Long postId;
+        private LocalDate applyDate;
         private String status;
         private String projectType;
         private String relateField;
 
         @Builder
         public ApplicationInfo(
-            Integer applicationId,
+            Long applicationId,
             String projectTitle,
-            Integer boardId,
-            Date applyDate,
+            Long postId,
+            LocalDate applyDate,
             String status,
             String projectType,
             String relateField) {
             this.applicationId = applicationId;
             this.projectTitle = projectTitle;
-            this.boardId = boardId;
+            this.postId = postId;
             this.applyDate = applyDate;
             this.status = status;
             this.projectType = projectType;
@@ -64,7 +65,7 @@ public class ShowApplyingProjectListResponseVo {
             .map(dtoApplication -> ShowApplyingProjectListResponseVo.ApplicationInfo.builder()
                 .applicationId(dtoApplication.getApplicationId())
                 .projectTitle(dtoApplication.getProjectTitle())
-                .boardId(dtoApplication.getBoardId())
+                .postId(dtoApplication.getPostId())
                 .applyDate(dtoApplication.getApplyDate())
                 .status(dtoApplication.getStatus())
                 .projectType(dtoApplication.getProjectType())

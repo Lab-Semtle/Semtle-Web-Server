@@ -1,7 +1,7 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Applicants;
-import java.util.Date;
+import com.archisemtle.semtlewebserverspring.domain.Applicant;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,29 +10,21 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ShowProjectApplicantInfoResponseDto {
-    private Integer applicantId;
+    private Long applicantId;
     private String name;
-    private Date applyDate;
+    private LocalDate applyDate;
     private String status;
     private String email;
     private String phone;
-    private String resumeUrl;
-    private String portfolioUrl;
-    private String customAnswer;
-    private String additionalFile;
 
-    public static ShowProjectApplicantInfoResponseDto entityToDto(Applicants applicants) {
+    public static ShowProjectApplicantInfoResponseDto entityToDto(Applicant applicant) {
         return ShowProjectApplicantInfoResponseDto.builder()
-            .applicantId(applicants.getApplicantId())
-            .name(applicants.getName())
-            .applyDate(applicants.getApplyDate())
-            .status(applicants.getStatus())
-            .email(applicants.getEmail())
-            .phone(applicants.getPhone())
-            .resumeUrl(applicants.getResumeUrl())
-            .portfolioUrl(applicants.getPortfolioUrl())
-            .customAnswer(applicants.getCustomAnswer())
-            .additionalFile(applicants.getAdditionalFile())
+            .applicantId(applicant.getApplicantId())
+            .name(applicant.getName())
+            .applyDate(applicant.getApplyDate())
+            .status(applicant.getStatus())
+            .email(applicant.getEmail())
+            .phone(applicant.getPhone())
             .build();
     }
 }

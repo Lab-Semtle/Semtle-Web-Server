@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ApplyProjectResponseDto;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApplyProjectResponseVo {
     private String message;
-    private Integer appliedId;
-    private String appliedAt;
+    private Long applicationId;
+    private LocalDateTime appliedAt;
 
     @Builder
-    public ApplyProjectResponseVo(String message, Integer appliedId, String appliedAt) {
+    public ApplyProjectResponseVo(String message, Long applicationId, LocalDateTime appliedAt) {
         this.message = message;
-        this.appliedId = appliedId;
+        this.applicationId = applicationId;
         this.appliedAt = appliedAt;
     }
 
@@ -23,7 +24,7 @@ public class ApplyProjectResponseVo {
         ApplyProjectResponseDto applyProjectResponseDto) {
         return ApplyProjectResponseVo.builder()
             .message(applyProjectResponseDto.getMessage())
-            .appliedId(applyProjectResponseDto.getAppliedId())
+            .applicationId(applyProjectResponseDto.getApplicationId())
             .appliedAt(applyProjectResponseDto.getAppliedAt())
             .build();
     }

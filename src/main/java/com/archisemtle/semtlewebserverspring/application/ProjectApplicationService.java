@@ -8,8 +8,8 @@ import com.archisemtle.semtlewebserverspring.dto.ShowApplyingProjectInfoResponse
 import com.archisemtle.semtlewebserverspring.dto.ShowProjectApplicantInfoResponseDto;
 
 public interface ProjectApplicationService {
-    ProjectApplicantsResponseDto getApplicants(Integer boardId, int page, int limit) throws Exception;
-    ShowProjectApplicantInfoResponseDto getApplicantInfo(Integer boardId,Integer applicantId) throws Exception;
-    ChangeApplyStatusResponseDto changeApplyStatus(Integer boardId,Integer applicantId, String status) throws Exception;
-    ShowApplyingProjectInfoResponseDto getApplyingProjectInfo(Integer applicantId,int page, int limit) throws Exception;
+    ProjectApplicantsResponseDto getApplicants(Long boardId, int page, int limit) throws Exception;
+    ShowProjectApplicantInfoResponseDto getApplicantInfo(Long boardId,Long applicantId) throws Exception;
+    ChangeApplyStatusResponseDto changeApplyStatus(Long boardId,Long applicantId, String status) throws Exception;
+    ShowApplyingProjectInfoResponseDto getApplyingProjectInfo(int memberId,int page, int limit) throws Exception;
 }

@@ -1,6 +1,6 @@
 package com.archisemtle.semtlewebserverspring.dto.member;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class MemberReadResponseDto {
     private String password;
     private String studentId;
     private String username;
-    private Date birth;
+    private LocalDate birth;
     private String phone;
     private String role;
     private boolean manageApprovalStatus;

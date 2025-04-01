@@ -95,6 +95,11 @@ public enum BaseResponseStatus {
     INVALID_APPLICATION_STATUS(HttpStatus.BAD_REQUEST, false, 5002, "유효하지 않은 신청 상태입니다."),
     APPLICATION_ALREADY_PROCESSED(HttpStatus.CONFLICT, false, 5003, "이미 처리된 신청입니다."),
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, false, 5004, "신청 정보를 찾을 수 없습니다."),
+    NO_BOARD_FOUND(HttpStatus.NOT_FOUND, false, 5005, "공고를 찾을 수 없습니다."),
+    RECRUITING_ALREADY_ENDED(HttpStatus.BAD_REQUEST, false, 5006, "프로젝트 모집이 마감되었습니다."),
+    NO_APPLICANTS(HttpStatus.BAD_REQUEST, false, 5007, "신청자가 존재하지 않습니다."),
+    NO_APPLICATIONS(HttpStatus.BAD_REQUEST, false, 5007, "신청서가 존재하지 않습니다."),
+    DUPLICATE_APPLICATION(HttpStatus.BAD_REQUEST, false, 5008, "이미 신청한 공고입니다."),
 
     /**
      * 6000 : Cart & WishProductList Service Error

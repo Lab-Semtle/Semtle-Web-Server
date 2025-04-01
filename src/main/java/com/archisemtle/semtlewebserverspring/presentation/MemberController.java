@@ -83,19 +83,31 @@ public class MemberController {
     // 출력 - 이름, 생년월일, 전화번호, 학번, 프로필 사진
     @GetMapping("/{uuid}")
     public CommonResponse<MemberReadResponseVo> showMember(@PathVariable UUID uuid) {
-        MemberReadResponseDto showMemberDto = memberService.show(uuid);
-        MemberReadResponseVo responseVo = MemberReadResponseVo.dtoToVo(showMemberDto);
-        return CommonResponse.success("해당하는 멤버의 정보를 조회하는데 성공하였습니다.", responseVo);
+        try{
+            MemberReadResponseDto showMemberDto = memberService.show(uuid);
+            MemberReadResponseVo responseVo = MemberReadResponseVo.dtoToVo(showMemberDto);
+            return CommonResponse.success("해당하는 멤버의 정보를 조회하는데 성공하였습니다.", responseVo);
+        } catch (BaseException e) {
+            return CommonResponse.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            return CommonResponse.fail(BaseResponseStatus.INTERNAL_SERVER_ERROR, BaseResponseStatus.INTERNAL_SERVER_ERROR.getMessage());
+        }
     }
 
     // 개인 정보 수정
-    // uuid, 이름, 생년월일, 전화번호, 학번, 프로필 사진
+    // 이름, 생년월일, 전화번호, 프로필 사진
     @PatchMapping("/{uuid}")
-    public CommonResponse<Void> updateMember(@PathVariable UUID uuid,
+    public CommonResponse<Integer> updateMember(@PathVariable UUID uuid,
         @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
-        memberService.update(uuid, memberUpdateRequestDto);
+        try {
+            memberService.update(uuid, memberUpdateRequestDto);
+            return CommonResponse.success(BaseResponseStatus.SUCCESS.getMessage(), BaseResponseStatus.SUCCESS.getCode());
+        } catch (BaseException e) {
+            return CommonResponse.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            return CommonResponse.fail(BaseResponseStatus.INTERNAL_SERVER_ERROR, BaseResponseStatus.INTERNAL_SERVER_ERROR.getMessage());
+        }
 
-        return CommonResponse.success("회원 정보 수정에 성공하였습니다.");
     }
 
     @GetMapping

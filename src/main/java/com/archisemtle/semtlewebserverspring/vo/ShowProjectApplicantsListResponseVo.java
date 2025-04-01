@@ -1,6 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ProjectApplicantsResponseDto;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,13 +21,13 @@ public class ShowProjectApplicantsListResponseVo {
     @Getter
     @NoArgsConstructor
     public static class ApplicantInfo {
-        private Integer applicantId;
+        private Long applicantId;
         private String name;
-        private Date applyDate;
+        private LocalDate applyDate;
         private String status;
 
         @Builder
-        public ApplicantInfo(Integer applicantId, String name, Date applyDate, String status) {
+        public ApplicantInfo(Long applicantId, String name, LocalDate applyDate, String status) {
             this.applicantId = applicantId;
             this.name = name;
             this.applyDate = applyDate;

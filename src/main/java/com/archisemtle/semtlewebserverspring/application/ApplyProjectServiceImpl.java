@@ -1,29 +1,28 @@
 package com.archisemtle.semtlewebserverspring.application;
 
-import static com.archisemtle.semtlewebserverspring.common.BaseResponseStatus.NO_DATA;
-
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
-import com.archisemtle.semtlewebserverspring.domain.Applicants;
+import com.archisemtle.semtlewebserverspring.domain.Applicant;
 import com.archisemtle.semtlewebserverspring.domain.Application;
 import com.archisemtle.semtlewebserverspring.domain.Member;
 import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
+import com.archisemtle.semtlewebserverspring.domain.ProjectJoinAnswer;
+import com.archisemtle.semtlewebserverspring.domain.ProjectJoinFile;
+import com.archisemtle.semtlewebserverspring.domain.ProjectJoinUrl;
 import com.archisemtle.semtlewebserverspring.domain.ProjectTypeCategory;
 import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
 import com.archisemtle.semtlewebserverspring.dto.ApplyProjectRequestDto;
-import com.archisemtle.semtlewebserverspring.dto.ApplyProjectRequestDto.FileDto;
 import com.archisemtle.semtlewebserverspring.dto.ApplyProjectResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.ApplicantsRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.ApplicationRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.ProjectJoinAnswerRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.ProjectJoinFileRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.ProjectJoinUrlRepository;
 import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.chrono.ChronoLocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -42,84 +41,98 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
     private final MemberRepository memberRepository;
     private final ProjectBoardRepository projectBoardRepository;
     private final RelationFieldProjectPostMiddleRepository relationFieldProjectPostMiddleRepository;
+    private final ProjectJoinAnswerRepository projectJoinAnswerRepository;
+    private final ProjectJoinFileRepository projectJoinFileRepository;
+    private final ProjectJoinUrlRepository projectJoinUrlRepository;
 
     @Override
     @Transactional
-    public ApplyProjectResponseDto applyProject(Integer boardId,Integer applicantId, ApplyProjectRequestDto applyProjectRequestDto)
-        throws Exception {
-        ProjectBoard projectBoard = projectBoardRepository.findById(Long.valueOf(boardId))
-            .orElseThrow(() -> new BaseException(NO_DATA)); //todo 나중에 BaseResponseStatue 수정 필요
+    public ApplyProjectResponseDto applyProject(Long postId, Long applicantId, ApplyProjectRequestDto applyProjectRequestDto) {
 
-        LocalDateTime now = LocalDateTime.now();
+        if(postId == null || applicantId == null || applyProjectRequestDto.getAnswers() == null) {
+            throw new BaseException(BaseResponseStatus.WRONG_PARAM);
+        }
 
-        LocalDate endDateTime = projectBoard.getProjectRecruitingEndTime();
+        ProjectBoard projectBoard = projectBoardRepository.findById(postId)
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_BOARD_FOUND));
 
-        if(now.isBefore(ChronoLocalDateTime.from(endDateTime))) {
-            Member member = memberRepository.findById(applicantId)
+        if(LocalDate.now().isBefore(projectBoard.getProjectRecruitingEndTime().plusDays(1))) {
+
+            Member member = memberRepository.findById(Math.toIntExact(applicantId))
                 .orElseThrow(() -> new BaseException(
                     BaseResponseStatus.NO_EXIST_MEMBERS));
 
-            Date applyDate = Date.from(
-                LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+            List<Application> existingApplications = applicationRepository.findByMemberIdAndPostId(member.getMemberId(), postId);
 
-            String updatedAt = LocalDateTime.now()
-                .atZone(ZoneId.of("UTC"))
-                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+            if (!existingApplications.isEmpty()) {
+                throw new BaseException(BaseResponseStatus.DUPLICATE_APPLICATION);
+            }
 
-            Applicants applicants = Applicants.builder()
+            Applicant applicant = Applicant.builder()
                 .name(member.getUsername())
-                .applyDate(applyDate)
-                .status("대기") // 기본값
+                .applyDate(LocalDate.now())
+                .status("대기")
                 .email(member.getEmail())
                 .phone(member.getPhone())
-                .resumeUrl(applyProjectRequestDto.getFiles().stream()
-                    .filter(file -> file.getFileName().equals("resume.pdf"))
-                    .map(FileDto::getFileUrl)
-                    .findFirst()
-                    .orElse(null))
-                .portfolioUrl(applyProjectRequestDto.getUrls().stream()
-                    .findFirst()
-                    .orElse(null))
-                .customAnswer("답변 내용")
-                .updatedAt(updatedAt)
-                .boardId(boardId)
+                .updatedAt(LocalDateTime.now())
+                .postId(postId)
                 .build();
 
-            applicantsRepository.save(applicants);
+            applicantsRepository.save(applicant);
 
-            ProjectTypeCategory projectTypeName = projectBoard.getProjectTypeCategory(); // project_type_category_name 가져오기
-
-            List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddles = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(Long.valueOf(boardId));
+            ProjectTypeCategory projectTypeName = projectBoard.getProjectTypeCategory();
+            List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddles = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(postId);
 
             List<String> relationFieldNames = relationFieldProjectPostMiddles.stream()
-                .map(relationField -> relationField.getRelationFieldCategory().getName()) // 이름 가져오기
-                .collect(Collectors.toList());
-
-            String questionAnswers = applyProjectRequestDto.getAnswers().stream()
-                .map(ApplyProjectRequestDto.AnswerDto::getAnswer) // answer만 추출
-                .collect(Collectors.joining("*|*")); // 구분자를 사용하여 하나의 문자열로 변환
+                .map(relationField -> relationField.getRelationFieldCategory().getName())
+                .toList();
 
             Application application = Application.builder()
-                .applicantId(applicants.getApplicantId())
+                .applicantId(applicant.getApplicantId())
+                .memberId(member.getMemberId())
                 .projectTitle(projectBoard.getTitle())
-                .boardId(boardId)
-                .applyDate(applyDate)
-                .status("대기") // 수정됨.
+                .postId(postId)
+                .applyDate(LocalDate.now())
+                .status("대기")
                 .projectType(projectTypeName.getName())
                 .relateField(relationFieldNames.toString())
-                .questionAnswer(questionAnswers)
                 .build();
 
             applicationRepository.save(application);
 
-            // 응답 DTO 생성
-            ApplyProjectResponseDto successResponseDto = ApplyProjectResponseDto.entityToDto(application);
 
+            List<ProjectJoinUrl> projectJoinUrls = applyProjectRequestDto.getUrls().stream()
+                .map(url -> ProjectJoinUrl.builder()
+                    .url(url)
+                    .applicationId(application.getApplicationId())
+                    .build())
+                .collect(Collectors.toList());
+
+            projectJoinUrlRepository.saveAll(projectJoinUrls);
+
+            List<ProjectJoinFile> projectJoinFiles = applyProjectRequestDto.getFiles().stream()
+                .map(fileDto -> ProjectJoinFile.builder()
+                    .file(fileDto.getFileUrl())
+                    .applicationId(application.getApplicationId())
+                    .build())
+                .collect(Collectors.toList());
+
+            projectJoinFileRepository.saveAll(projectJoinFiles);
+
+            List<ProjectJoinAnswer> projectJoinAnswers = applyProjectRequestDto.getAnswers().stream()
+                .map(answerDto -> ProjectJoinAnswer.builder()
+                    .answerText(answerDto.getAnswer())
+                    .questionId((long) answerDto.getQuestionId())
+                    .applicationId(application.getApplicationId())
+                    .build())
+                .collect(Collectors.toList());
+
+            projectJoinAnswerRepository.saveAll(projectJoinAnswers);
+
+            ApplyProjectResponseDto successResponseDto = ApplyProjectResponseDto.entityToDto(application);
             return successResponseDto;
         }else{
-            ApplyProjectResponseDto failResponseDto = ApplyProjectResponseDto.entityToDto(null);
-
-            return failResponseDto;
+            throw new BaseException(BaseResponseStatus.RECRUITING_ALREADY_ENDED);
         }
     }
 }

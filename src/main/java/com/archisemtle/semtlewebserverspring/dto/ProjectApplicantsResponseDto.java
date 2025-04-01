@@ -1,13 +1,14 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Applicants;
-import java.util.Date;
+import com.archisemtle.semtlewebserverspring.domain.Applicant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Setter
@@ -22,13 +23,13 @@ public class ProjectApplicantsResponseDto {
     @Getter
     @NoArgsConstructor
     public static class ApplicantInfo {
-        private Integer applicantId;
+        private Long applicantId;
         private String name;
-        private Date applyDate;
+        private LocalDate applyDate;
         private String status;
 
         @Builder
-        public ApplicantInfo(Integer applicantId, String name, Date applyDate, String status) {
+        public ApplicantInfo(Long applicantId, String name, LocalDate applyDate, String status) {
             this.applicantId = applicantId;
             this.name = name;
             this.applyDate = applyDate;
@@ -36,7 +37,10 @@ public class ProjectApplicantsResponseDto {
         }
     }
 
-    public static ProjectApplicantsResponseDto entityToDto(List<Applicants> applicants, int currentPage, int totalElements) {
+    public static ProjectApplicantsResponseDto entityToDto(Page<Applicant> applicantsPage, int currentPage) {
+        List<Applicant> applicants = applicantsPage.getContent();
+        int totalElements = (int) applicantsPage.getTotalElements();
+
         List<ApplicantInfo> applicantInfoList = applicants.stream()
             .map(applicant -> ApplicantInfo.builder()
                 .applicantId(applicant.getApplicantId())

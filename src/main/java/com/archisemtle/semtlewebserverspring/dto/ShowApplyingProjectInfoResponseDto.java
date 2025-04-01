@@ -1,15 +1,14 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
 import com.archisemtle.semtlewebserverspring.domain.Application;
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Setter
@@ -24,26 +23,26 @@ public class ShowApplyingProjectInfoResponseDto {
     @Getter
     @NoArgsConstructor
     public static class ApplicationInfo {
-        private Integer applicationId;
+        private Long applicationId;
         private String projectTitle;
-        private Integer boardId;
-        private Date applyDate;
+        private Long postId;
+        private LocalDate applyDate;
         private String status;
         private String projectType;
         private String relateField;
 
         @Builder
         public ApplicationInfo(
-            Integer applicationId,
+            Long applicationId,
             String projectTitle,
-            Integer boardId,
-            Date applyDate,
+            Long postId,
+            LocalDate applyDate,
             String status,
             String projectType,
             String relateField) {
             this.applicationId = applicationId;
             this.projectTitle = projectTitle;
-            this.boardId = boardId;
+            this.postId = postId;
             this.applyDate = applyDate;
             this.status = status;
             this.projectType = projectType;
@@ -52,12 +51,15 @@ public class ShowApplyingProjectInfoResponseDto {
     }
 
 
-    public static ShowApplyingProjectInfoResponseDto entityToDto(List<Application> applications, int currentPage, int totalElements) {
+    public static ShowApplyingProjectInfoResponseDto entityToDto(Page<Application> applicationsPage, int currentPage) {
+        List<Application> applications = applicationsPage.getContent();
+        int totalElements = (int) applicationsPage.getTotalElements();
+
         List<ApplicationInfo> applicationInfoList = applications.stream()
             .map(application -> ApplicationInfo.builder()
                 .applicationId(application.getApplicationId())
                 .projectTitle(application.getProjectTitle())
-                .boardId(application.getBoardId())
+                .postId(application.getPostId())
                 .applyDate(application.getApplyDate())
                 .status(application.getStatus())
                 .projectType(application.getProjectType())

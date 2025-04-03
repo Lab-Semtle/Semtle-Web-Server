@@ -15,6 +15,7 @@ public class MemberReadResponseDto {
     private String username;
     private LocalDate birth;
     private String phone;
+    private String profileImageUrl;
     private String role;
     private boolean manageApprovalStatus;
 }

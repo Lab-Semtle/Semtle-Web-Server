@@ -17,6 +17,7 @@ public class MemberReadResponseVo {
     private LocalDate birth;
     private String phone;
     private String role;
+    private String profileImageUrl;
     private boolean manageApprovalStatus;
 
     public static MemberReadResponseVo dtoToVo(
@@ -30,6 +31,7 @@ public class MemberReadResponseVo {
             .birth(memberReadResponseDto.getBirth())
             .phone(memberReadResponseDto.getPhone())
             .role(memberReadResponseDto.getRole())
+            .profileImageUrl(memberReadResponseDto.getProfileImageUrl())
             .manageApprovalStatus(memberReadResponseDto.isManageApprovalStatus())
             .build();
     }

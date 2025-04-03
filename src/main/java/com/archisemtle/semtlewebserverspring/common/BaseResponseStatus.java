@@ -100,6 +100,7 @@ public enum BaseResponseStatus {
     NO_APPLICANTS(HttpStatus.BAD_REQUEST, false, 5007, "신청자가 존재하지 않습니다."),
     NO_APPLICATIONS(HttpStatus.BAD_REQUEST, false, 5007, "신청서가 존재하지 않습니다."),
     DUPLICATE_APPLICATION(HttpStatus.BAD_REQUEST, false, 5008, "이미 신청한 공고입니다."),
+    PROCESSED_APPLICATION(HttpStatus.BAD_REQUEST, false, 5009, "이미 변경된 상태입니다."),
 
     /**
      * 6000 : Cart & WishProductList Service Error

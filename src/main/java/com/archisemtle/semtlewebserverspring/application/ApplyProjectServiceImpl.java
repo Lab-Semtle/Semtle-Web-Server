@@ -55,7 +55,6 @@ public class ApplyProjectServiceImpl implements ApplyProjectService {
 
         ProjectBoard projectBoard = projectBoardRepository.findById(postId)
             .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_BOARD_FOUND));
-
         if(LocalDate.now().isBefore(projectBoard.getProjectRecruitingEndTime().plusDays(1))) {
 
             Member member = memberRepository.findById(Math.toIntExact(applicantId))

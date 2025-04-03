@@ -75,6 +75,11 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
         Applicant applicant = applicantsRepository.findByPostIdAndApplicantId(postId, applicantId).orElseThrow(() -> new BaseException(
             BaseResponseStatus.NO_APPLICANT_FOUND));
 
+        // 이미 변경된(동일한) 상태
+        if(applicant.getStatus().equals(status)) {
+            throw new BaseException(BaseResponseStatus.PROCESSED_APPLICATION);
+        }
+
         Applicant updatedApplicant = Applicant.builder()
             .applicantId(applicant.getApplicantId())
             .name(applicant.getName())
@@ -87,6 +92,24 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
             .build();
 
         applicantsRepository.save(updatedApplicant);
+
+
+        Application application = applicationRepository.findByApplicantId(applicant.getApplicantId()).orElseThrow(() -> new BaseException(
+            BaseResponseStatus.NO_APPLICATIONS));
+
+        Application updatedApplication = Application.builder()
+            .applicationId(application.getApplicationId())
+            .applicantId(application.getApplicantId())
+            .memberId(application.getMemberId())
+            .projectTitle(application.getProjectTitle())
+            .postId(application.getPostId())
+            .applyDate(application.getApplyDate())
+            .status(status)
+            .projectType(application.getProjectType())
+            .relateField(application.getRelateField())
+            .build();
+
+        applicationRepository.save(updatedApplication);
 
         ChangeApplyStatusResponseDto changeApplyStatusResponseDto = ChangeApplyStatusResponseDto.entityToDto(
             updatedApplicant);

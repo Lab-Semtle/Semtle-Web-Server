@@ -86,7 +86,7 @@ public class MemberController {
         try{
             MemberReadResponseDto showMemberDto = memberService.show(uuid);
             MemberReadResponseVo responseVo = MemberReadResponseVo.dtoToVo(showMemberDto);
-            return CommonResponse.success("해당하는 멤버의 정보를 조회하는데 성공하였습니다.", responseVo);
+            return CommonResponse.success(BaseResponseStatus.SUCCESS.getMessage(), responseVo);
         } catch (BaseException e) {
             return CommonResponse.fail(e.getErrorCode(), e.getMessage());
         } catch (Exception e) {

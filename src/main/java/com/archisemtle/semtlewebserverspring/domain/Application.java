@@ -48,8 +48,9 @@ public class Application {
 
 
     @Builder
-    public Application(Long applicantId, int memberId ,String projectTitle, Long postId, LocalDate applyDate, String status,
+    public Application(Long applicationId, Long applicantId, int memberId ,String projectTitle, Long postId, LocalDate applyDate, String status,
         String projectType, String relateField) {
+        this.applicationId = applicationId;
         this.applicantId = applicantId;
         this.memberId = memberId;
         this.projectTitle = projectTitle;

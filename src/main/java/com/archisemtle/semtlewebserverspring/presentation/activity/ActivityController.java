@@ -3,6 +3,7 @@ package com.archisemtle.semtlewebserverspring.presentation.activity;
 import com.archisemtle.semtlewebserverspring.application.activity.ActivityService;
 import com.archisemtle.semtlewebserverspring.application.activity.ActivityServiceImpl;
 import com.archisemtle.semtlewebserverspring.common.BaseException;
+import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityListResponseDto;
@@ -48,9 +49,8 @@ public class ActivityController {
 
     //게시물 생성
     @PostMapping
-    public CommonResponse<String> createActivity(@RequestBody ActivityRequestVo requestVo)
+    public CommonResponse<String> createActivity(@Valid @RequestBody ActivityRequestVo requestVo)
         throws IOException {
-
         activityService.createActivityBoard(ActivityRequestVo.voToDto(requestVo));
         return CommonResponse.success("게시글 작성 성공");
     }
@@ -83,6 +83,9 @@ public class ActivityController {
         @RequestParam(name = "page", defaultValue = "1") int page,
         @RequestParam(name = "size", defaultValue = "15") int size,
         @RequestParam(name = "type", defaultValue = "") String type){
+
+        if(page < 1 || size < 1 || type.isEmpty()) throw new BaseException(BaseResponseStatus.WRONG_PARAM);
+
         ActivityListRequestVo requestVo = ActivityListRequestVo.builder()
             .page(page)
             .size(size)
@@ -96,6 +99,7 @@ public class ActivityController {
     @GetMapping("/recent")
     public CommonResponse<ActivityListResponseVo> getCurActivityList(
         @RequestParam(name = "limit", defaultValue = "3") int limit){
+        if(limit < 1) throw new BaseException(BaseResponseStatus.WRONG_PARAM);
 
         ActivityListResponseDto responseDto = activityService.readRecentActivityListBoard(limit);
         return CommonResponse.success("최근 활동 게시물 목록 읽어오기 성공", ActivityListResponseDto.dtoToVo(responseDto));

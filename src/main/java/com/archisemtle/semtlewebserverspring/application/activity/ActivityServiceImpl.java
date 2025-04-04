@@ -72,7 +72,6 @@ public class ActivityServiceImpl implements ActivityService{
                 .images(requestDto.getImages())
                 .type(requestDto.getType())
                 .build();
-
         activityRepository.save(changedActivity);
     }
 

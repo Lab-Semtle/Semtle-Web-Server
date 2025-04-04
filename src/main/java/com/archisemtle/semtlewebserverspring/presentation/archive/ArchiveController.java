@@ -38,6 +38,7 @@ public class ArchiveController {
     @PostMapping
     public CommonResponse<String> createArchive(@RequestBody ArchiveRequestVo requestVo) throws IOException{
         archiveService.createArchiveBoard(ArchiveRequestVo.voToDto(requestVo));
+
         return CommonResponse.success("Secret Note 게시물이 성공적으로 등록되었습니다.");
     }
 

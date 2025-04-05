@@ -87,7 +87,7 @@ jobs:
       # docker-compose로 spring 서비스만 다시 실행 (DB 유지)
       - name: Restart Spring Container Only
         run: |
-          sudo docker-compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring
+          sudo docker compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring
       
       # 불필요한 Docker 이미지 삭제
       - name: Clean Up Old Docker Images

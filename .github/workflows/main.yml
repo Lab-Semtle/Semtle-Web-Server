@@ -85,5 +85,5 @@ jobs:
             fi
 
             # ✅ 최신 spring 이미지로 다시 실행
-            docker compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring
+            docker compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring_container
             docker system prune -f

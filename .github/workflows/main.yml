@@ -77,5 +77,13 @@ jobs:
           script: |
             docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/semtle-web-server:latest
+            
+            # ✅ 기존 spring 컨테이너 중지 및 삭제
+            if [ "$(docker ps -a -q -f name=spring)" ]; then
+            docker stop spring
+            docker rm spring
+            fi
+
+            # ✅ 최신 spring 이미지로 다시 실행
             docker compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring
             docker system prune -f

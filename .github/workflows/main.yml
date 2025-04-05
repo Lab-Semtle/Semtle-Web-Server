@@ -67,28 +67,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Docker 로그인
-      - name: Login to Docker Hub
-        run: |
-          sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
-      
-      # 최신 Docker 이미지 가져오기
-      - name: Pull Docker Image
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/semtle-web-server:latest
-
-      # 기존 컨테이너 확인 및 중지
-      - name: Check and Stop Running Container
-        run: |
-          if sudo docker ps -a | grep -q spring_container; then
-            sudo docker stop spring_container
-            sudo docker rm spring_container
-          fi
-
-      # docker-compose로 spring 서비스만 다시 실행 (DB 유지)
-      - name: Restart Spring Container Only
-        run: |
-          sudo docker compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring
-      
-      # 불필요한 Docker 이미지 삭제
-      - name: Clean Up Old Docker Images
-        run: sudo docker system prune -f
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/semtle-web-server:latest
+            docker compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring
+            docker system prune -f

@@ -71,6 +71,10 @@ jobs:
       - name: Login to Docker Hub
         run: |
           sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+      # 최신 Docker 이미지 가져오기
+      - name: Pull Docker Image
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/semtle-web-server:latest
 
       # 기존 컨테이너 확인 및 중지
       - name: Check and Stop Running Container
@@ -80,14 +84,11 @@ jobs:
             sudo docker rm spring_container
           fi
 
-      # 최신 Docker 이미지 가져오기
-      - name: Pull Docker Image
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/semtle-web-server:latest
-
-      # 새로운 컨테이너 실행
-      - name: Run Docker Container
-        run: sudo docker run -d --name spring_container -p 8090:8090 ${{ secrets.DOCKERHUB_USERNAME }}/semtle-web-server:latest
-
+      # docker-compose로 spring 서비스만 다시 실행 (DB 유지)
+      - name: Restart Spring Container Only
+        run: |
+          sudo docker-compose -f ./semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring
+      
       # 불필요한 Docker 이미지 삭제
       - name: Clean Up Old Docker Images
         run: sudo docker system prune -f

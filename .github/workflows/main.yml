@@ -79,9 +79,9 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/semtle-web-server:latest
             
             # ✅ 기존 spring 컨테이너 중지 및 삭제
-            if [ "$(docker ps -a -q -f name=spring)" ]; then
-            docker stop spring
-            docker rm spring
+            if [ "$(docker ps -a -q -f name=spring_container)" ]; then
+            docker stop spring_container
+            docker rm spring_container
             fi
 
             # ✅ 최신 spring 이미지로 다시 실행

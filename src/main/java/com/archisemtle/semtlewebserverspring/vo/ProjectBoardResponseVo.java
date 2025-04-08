@@ -24,5 +24,5 @@ public class ProjectBoardResponseVo {
     private LocalDate projectEndTime;
     private LocalDate projectRecruitingEndTime;
     private ProjectStatus projectStatus;
-    private List<ProjectBoardImage> projectBoardImages;
+    private List<String> projectBoardImages;
 }

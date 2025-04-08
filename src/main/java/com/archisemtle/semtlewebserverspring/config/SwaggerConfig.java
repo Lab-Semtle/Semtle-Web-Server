@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
-    servers = @Server(url = "https://archisemtle.site")
+    servers = {@Server(url = "https://archisemtle.site"),
+    @Server(url = "http://localhost:8080")} // 로컬 개발 시 사용
 )
 
 @Configuration

@@ -115,8 +115,9 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
                     .getName())
             .toList();
 
-        List<ProjectBoardImage> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
-            id);
+        List<String> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
+                id).stream().map(ProjectBoardImage::getProjectBoardImageUrl)
+            .collect(Collectors.toList());
 
         return ProjectBoardResponseDto.builder()
             .title(projectBoard.getTitle())

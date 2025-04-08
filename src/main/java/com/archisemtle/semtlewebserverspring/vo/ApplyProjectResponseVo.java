@@ -9,22 +9,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ApplyProjectResponseVo {
-    private String message;
-    private Long applicationId;
+    private Long applyId;
     private LocalDateTime appliedAt;
 
     @Builder
-    public ApplyProjectResponseVo(String message, Long applicationId, LocalDateTime appliedAt) {
-        this.message = message;
-        this.applicationId = applicationId;
+    public ApplyProjectResponseVo(Long applyId, LocalDateTime appliedAt) {
+        this.applyId = applyId;
         this.appliedAt = appliedAt;
     }
 
     public static ApplyProjectResponseVo dtoToVo(
         ApplyProjectResponseDto applyProjectResponseDto) {
         return ApplyProjectResponseVo.builder()
-            .message(applyProjectResponseDto.getMessage())
-            .applicationId(applyProjectResponseDto.getApplicationId())
+            .applyId(applyProjectResponseDto.getApplyId())
             .appliedAt(applyProjectResponseDto.getAppliedAt())
             .build();
     }

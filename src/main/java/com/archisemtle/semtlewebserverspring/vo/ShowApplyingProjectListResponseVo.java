@@ -1,9 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ShowApplyingProjectInfoResponseDto;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -17,59 +15,60 @@ public class ShowApplyingProjectListResponseVo {
     private int totalElements;
     private int totalPages;
     private int currentPage;
-    private List<ApplicationInfo> applications;
+    private List<ApplyInfo> apply;
 
     @Getter
     @NoArgsConstructor
-    public static class ApplicationInfo {
-        private Long applicationId;
-        private String projectTitle;
+    public static class ApplyInfo {
+        private Long applyId;
         private Long postId;
-        private LocalDate applyDate;
+        private String projectTitle;
+        private LocalDateTime applyDate;
         private String status;
         private String projectType;
         private String relateField;
 
         @Builder
-        public ApplicationInfo(
-            Long applicationId,
-            String projectTitle,
+        public ApplyInfo(
+            Long applyId,
             Long postId,
-            LocalDate applyDate,
+            String projectTitle,
             String status,
             String projectType,
-            String relateField) {
-            this.applicationId = applicationId;
-            this.projectTitle = projectTitle;
+            String relateField,
+            LocalDateTime applyDate) {
+            this.applyId = applyId;
             this.postId = postId;
-            this.applyDate = applyDate;
+            this.projectTitle = projectTitle;
             this.status = status;
             this.projectType = projectType;
             this.relateField = relateField;
+            this.applyDate = applyDate;
         }
     }
 
+
     @Builder
     public ShowApplyingProjectListResponseVo(int totalElements, int totalPages, int currentPage,
-        List<ApplicationInfo> applications) {
+        List<ApplyInfo> apply) {
         this.totalElements = totalElements;
         this.totalPages = totalPages;
         this.currentPage = currentPage;
-        this.applications = applications;
+        this.apply = apply;
     }
 
     public static ShowApplyingProjectListResponseVo dtoToVo(
         ShowApplyingProjectInfoResponseDto showApplyingProjectInfoResponseDto) {
 
-        List<ApplicationInfo> applicationInfoList = showApplyingProjectInfoResponseDto.getApplications().stream()
-            .map(dtoApplication -> ShowApplyingProjectListResponseVo.ApplicationInfo.builder()
-                .applicationId(dtoApplication.getApplicationId())
-                .projectTitle(dtoApplication.getProjectTitle())
-                .postId(dtoApplication.getPostId())
-                .applyDate(dtoApplication.getApplyDate())
-                .status(dtoApplication.getStatus())
-                .projectType(dtoApplication.getProjectType())
-                .relateField(dtoApplication.getRelateField())
+        List<ApplyInfo> applyInfoList = showApplyingProjectInfoResponseDto.getApplys().stream()
+            .map(apply -> ShowApplyingProjectListResponseVo.ApplyInfo.builder()
+                .applyId(apply.getApplyId())
+                .postId(apply.getPostId())
+                .projectTitle(apply.getProjectTitle())
+                .status(apply.getStatus())
+                .projectType(apply.getProjectType())
+                .relateField(apply.getRelateField())
+                .applyDate(apply.getApplyDate())
                 .build())
             .collect(Collectors.toList());
 
@@ -77,7 +76,7 @@ public class ShowApplyingProjectListResponseVo {
             .totalElements(showApplyingProjectInfoResponseDto.getTotalElements())
             .totalPages(showApplyingProjectInfoResponseDto.getTotalPages())
             .currentPage(showApplyingProjectInfoResponseDto.getCurrentPage())
-            .applications(applicationInfoList)
+            .apply(applyInfoList)
             .build();
     }
 }

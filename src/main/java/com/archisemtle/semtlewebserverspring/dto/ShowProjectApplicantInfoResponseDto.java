@@ -1,7 +1,7 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Applicant;
-import java.time.LocalDate;
+import com.archisemtle.semtlewebserverspring.domain.Apply;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,21 +10,21 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ShowProjectApplicantInfoResponseDto {
-    private Long applicantId;
-    private String name;
-    private LocalDate applyDate;
+    private Long applyId;
+    private String username;
+    private LocalDateTime applyDate;
     private String status;
     private String email;
     private String phone;
 
-    public static ShowProjectApplicantInfoResponseDto entityToDto(Applicant applicant) {
+    public static ShowProjectApplicantInfoResponseDto entityToDto(Apply apply) {
         return ShowProjectApplicantInfoResponseDto.builder()
-            .applicantId(applicant.getApplicantId())
-            .name(applicant.getName())
-            .applyDate(applicant.getApplyDate())
-            .status(applicant.getStatus())
-            .email(applicant.getEmail())
-            .phone(applicant.getPhone())
+            .applyId(apply.getApplyId())
+            .username(apply.getMember().getUsername())
+            .applyDate(apply.getApplyDate())
+            .status(apply.getStatus())
+            .email(apply.getMember().getEmail())
+            .phone(apply.getMember().getPhone())
             .build();
     }
 }

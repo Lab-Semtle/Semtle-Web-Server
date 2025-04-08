@@ -9,8 +9,6 @@ import com.archisemtle.semtlewebserverspring.dto.ApplyProjectResponseDto;
 import com.archisemtle.semtlewebserverspring.vo.ApplyProjectResponseVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,15 +22,10 @@ public class ApplyingController {
 
     private final ApplyProjectService applyProjectService;
 
-    // 공고 신청
-    @PostMapping("/{post_id}/apply/{applicant_id}")
-    public CommonResponse<ApplyProjectResponseVo> ApplyProject(
-        @PathVariable("post_id") Long postId,
-        @PathVariable("applicant_id") Long applicantId,
-        @RequestBody ApplyProjectRequestDto applyProjectRequestDto
-    ){
+    @PostMapping("/apply")
+    public CommonResponse<ApplyProjectResponseVo> ApplyProject(@RequestBody ApplyProjectRequestDto applyProjectRequestDto){
         try {
-            ApplyProjectResponseDto applyProjectResponseDto = applyProjectService.applyProject(postId, applicantId, applyProjectRequestDto);
+            ApplyProjectResponseDto applyProjectResponseDto = applyProjectService.applyProject(applyProjectRequestDto);
             ApplyProjectResponseVo applyProjectResponseVo = ApplyProjectResponseVo.dtoToVo(applyProjectResponseDto);
             return CommonResponse.success(BaseResponseStatus.SUCCESS.getMessage(), applyProjectResponseVo);
         } catch (BaseException e) {

@@ -1,7 +1,7 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Applicant;
-import java.time.LocalDate;
+import com.archisemtle.semtlewebserverspring.domain.Apply;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -18,45 +18,45 @@ public class ProjectApplicantsResponseDto {
     private int totalElements;
     private int totalPages;
     private int currentPage;
-    private List<ApplicantInfo> applicants;
+    private List<ApplyInfo> applys;
 
     @Getter
     @NoArgsConstructor
-    public static class ApplicantInfo {
-        private Long applicantId;
-        private String name;
-        private LocalDate applyDate;
+    public static class ApplyInfo {
+        private Long applyId;
+        private String username;
+        private LocalDateTime applyDate;
         private String status;
 
         @Builder
-        public ApplicantInfo(Long applicantId, String name, LocalDate applyDate, String status) {
-            this.applicantId = applicantId;
-            this.name = name;
+        public ApplyInfo(Long applyId, String username, LocalDateTime applyDate, String status) {
+            this.applyId = applyId;
+            this.username = username;
             this.applyDate = applyDate;
             this.status = status;
         }
     }
 
-    public static ProjectApplicantsResponseDto entityToDto(Page<Applicant> applicantsPage, int currentPage) {
-        List<Applicant> applicants = applicantsPage.getContent();
+    public static ProjectApplicantsResponseDto entityToDto(Page<Apply> applicantsPage, int currentPage) {
+        List<Apply> applys = applicantsPage.getContent();
         int totalElements = (int) applicantsPage.getTotalElements();
 
-        List<ApplicantInfo> applicantInfoList = applicants.stream()
-            .map(applicant -> ApplicantInfo.builder()
-                .applicantId(applicant.getApplicantId())
-                .name(applicant.getName())
-                .applyDate(applicant.getApplyDate())
-                .status(applicant.getStatus())
+        List<ApplyInfo> applyInfoList = applys.stream()
+            .map(apply -> ApplyInfo.builder()
+                .applyId(apply.getApplyId())
+                .username(apply.getMember().getUsername())
+                .applyDate(apply.getApplyDate())
+                .status(apply.getStatus())
                 .build())
             .collect(Collectors.toList());
 
-        int totalPages = (int) Math.ceil((double) totalElements / applicants.size());
+        int totalPages = (int) Math.ceil((double) totalElements / applys.size());
 
         return ProjectApplicantsResponseDto.builder()
             .totalElements(totalElements)
             .totalPages(totalPages)
             .currentPage(currentPage)
-            .applicants(applicantInfoList)
+            .applys(applyInfoList)
             .build();
     }
 

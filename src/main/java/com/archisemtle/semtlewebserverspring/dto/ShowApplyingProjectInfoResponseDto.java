@@ -1,7 +1,9 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Application;
-import java.time.LocalDate;
+import com.archisemtle.semtlewebserverspring.domain.Apply;
+import com.archisemtle.semtlewebserverspring.domain.RelationFieldProjectPostMiddle;
+import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -18,62 +20,72 @@ public class ShowApplyingProjectInfoResponseDto {
     private int totalElements;
     private int totalPages;
     private int currentPage;
-    private List<ApplicationInfo> applications;
+    private List<ApplyInfo> applys;
 
     @Getter
     @NoArgsConstructor
-    public static class ApplicationInfo {
-        private Long applicationId;
-        private String projectTitle;
+    public static class ApplyInfo {
+        private Long applyId;
         private Long postId;
-        private LocalDate applyDate;
+        private String projectTitle;
+        private LocalDateTime applyDate;
         private String status;
         private String projectType;
         private String relateField;
 
         @Builder
-        public ApplicationInfo(
-            Long applicationId,
-            String projectTitle,
+        public ApplyInfo(
+            Long applyId,
             Long postId,
-            LocalDate applyDate,
+            String projectTitle,
             String status,
             String projectType,
-            String relateField) {
-            this.applicationId = applicationId;
-            this.projectTitle = projectTitle;
+            String relateField,
+            LocalDateTime applyDate) {
+            this.applyId = applyId;
             this.postId = postId;
-            this.applyDate = applyDate;
+            this.projectTitle = projectTitle;
             this.status = status;
             this.projectType = projectType;
             this.relateField = relateField;
+            this.applyDate = applyDate;
         }
     }
 
 
-    public static ShowApplyingProjectInfoResponseDto entityToDto(Page<Application> applicationsPage, int currentPage) {
-        List<Application> applications = applicationsPage.getContent();
-        int totalElements = (int) applicationsPage.getTotalElements();
+    public static ShowApplyingProjectInfoResponseDto entityToDto(Page<Apply> applyPage, int currentPage, RelationFieldProjectPostMiddleRepository relationFieldProjectPostMiddleRepository) {
 
-        List<ApplicationInfo> applicationInfoList = applications.stream()
-            .map(application -> ApplicationInfo.builder()
-                .applicationId(application.getApplicationId())
-                .projectTitle(application.getProjectTitle())
-                .postId(application.getPostId())
-                .applyDate(application.getApplyDate())
-                .status(application.getStatus())
-                .projectType(application.getProjectType())
-                .relateField(application.getRelateField())
-                .build())
+        List<Apply> applys = applyPage.getContent();
+        int totalElements = (int) applyPage.getTotalElements();
+
+        List<ApplyInfo> applyInfoList = applys.stream()
+            .map(apply -> {
+                List<RelationFieldProjectPostMiddle> relatedFields = relationFieldProjectPostMiddleRepository
+                    .findAllByProjectBoardId(apply.getProjectBoard().getId());
+
+                String relatedFieldsStr = relatedFields.stream()
+                    .map(field -> field.getRelationFieldCategory().getName())
+                    .collect(Collectors.joining(", "));
+
+                return ApplyInfo.builder()
+                    .applyId(apply.getApplyId())
+                    .postId(apply.getProjectBoard().getId())
+                    .projectTitle(apply.getProjectBoard().getTitle())
+                    .status(apply.getStatus())
+                    .projectType(apply.getProjectBoard().getProjectTypeCategory().getName())
+                    .relateField(relatedFieldsStr)
+                    .applyDate(apply.getApplyDate())
+                    .build();
+            })
             .collect(Collectors.toList());
 
-        int totalPages = (int) Math.ceil((double) totalElements / applications.size());
+        int totalPages = (int) Math.ceil((double) totalElements / applys.size());
 
         return ShowApplyingProjectInfoResponseDto.builder()
             .totalElements(totalElements)
             .totalPages(totalPages)
             .currentPage(currentPage)
-            .applications(applicationInfoList)
+            .applys(applyInfoList)
             .build();
     }
 }

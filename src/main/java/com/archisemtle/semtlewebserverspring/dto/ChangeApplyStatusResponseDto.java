@@ -1,6 +1,6 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Applicant;
+import com.archisemtle.semtlewebserverspring.domain.Apply;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +13,10 @@ public class ChangeApplyStatusResponseDto {
     private String updatedStatus;
     private LocalDateTime updatedAt;
 
-    public static ChangeApplyStatusResponseDto entityToDto(Applicant applicant) {
+    public static ChangeApplyStatusResponseDto entityToDto(Apply apply) {
         return ChangeApplyStatusResponseDto.builder()
-            .updatedStatus(applicant.getStatus())
-            .updatedAt(LocalDateTime.now())
+            .updatedStatus(apply.getStatus())
+            .updatedAt(apply.getUpdatedAt())
             .build();
     }
 }

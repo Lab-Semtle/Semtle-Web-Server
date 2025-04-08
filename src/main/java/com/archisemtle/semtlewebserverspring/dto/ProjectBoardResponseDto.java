@@ -27,7 +27,7 @@ public class ProjectBoardResponseDto {
     private LocalDate projectEndTime;
     private LocalDate projectRecruitingEndTime;
     private ProjectStatus projectStatus;
-    private List<ProjectBoardImage> projectBoardImages;
+    private List<String> projectBoardImages;
 
     public static ProjectBoardResponseVo dtoToVo(ProjectBoardResponseDto projectBoardResponseDto) {
         return ProjectBoardResponseVo.builder()

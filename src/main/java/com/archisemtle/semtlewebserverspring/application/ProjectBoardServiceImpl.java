@@ -247,6 +247,13 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             throw new BaseException(FAIL_TO_DELETE);
         }
 
+        List<ProjectBoardImage> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
+            id);
+
+        if(!projectBoardImages.isEmpty()) {
+            projectBoardImageRepository.deleteAllByProjectBoardId(id);
+        }
+
         List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddleList = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(
             id);
 

@@ -250,7 +250,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
         List<ProjectBoardImage> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
             id);
 
-        if(!projectBoardImages.isEmpty()) {
+        if (!projectBoardImages.isEmpty()) {
             projectBoardImageRepository.deleteAllByProjectBoardId(id);
         }
 
@@ -280,7 +280,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .id(id)
             .title(updateProjectBoardRequestDto.getTitle())
             .content(updateProjectBoardRequestDto.getContent())
-            .writerUuid(origin.getWriterUuid()) //TODO: 나중에 실제 값으로 변경해야함
+            .writerUuid(origin.getWriterUuid())
             .writerName(origin.getWriterName())
             .contact(updateProjectBoardRequestDto.getContact())
             .projectTypeCategory(updateProjectBoardRequestDto.getProjectTypeCategory())
@@ -291,6 +291,21 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
             .build();
 
         projectBoardRepository.save(projectBoard);
+
+        List<ProjectBoardImage> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
+            id);
+
+        if (!projectBoardImages.isEmpty()) {
+            projectBoardImageRepository.deleteAllByProjectBoardId(id);
+        }
+        List<ProjectBoardImage> projectBoardImageList = updateProjectBoardRequestDto.getProjectBoardImages()
+            .stream().map(
+                image -> ProjectBoardImage.builder()
+                    .projectBoard(projectBoard)
+                    .projectBoardImageUrl(image)
+                    .build())
+            .collect(Collectors.toList());
+        projectBoardImageRepository.saveAll(projectBoardImageList);
 
         relationFieldProjectPostMiddleRepository.deleteAllByProjectBoardId(id);
 

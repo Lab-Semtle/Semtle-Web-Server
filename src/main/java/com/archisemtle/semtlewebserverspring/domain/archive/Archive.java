@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +32,8 @@ public class Archive {
     private String title;
     @Column(unique = false, nullable = false)
     private String writer;
+
+    @Lob
     @Column(unique = false, nullable = false)
     private String content;
     @Column(unique = false, nullable = false)

@@ -1,5 +1,7 @@
 package com.archisemtle.semtlewebserverspring.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -7,6 +9,11 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+@OpenAPIDefinition(
+    servers = {@Server(url = "https://archisemtle.site"),
+    @Server(url = "http://localhost:8080")} // 로컬 개발 시 사용
+)
 
 @Configuration
 public class SwaggerConfig {
@@ -33,8 +40,8 @@ public class SwaggerConfig {
     // API의 기본 정보 설정
     private Info apiInfo() {
         return new Info()
-            .title("API Test") // API의 제목
-            .description("Let's practice Swagger UI") // API에 대한 설명
+            .title("SemtleAPI") // API의 제목
+            .description("셈틀API") // API에 대한 설명
             .version("1.0.0"); // API의 버전
     }
 }

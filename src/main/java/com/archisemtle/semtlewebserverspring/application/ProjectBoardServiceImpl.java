@@ -115,8 +115,9 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
                     .getName())
             .toList();
 
-        List<ProjectBoardImage> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
-            id);
+        List<String> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
+                id).stream().map(ProjectBoardImage::getProjectBoardImageUrl)
+            .collect(Collectors.toList());
 
         return ProjectBoardResponseDto.builder()
             .title(projectBoard.getTitle())
@@ -244,6 +245,13 @@ public class ProjectBoardServiceImpl implements ProjectBoardService {
 
         if (!uuid.toString().equals(projectBoard.getWriterUuid())) {
             throw new BaseException(FAIL_TO_DELETE);
+        }
+
+        List<ProjectBoardImage> projectBoardImages = projectBoardImageRepository.findAllByProjectBoardId(
+            id);
+
+        if(!projectBoardImages.isEmpty()) {
+            projectBoardImageRepository.deleteAllByProjectBoardId(id);
         }
 
         List<RelationFieldProjectPostMiddle> relationFieldProjectPostMiddleList = relationFieldProjectPostMiddleRepository.findAllByProjectBoardId(

@@ -1,5 +1,6 @@
 package com.archisemtle.semtlewebserverspring.dto.member;
 
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ public class MemberUpdateRequestDto {
 
     private String studentId;
     private String username;
-    private Date birth;
+    private LocalDate birth;
     private String phone;
     //private String imageUrl;
 

@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberDeactiveRequestDto {
     private boolean manageApprovalStatus;
+    private String role;
     private String reason;
 }

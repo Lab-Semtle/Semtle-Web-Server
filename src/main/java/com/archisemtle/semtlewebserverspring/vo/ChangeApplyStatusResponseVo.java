@@ -1,6 +1,8 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ChangeApplyStatusResponseDto;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,13 +10,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ChangeApplyStatusResponseVo {
-    String message;
     String updatedStatus;
-    String updatedAt;
+    LocalDateTime updatedAt;
 
     @Builder
-    public ChangeApplyStatusResponseVo(String message, String updatedStatus, String updatedAt) {
-        this.message = message;
+    public ChangeApplyStatusResponseVo(String updatedStatus, LocalDateTime updatedAt) {
         this.updatedStatus = updatedStatus;
         this.updatedAt = updatedAt;
     }
@@ -22,7 +22,6 @@ public class ChangeApplyStatusResponseVo {
     public static ChangeApplyStatusResponseVo dtoToVo(
         ChangeApplyStatusResponseDto changeApplyStatusResponseDto) {
         return ChangeApplyStatusResponseVo.builder()
-            .message(changeApplyStatusResponseDto.getMessage())
             .updatedStatus(changeApplyStatusResponseDto.getUpdatedStatus())
             .updatedAt(changeApplyStatusResponseDto.getUpdatedAt())
             .build();

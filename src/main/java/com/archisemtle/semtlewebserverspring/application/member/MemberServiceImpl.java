@@ -148,6 +148,7 @@ public class MemberServiceImpl implements MemberService {
             .birth(member.getBirth())
             .phone(member.getPhone())
             .role(member.getRole())
+            .profileImageUrl(member.getProfileImageUrl())
             .manageApprovalStatus(member.isManageApprovalStatus())
             .build();
     }

@@ -24,6 +24,7 @@ public class Activity {
 
     @Column(nullable = false, unique = false)
     private String title;
+    @Lob
     @Column(nullable = false, unique = false)
     private String content;
     @Column(nullable = false, unique = false)

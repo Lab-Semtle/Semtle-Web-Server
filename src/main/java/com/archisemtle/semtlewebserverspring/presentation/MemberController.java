@@ -105,10 +105,16 @@ public class MemberController {
         @PathVariable UUID uuid,
 
         @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "회원 수정 정보")
-        @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
-        memberService.update(uuid, memberUpdateRequestDto);
-
-        return CommonResponse.success("회원 정보 수정에 성공하였습니다.");
+    public CommonResponse<MemberReadResponseVo> showMember(@PathVariable UUID uuid) {
+        try{
+            MemberReadResponseDto showMemberDto = memberService.show(uuid);
+            MemberReadResponseVo responseVo = MemberReadResponseVo.dtoToVo(showMemberDto);
+            return CommonResponse.success(BaseResponseStatus.SUCCESS.getMessage(), responseVo);
+        } catch (BaseException e) {
+            return CommonResponse.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            return CommonResponse.fail(BaseResponseStatus.INTERNAL_SERVER_ERROR, BaseResponseStatus.INTERNAL_SERVER_ERROR.getMessage());
+        }
     }
 
     @GetMapping

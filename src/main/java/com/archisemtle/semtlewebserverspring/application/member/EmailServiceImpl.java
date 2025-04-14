@@ -14,14 +14,14 @@ public class EmailServiceImpl implements EmailService{
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendPasswordResetEmail(String to, String resetToken) {
+    public void sendPasswordResetEmail(String to, String resetLink) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(to);
             helper.setSubject("비밀번호 재설정 안내");
-            helper.setText(buildEmailContent(resetToken), true);
+            helper.setText(buildEmailContent(resetLink), true);
 
             mailSender.send(message);
         } catch (MessagingException e) {
@@ -29,21 +29,10 @@ public class EmailServiceImpl implements EmailService{
         }
     }
 
-    private String buildEmailContent(String resetToken) {
+    private String buildEmailContent(String resetLink) {
         return "<h2>비밀번호 재설정 안내</h2>" +
-            "<p>아래 코드를 기입하여 비밀번호를 재설정하세요.</p>" +
-            "<div style=\"border: 2px solid #4CAF50; " +
-            "padding: 10px; " +
-            "width: fit-content; " +
-            "font-size: 24px; " +
-            "font-weight: bold; " +
-            "color: #333; " +
-            "background-color: #f9f9f9; " +
-            "border-radius: 8px; " +
-            "margin: 16px 0; " +
-            "text-align: center;\">" +
-            resetToken +
-            "</div>" +
-            "<p>이 코드는 15분 후 만료됩니다.</p>";
+            "<p>아래 버튼을 클릭하여 비밀번호를 재설정하세요.</p>" +
+            "<p><a href='" + resetLink + "' style='display:inline-block;padding:10px 20px;color:white;background-color:#007bff;text-decoration:none;border-radius:5px;'>비밀번호 재설정</a></p>" +
+            "<p>이 링크는 15분 후 만료됩니다.</p>";
     }
 }

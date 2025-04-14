@@ -14,8 +14,6 @@ import com.archisemtle.semtlewebserverspring.dto.member.verifyAdminRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberPasswordResetResponseVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
-@Tag(name = "auth-controller", description = "보안")
 public class AuthController {
 
     private final MemberService memberService;
@@ -39,19 +36,14 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/signin")
-    @Operation(summary = "로그인", description = "이메일과 비밀번호로 로그인합니다.")
-    public CommonResponse<LoginResponseVo> Login(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "로그인 정보")
-        @RequestBody LoginRequestDto loginRequestDto) {
+    public CommonResponse<LoginResponseVo> Login(@RequestBody LoginRequestDto loginRequestDto) {
         LoginResponseVo loginResponseVo = LoginResponseVo.dtoToVo(
             memberService.login(loginRequestDto));
         return CommonResponse.success("로그인에 성공하였습니다.", loginResponseVo);
     }
 
     @PostMapping("/password/reset/email")
-    @Operation(summary = "비밀번호 재설정 이메일 전송", description = "이메일을 기준으로 비밀번호 재설정 이메일을 전송합니다.")
     public CommonResponse<MemberPasswordResetResponseVo> requestPasswordReset(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "이메일")
         @RequestBody MemberPasswordResetEmailRequestDto memberPasswordResetEmailRequestDto
     ) {
         MemberPasswordResetEmailResponseDto memberPasswordResetEmailResponseDto = passwordResetService.sendPasswordResetEmail(
@@ -63,9 +55,7 @@ public class AuthController {
     }
 
     @PostMapping("/password/reset")
-    @Operation(summary = "비밀번호 재설정", description = "이메일을 기준으로 비밀번호 재설정 이메일을 전송합니다.")
     public CommonResponse<String> confirmPasswordReset(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "비밀번호 재설정 정보")
         @RequestBody MemberPasswordResetRequestDto memberPasswordResetRequestDto
     ) {
         passwordResetService.resetPassword(memberPasswordResetRequestDto.getToken(),
@@ -76,9 +66,7 @@ public class AuthController {
     }
 
     @PutMapping("/password/manager")
-    @Operation(summary = "관리자 2차 인증", description = "비밀번호를 기준으로 2차인증을 진행합니다.")
     public CommonResponse<String> verifyAdmin(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "2차 인증 정보")
         @RequestBody verifyAdminRequestDto verifyAdminRequestDto) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

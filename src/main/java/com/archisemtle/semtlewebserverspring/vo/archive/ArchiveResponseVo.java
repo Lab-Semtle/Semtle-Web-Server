@@ -1,6 +1,6 @@
 package com.archisemtle.semtlewebserverspring.vo.archive;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public class ArchiveResponseVo {
     private String writer;
     private String content;
     private String title;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private List<String> imageUrl;
     private List<String> fileUrl;
 

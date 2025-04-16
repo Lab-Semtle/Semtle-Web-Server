@@ -10,4 +10,5 @@ public class SemtleWebServerSpringApplication {
 		SpringApplication.run(SemtleWebServerSpringApplication.class, args);
 	}
 
+
 }

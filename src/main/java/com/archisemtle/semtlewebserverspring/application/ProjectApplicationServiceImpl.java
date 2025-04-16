@@ -2,24 +2,26 @@ package com.archisemtle.semtlewebserverspring.application;
 
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
+import com.archisemtle.semtlewebserverspring.domain.Apply;
 import com.archisemtle.semtlewebserverspring.domain.Member;
-import com.archisemtle.semtlewebserverspring.domain.Applicants;
-import com.archisemtle.semtlewebserverspring.domain.Application;
-import com.archisemtle.semtlewebserverspring.dto.ChangeApplyStatusRequestDto;
+import com.archisemtle.semtlewebserverspring.domain.ProjectBoard;
 import com.archisemtle.semtlewebserverspring.dto.ChangeApplyStatusResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ProjectApplicantsResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ShowApplyingProjectInfoResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.ShowProjectApplicantInfoResponseDto;
-import com.archisemtle.semtlewebserverspring.infrastructure.ApplicantsRepository;
-import com.archisemtle.semtlewebserverspring.infrastructure.ApplicationRepository;
-import java.sql.Timestamp;
+import com.archisemtle.semtlewebserverspring.infrastructure.ApplyRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepository;
+import com.archisemtle.semtlewebserverspring.infrastructure.RelationFieldProjectPostMiddleRepository;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,33 +31,33 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProjectApplicationServiceImpl implements ProjectApplicationService {
 
-    private final ApplicantsRepository applicantsRepository;
-    private final ApplicationRepository applicationRepository;
+    private final ApplyRepository applyRepository;
+    private final MemberRepository memberRepository;
+    private final ProjectBoardRepository projectBoardRepository;
+    private final RelationFieldProjectPostMiddleRepository relationFieldProjectPostMiddleRepository;
 
     @Override
-    public ProjectApplicantsResponseDto getApplicants(Integer boardId, int page, int limit)
-        throws Exception {
+    public ProjectApplicantsResponseDto getApplicants(Long postId, int page, int limit) {
+        if(postId == null || page == 0 || limit == 0) {
+            throw new BaseException(BaseResponseStatus.WRONG_PARAM);
+        }
 
-        // 게시글 ID로 지원자 목록 조회 (페이징 처리)
-        Pageable pageable = PageRequest.of(page - 1, limit); // Pageable로 선언
-        Page<Applicants> applicantsPage = applicantsRepository.findAllWithApplication(
-            boardId,
+        ProjectBoard projectBoard = projectBoardRepository.findById(postId)
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_BOARD_FOUND));
+
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        Page<Apply> applyPage = applyRepository.findByProjectBoard(
+            projectBoard,
             pageable
         );
 
-        // 결과가 비어있거나 지원자 목록 조회에 실패한 경우 처리
-        if (applicantsPage.isEmpty()) {
-            throw new BaseException(BaseResponseStatus.APPLICATION_NOT_FOUND);
+        if (applyPage == null) {
+            throw new BaseException(BaseResponseStatus.NO_APPLICANTS);
         }
 
-        // 지원자 정보를 DTO로 변환
-        List<Applicants> applicants = applicantsPage.getContent();
-
-        // DTO 생성
         ProjectApplicantsResponseDto projectApplicantsResponseDto = ProjectApplicantsResponseDto.entityToDto(
-            applicants,
-            page,
-            (int) applicantsPage.getTotalElements()
+            applyPage,
+            page
         );
 
         return projectApplicantsResponseDto;
@@ -63,66 +65,91 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
 
 
     @Override
-    public ShowProjectApplicantInfoResponseDto getApplicantInfo(Integer boardId, Integer applicantId) throws Exception {
-        Applicants applicants = applicantsRepository.findByBoardIdAndApplicantId(boardId, applicantId).orElseThrow(() -> new BaseException(
-            BaseResponseStatus.NO_APPLICANT_FOUND));
+    public ShowProjectApplicantInfoResponseDto getApplicantInfo(Long postId, UUID uuid) {
+        if(postId == null || uuid == null) {
+            throw new BaseException(BaseResponseStatus.WRONG_PARAM);
+        }
+        Member member = memberRepository.findByUuid(uuid)
+            .orElseThrow(() -> new BaseException(
+                BaseResponseStatus.NO_EXIST_MEMBERS));
+
+        Apply apply = applyRepository.findByMemberAndProjectBoardId(member, postId);
+        if(apply == null) {
+            throw new BaseException(BaseResponseStatus.NO_APPLICANTS);
+        }
 
         ShowProjectApplicantInfoResponseDto showProjectApplicantInfoResponseDto = ShowProjectApplicantInfoResponseDto.entityToDto(
-            applicants);
+            apply);
         return showProjectApplicantInfoResponseDto;
     }
 
     @Override
     @Transactional
-    public ChangeApplyStatusResponseDto changeApplyStatus(Integer boardId, Integer applicantId,
-        String status) throws Exception {
-        // 신청자 정보 조회
-        Applicants applicants = applicantsRepository.findByBoardIdAndApplicantId(boardId, applicantId).orElseThrow(() -> new BaseException(
-            BaseResponseStatus.NO_APPLICANT_FOUND));
+    public ChangeApplyStatusResponseDto changeApplyStatus(Long postId, UUID uuid, String status) {
 
-        Applicants updatedApplicants = Applicants.builder()
-            .applicantId(applicants.getApplicantId())
-            .name(applicants.getName())
-            .applyDate(applicants.getApplyDate())
+        if(postId == null || uuid == null || status == null) {
+            throw new BaseException(BaseResponseStatus.WRONG_PARAM);
+        }
+        Member member = memberRepository.findByUuid(uuid)
+            .orElseThrow(() -> new BaseException(
+                BaseResponseStatus.NO_EXIST_MEMBERS));
+
+        Apply apply = applyRepository.findByMemberAndProjectBoardId(member, postId);
+
+        if (apply == null) {
+            throw new BaseException(BaseResponseStatus.NO_APPLICATIONS);
+        }
+
+        if(!(status.equals("승인") || status.equals("대기") || status.equals("반려"))) {
+            throw new BaseException(BaseResponseStatus.FALSE_STATUS);
+        }
+
+        if(apply.getStatus().equals(status)) {
+            throw new BaseException(BaseResponseStatus.PROCESSED_APPLY);
+        }
+
+        Apply updatedApply = Apply.builder()
+            .applyId(apply.getApplyId())
+            .member(apply.getMember())
+            .projectBoard(apply.getProjectBoard())
+            .applyDate(apply.getApplyDate())
             .status(status)
-            .email(applicants.getEmail())
-            .phone(applicants.getPhone())
-            .resumeUrl(applicants.getResumeUrl())
-            .portfolioUrl(applicants.getPortfolioUrl())
-            .customAnswer(applicants.getCustomAnswer())
-            .additionalFile(applicants.getAdditionalFile())
-            .updatedAt(String.valueOf(LocalDateTime.now()))
-            .boardId(applicants.getBoardId())
+            .updatedAt(LocalDateTime.now())
+            .answer(apply.getAnswer())
             .build();
 
-        applicantsRepository.save(updatedApplicants);
+        applyRepository.save(updatedApply);
 
-        ChangeApplyStatusResponseDto changeApplyStatusResponseDto = ChangeApplyStatusResponseDto.entityToDto(updatedApplicants);
+        ChangeApplyStatusResponseDto changeApplyStatusResponseDto = ChangeApplyStatusResponseDto.entityToDto(
+            updatedApply);
         return changeApplyStatusResponseDto;
     }
 
     @Override
-    public ShowApplyingProjectInfoResponseDto getApplyingProjectInfo(Integer applicantId, int page, int limit)
-        throws Exception {
+    public ShowApplyingProjectInfoResponseDto getApplyingProjectInfo(int page, int limit) {
 
-        // 게시글 ID로 지원자 목록 조회 (페이징 처리)
-        Pageable pageable = PageRequest.of(page - 1, limit); // Pageable로 선언
-        Page<Application> applicationsPage = applicationRepository.findByApplicantId(applicantId, pageable);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID uuid = UUID.fromString(authentication.getName());
 
-        // 결과가 비어있거나 신청서 조회에 실패한 경우 처리
-        if (applicationsPage.isEmpty()) {
-            System.out.println("신청한 공고가 없거나 조회에 실패했습니다.");
-            return null;
+        if(page == 0 || limit == 0) {
+            throw new BaseException(BaseResponseStatus.WRONG_PARAM);
         }
 
-        // 지원자 정보를 DTO로 변환
-        List<Application> applications = applicationsPage.getContent();
+        Member member = memberRepository.findByUuid(uuid)
+            .orElseThrow(() -> new BaseException(
+                BaseResponseStatus.NO_EXIST_MEMBERS));
 
-        // DTO 생성
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        Page<Apply> applyPage = applyRepository.findByMember(member, pageable);
+
+        if (applyPage == null || applyPage.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NO_APPLICATIONS);
+        }
+
         ShowApplyingProjectInfoResponseDto showApplyingProjectInfoResponseDto = ShowApplyingProjectInfoResponseDto.entityToDto(
-            applications,
+            applyPage,
             page,
-            (int) applicationsPage.getTotalElements()
+            relationFieldProjectPostMiddleRepository
         );
 
         return showApplyingProjectInfoResponseDto;

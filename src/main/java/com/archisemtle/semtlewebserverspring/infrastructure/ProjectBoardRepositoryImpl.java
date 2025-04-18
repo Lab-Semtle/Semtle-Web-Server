@@ -13,13 +13,12 @@ import com.archisemtle.semtlewebserverspring.dto.ProjectBoardListDto;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +68,8 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                 relationFieldCategory.id,
                 relationFieldCategory.name,
                 projectBoard.projectRecruitingEndTime,
-                projectBoardImage.projectBoardImageUrl
+                projectBoardImage.projectBoardImageUrl,
+                projectBoard.updateAt
             )
             .from(projectBoard)
             .leftJoin(projectTypeCategory)
@@ -88,18 +88,22 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                     .when(projectBoard.projectStatus.eq(ProjectStatus.IN_PROGRESS)).then(2)
                     .when(projectBoard.projectStatus.eq(ProjectStatus.CLOSED)).then(3)
                     .otherwise(4)
-                    .asc()
-            )
-            .orderBy(projectBoardImage.id.asc())
+                    .asc(),
+                projectBoard.updateAt.desc().nullsFirst(),
+                projectBoardImage.id.asc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
 
-        log.info("Query Result (Tuple List): {}", result); // ✅ 쿼리 결과 로그 출력
+//        log.info("Query Result (Tuple List): {}", result); // ✅ 쿼리 결과 로그 출력
 
         // DTO 변환 (List<String>으로 relationFieldCategoryName 합치기)
         Map<Long, List<Tuple>> groupedByProjectId = result.stream()
-            .collect(Collectors.groupingBy(tuple -> tuple.get(projectBoard.id)));
+            .collect(Collectors.groupingBy(tuple -> tuple.get(projectBoard.id),
+                LinkedHashMap::new,
+                Collectors.toList()));
+
+//        log.info("Grouped Result: {}", groupedByProjectId); // ✅ 그룹화된 결과 로그 출력
 
         List<ProjectBoardListDto> dtoList = groupedByProjectId.values().stream()
             .filter(grouped -> { // ✅ relation_type 필터링 추가 (게시물 유지 여부 결정)
@@ -155,7 +159,7 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
 
         Page<ProjectBoardListDto> pageResult = PageableExecutionUtils.getPage(dtoList, pageable,
             countQuery::fetchOne);
-        log.info("Final Page Result: {}", pageResult); // ✅ 최종 반환값 로그 출력
+//        log.info("Final Page Result: {}", pageResult); // ✅ 최종 반환값 로그 출력
 
         return pageResult;
     }

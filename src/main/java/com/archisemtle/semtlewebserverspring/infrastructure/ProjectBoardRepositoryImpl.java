@@ -13,6 +13,7 @@ import com.archisemtle.semtlewebserverspring.dto.ProjectBoardListDto;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.LinkedHashMap;
@@ -40,18 +41,16 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
         BooleanExpression projectTypeCondition = projectTypeCategoryNameEq(
             condition.getProjectTypeCategoryName());
 
-        List<Long> matchingProjectIds = queryFactory
-            .select(relationFieldProjectPostMiddle.projectBoard.id)
-            .from(relationFieldProjectPostMiddle)
-            .leftJoin(relationFieldCategory)
-            .on(relationFieldProjectPostMiddle.relationFieldCategory.id.eq(
-                relationFieldCategory.id))
-            .where(relationFieldCategoryNameEq(condition.getRelationFieldCategoryName()))
-            .fetch();
-
         BooleanExpression relationFieldCondition = null;
         if (hasText(condition.getRelationFieldCategoryName())) {
-            relationFieldCondition = projectBoard.id.in(matchingProjectIds); // ✅ 조회된 ID 목록을 조건으로 사용
+            relationFieldCondition = projectBoard.id.in(JPAExpressions
+                .select(relationFieldProjectPostMiddle.projectBoard.id)
+                .from(relationFieldProjectPostMiddle)
+                .leftJoin(relationFieldCategory)
+                .on(relationFieldProjectPostMiddle.relationFieldCategory.id.eq(
+                    relationFieldCategory.id))
+                .where(relationFieldCategoryNameEq(
+                    condition.getRelationFieldCategoryName()))); // ✅ 조회된 ID 목록을 조건으로 사용
         }
 
         BooleanExpression filterCondition =
@@ -68,8 +67,7 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                 relationFieldCategory.id,
                 relationFieldCategory.name,
                 projectBoard.projectRecruitingEndTime,
-                projectBoardImage.projectBoardImageUrl,
-                projectBoard.updateAt
+                projectBoardImage.projectBoardImageUrl
             )
             .from(projectBoard)
             .leftJoin(projectTypeCategory)
@@ -192,7 +190,8 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
                     .when(projectBoard.projectStatus.eq(ProjectStatus.IN_PROGRESS)).then(2)
                     .when(projectBoard.projectStatus.eq(ProjectStatus.CLOSED)).then(3)
                     .otherwise(4)
-                    .asc()
+                    .asc(),
+                projectBoard.updateAt.desc().nullsFirst()
             )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -200,7 +199,9 @@ public class ProjectBoardRepositoryImpl implements ProjectBoardRepositoryCustom 
 
         // DTO 변환 (List<String>으로 relationFieldCategoryName 합치기)
         Map<Long, List<Tuple>> groupedByProjectId = result.stream()
-            .collect(Collectors.groupingBy(tuple -> tuple.get(projectBoard.id)));
+            .collect(Collectors.groupingBy(tuple -> tuple.get(projectBoard.id),
+                LinkedHashMap::new,
+                Collectors.toList()));
 
         List<ProjectBoardListDto> dtoList = groupedByProjectId.values().stream()
             .map(grouped -> {

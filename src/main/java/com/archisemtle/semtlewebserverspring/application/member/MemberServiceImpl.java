@@ -174,8 +174,7 @@ public class MemberServiceImpl implements MemberService {
             .password(member.getPassword())
             .studentId(member.getStudentId())
             .username(memberUpdateRequestDto.getUsername() != null ? memberUpdateRequestDto.getUsername() : member.getUsername()) // 업데이트 값 적용
-            .birth(memberUpdateRequestDto.getBirth() != null ? parseDate(
-                String.valueOf(memberUpdateRequestDto.getBirth())) : member.getBirth())
+            .birth(memberUpdateRequestDto.getBirth() != null ? memberUpdateRequestDto.getBirth() : member.getBirth())
             .phone(memberUpdateRequestDto.getPhone() != null ? memberUpdateRequestDto.getPhone() : member.getPhone())
             .profileImageUrl(memberUpdateRequestDto.getImageUrl() != null ? memberUpdateRequestDto.getImageUrl() : member.getProfileImageUrl())
             .role(member.getRole())
@@ -192,7 +191,6 @@ public class MemberServiceImpl implements MemberService {
             .orElseThrow(() -> new RuntimeException("해당 UUID의 회원을 찾을 수 없습니다."));
 
         member.setManageApprovalStatus(memberDeactiveRequestDto.isManageApprovalStatus());
-        member.setRole(memberDeactiveRequestDto.getRole());
 
         memberRepository.save(member);
     }

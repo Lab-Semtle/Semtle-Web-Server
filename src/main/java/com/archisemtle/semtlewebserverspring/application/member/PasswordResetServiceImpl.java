@@ -27,13 +27,14 @@ public class PasswordResetServiceImpl implements PasswordResetService{
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("해당 이메일의 회원이 없습니다."));
 
-        String resetToken = UUID.randomUUID().toString().substring(0, 6);
+        String resetToken = UUID.randomUUID().toString();
         Instant expirationTime = Instant.now().plusSeconds(900);
 
         tokenStore.put(resetToken, email);
         tokenExpirationStore.put(resetToken, expirationTime);
 
-        emailService.sendPasswordResetEmail(member.getEmail(), resetToken);
+        String resetLink = "https://example.com/password-reset?token=" + resetToken;
+        emailService.sendPasswordResetEmail(member.getEmail(), resetLink);
 
         return new MemberPasswordResetEmailResponseDto(expirationTime.toString());
     }
@@ -65,6 +66,6 @@ public class PasswordResetServiceImpl implements PasswordResetService{
 
     @Override
     public String generateResetToken() {
-        return UUID.randomUUID().toString().substring(0, 6);
+        return UUID.randomUUID().toString();
     }
 }

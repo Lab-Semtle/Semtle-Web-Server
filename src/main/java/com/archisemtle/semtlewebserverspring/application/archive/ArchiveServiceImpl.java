@@ -9,23 +9,26 @@ import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveListResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.archive.ArchiveRepository;
-import java.util.Date;
+import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveResponseVo;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import com.archisemtle.semtlewebserverspring.domain.archive.Archive;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ArchiveServiceImpl implements ArchiveService{
 
-
     private final ArchiveRepository archiveRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ArchiveServiceImpl.class);
 
     //게시판 생성
     @Override
@@ -34,13 +37,13 @@ public class ArchiveServiceImpl implements ArchiveService{
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
-            .createdAt(new Date())
+            .createdAt(requestDto.getCreatedAt())
             .uuid(requestDto.getUuid())
             .imageUrl(requestDto.getImageUrl())
             .fileUrl(requestDto.getFileUrl())
             .build();
-        archiveRepository.save(archive);
 
+        archiveRepository.save(archive);
     }
 
     //게시판 읽기

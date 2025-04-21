@@ -2,7 +2,6 @@ package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ShowApplyingProjectInfoResponseDto;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -16,59 +15,60 @@ public class ShowApplyingProjectListResponseVo {
     private int totalElements;
     private int totalPages;
     private int currentPage;
-    private List<ApplicationInfo> applications;
+    private List<ApplyInfo> apply;
 
     @Getter
     @NoArgsConstructor
-    public static class ApplicationInfo {
-        private Integer applicationId;
+    public static class ApplyInfo {
+        private Long applyId;
+        private Long postId;
         private String projectTitle;
-        private Integer boardId;
-        private Date applyDate;
+        private LocalDateTime applyDate;
         private String status;
         private String projectType;
         private String relateField;
 
         @Builder
-        public ApplicationInfo(
-            Integer applicationId,
+        public ApplyInfo(
+            Long applyId,
+            Long postId,
             String projectTitle,
-            Integer boardId,
-            Date applyDate,
             String status,
             String projectType,
-            String relateField) {
-            this.applicationId = applicationId;
+            String relateField,
+            LocalDateTime applyDate) {
+            this.applyId = applyId;
+            this.postId = postId;
             this.projectTitle = projectTitle;
-            this.boardId = boardId;
-            this.applyDate = applyDate;
             this.status = status;
             this.projectType = projectType;
             this.relateField = relateField;
+            this.applyDate = applyDate;
         }
     }
 
+
     @Builder
     public ShowApplyingProjectListResponseVo(int totalElements, int totalPages, int currentPage,
-        List<ApplicationInfo> applications) {
+        List<ApplyInfo> apply) {
         this.totalElements = totalElements;
         this.totalPages = totalPages;
         this.currentPage = currentPage;
-        this.applications = applications;
+        this.apply = apply;
     }
 
     public static ShowApplyingProjectListResponseVo dtoToVo(
         ShowApplyingProjectInfoResponseDto showApplyingProjectInfoResponseDto) {
 
-        List<ApplicationInfo> applicationInfoList = showApplyingProjectInfoResponseDto.getApplications().stream()
-            .map(dtoApplication -> ShowApplyingProjectListResponseVo.ApplicationInfo.builder()
-                .applicationId(dtoApplication.getApplicationId())
-                .projectTitle(dtoApplication.getProjectTitle())
-                .boardId(dtoApplication.getBoardId())
-                .applyDate(dtoApplication.getApplyDate())
-                .status(dtoApplication.getStatus())
-                .projectType(dtoApplication.getProjectType())
-                .relateField(dtoApplication.getRelateField())
+        List<ApplyInfo> applyInfoList = showApplyingProjectInfoResponseDto.getApplys().stream()
+            .map(apply -> ShowApplyingProjectListResponseVo.ApplyInfo.builder()
+                .applyId(apply.getApplyId())
+                .postId(apply.getPostId())
+                .projectTitle(apply.getProjectTitle())
+                .status(apply.getStatus())
+                .projectType(apply.getProjectType())
+                .relateField(apply.getRelateField())
+                .applyDate(apply.getApplyDate())
                 .build())
             .collect(Collectors.toList());
 
@@ -76,7 +76,7 @@ public class ShowApplyingProjectListResponseVo {
             .totalElements(showApplyingProjectInfoResponseDto.getTotalElements())
             .totalPages(showApplyingProjectInfoResponseDto.getTotalPages())
             .currentPage(showApplyingProjectInfoResponseDto.getCurrentPage())
-            .applications(applicationInfoList)
+            .apply(applyInfoList)
             .build();
     }
 }

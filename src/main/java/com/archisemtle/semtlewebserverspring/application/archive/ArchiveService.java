@@ -11,7 +11,6 @@ import java.util.UUID;
 
 public interface ArchiveService {
 
-
     public void createArchiveBoard(ArchiveRequestDto requestDto);
     public ArchiveResponseDto readArchiveBoard(Long id);
     public void updateArchiveBoard(Long id, ArchiveRequestDto requestDto);

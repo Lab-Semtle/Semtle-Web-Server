@@ -1,8 +1,6 @@
 package com.archisemtle.semtlewebserverspring.presentation.archive;
 
 import com.archisemtle.semtlewebserverspring.application.archive.ArchiveService;
-import com.archisemtle.semtlewebserverspring.common.BaseException;
-import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
 import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveListRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveListResponseDto;
@@ -40,7 +38,6 @@ public class ArchiveController {
     @PostMapping
     public CommonResponse<String> createArchive(@RequestBody ArchiveRequestVo requestVo) throws IOException{
         archiveService.createArchiveBoard(ArchiveRequestVo.voToDto(requestVo));
-
         return CommonResponse.success("Secret Note 게시물이 성공적으로 등록되었습니다.");
     }
 
@@ -48,7 +45,6 @@ public class ArchiveController {
     @GetMapping("/{id}")
     public CommonResponse<ArchiveResponseVo> readArchive(@PathVariable Long id){
         ArchiveResponseDto responseDto = archiveService.readArchiveBoard(id);
-
         return CommonResponse.success("족보 게시판 흭득 성공", ArchiveResponseDto.dtoToVo(responseDto));
     }
 
@@ -75,7 +71,6 @@ public class ArchiveController {
         @RequestParam(name = "size", defaultValue = "15") int size,
         @RequestParam(name = "search_keyword", defaultValue = "") String search_keyword
     ){
-        if(page < 1 || size < 1) throw new BaseException(BaseResponseStatus.WRONG_PARAM);
         ArchiveListRequestVo requestVo = new ArchiveListRequestVo(page, size, search_keyword);
         ArchiveListRequestDto requestDto = ArchiveListRequestVo.voToDto(requestVo);
         ArchiveListResponseDto responseDto = archiveService.getArchiveList(requestDto);

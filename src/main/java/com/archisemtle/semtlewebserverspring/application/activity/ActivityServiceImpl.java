@@ -36,10 +36,10 @@ public class ActivityServiceImpl implements ActivityService{
         Activity activity = Activity.builder()
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
-            .createdAt(requestDto.getCreatedAt())
             .writer(requestDto.getWriter())
             .images(requestDto.getImages())
             .uuid(requestDto.getUuid())
+            .createdAt(new Date())
             .type(requestDto.getType())
             .build();
 
@@ -72,6 +72,7 @@ public class ActivityServiceImpl implements ActivityService{
                 .images(requestDto.getImages())
                 .type(requestDto.getType())
                 .build();
+
         activityRepository.save(changedActivity);
     }
 
@@ -87,8 +88,8 @@ public class ActivityServiceImpl implements ActivityService{
         Pageable pageable = PageRequest.of(requestDto.getPage()-1, requestDto.getSize(),
             Sort.by(Direction.ASC, "createdAt"));
 
-            activityPage = requestDto.getType().equals("all") ? activityRepository.findAll(pageable) :
-                activityRepository.findByTypeContainingIgnoreCase(requestDto.getType(), pageable);
+
+        activityPage = activityRepository.findByTypeContainingIgnoreCase(requestDto.getType(), pageable);
 
         int total_posts = (int)activityPage.getTotalElements();
         int total_pages = (int) Math.ceil((double) total_posts / requestDto.getSize());

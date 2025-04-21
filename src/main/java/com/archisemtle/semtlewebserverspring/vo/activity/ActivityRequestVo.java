@@ -1,8 +1,6 @@
 package com.archisemtle.semtlewebserverspring.vo.activity;
 
 import com.archisemtle.semtlewebserverspring.dto.activity.ActivityRequestDto;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +14,7 @@ public class ActivityRequestVo {
     private String title;
     private String content;
     private String writer;
+    private Date createdAt;
     private UUID uuid;
     private List<String> images;
     private String type;
@@ -26,7 +25,7 @@ public class ActivityRequestVo {
             .content(requestVo.getContent())
             .writer(requestVo.getWriter())
             .images(requestVo.getImages())
-            .createdAt(LocalDateTime.now())
+            .createdAt(requestVo.getCreatedAt())
             .uuid(requestVo.getUuid())
             .type(requestVo.getType())
             .build();

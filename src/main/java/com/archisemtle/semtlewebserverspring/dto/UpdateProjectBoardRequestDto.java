@@ -21,5 +21,4 @@ public class UpdateProjectBoardRequestDto {
     private LocalDate projectStartTime;
     private LocalDate projectEndTime;
     private LocalDate projectRecruitingEndTime;
-    private List<String> projectBoardImages;
 }

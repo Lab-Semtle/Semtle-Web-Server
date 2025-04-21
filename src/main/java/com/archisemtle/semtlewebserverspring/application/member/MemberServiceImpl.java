@@ -2,7 +2,6 @@ package com.archisemtle.semtlewebserverspring.application.member;
 
 import com.archisemtle.semtlewebserverspring.common.BaseException;
 import com.archisemtle.semtlewebserverspring.common.BaseResponseStatus;
-import com.archisemtle.semtlewebserverspring.common.CommonResponse;
 import com.archisemtle.semtlewebserverspring.config.jwt.JwtToken;
 import com.archisemtle.semtlewebserverspring.config.jwt.JwtTokenProvider;
 import com.archisemtle.semtlewebserverspring.domain.Member;
@@ -19,7 +18,6 @@ import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,7 +89,7 @@ public class MemberServiceImpl implements MemberService {
                     .password(passwordEncoder.encode("#semtle308"))
                     .studentId(studentId)
                     .username(username)
-                    .birth(LocalDate.parse("2025-01-01"))
+                    .birth(parseDate("2025-01-01"))
                     .phone(phone)
                     .role(role)
                     .manageApprovalStatus(false)
@@ -131,11 +129,6 @@ public class MemberServiceImpl implements MemberService {
     // Member 조회 메서드
     @Override
     public MemberReadResponseDto show(UUID uuid) {
-
-        if(uuid == null) {
-            throw new BaseException(BaseResponseStatus.WRONG_PARAM);
-        }
-
         Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
             BaseResponseStatus.NO_EXIST_MEMBERS));
 
@@ -148,7 +141,6 @@ public class MemberServiceImpl implements MemberService {
             .birth(member.getBirth())
             .phone(member.getPhone())
             .role(member.getRole())
-            .profileImageUrl(member.getProfileImageUrl())
             .manageApprovalStatus(member.isManageApprovalStatus())
             .build();
     }
@@ -157,13 +149,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void update(UUID uuid , MemberUpdateRequestDto memberUpdateRequestDto) {
-
-        if(uuid == null || memberUpdateRequestDto.getUsername() == null || memberUpdateRequestDto.getBirth() == null
-            || memberUpdateRequestDto.getPhone() == null || memberUpdateRequestDto.getImageUrl()
-            == null) {
-            throw new BaseException(BaseResponseStatus.WRONG_PARAM);
-        }
-
         Member member = memberRepository.findByUuid(uuid).orElseThrow(()-> new BaseException(
             BaseResponseStatus.NO_EXIST_MEMBERS));
 
@@ -172,11 +157,10 @@ public class MemberServiceImpl implements MemberService {
             .uuid(member.getUuid())
             .email(member.getEmail())
             .password(member.getPassword())
-            .studentId(member.getStudentId())
+            .studentId(member.getStudentId() != null ? memberUpdateRequestDto.getStudentId() : member.getStudentId())
             .username(memberUpdateRequestDto.getUsername() != null ? memberUpdateRequestDto.getUsername() : member.getUsername()) // 업데이트 값 적용
             .birth(memberUpdateRequestDto.getBirth() != null ? memberUpdateRequestDto.getBirth() : member.getBirth())
             .phone(memberUpdateRequestDto.getPhone() != null ? memberUpdateRequestDto.getPhone() : member.getPhone())
-            .profileImageUrl(memberUpdateRequestDto.getImageUrl() != null ? memberUpdateRequestDto.getImageUrl() : member.getProfileImageUrl())
             .role(member.getRole())
             .manageApprovalStatus(member.isManageApprovalStatus())
             .build();

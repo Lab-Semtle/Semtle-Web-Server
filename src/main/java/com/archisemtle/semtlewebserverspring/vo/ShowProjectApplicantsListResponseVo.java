@@ -1,7 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ProjectApplicantsResponseDto;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -15,20 +15,20 @@ public class ShowProjectApplicantsListResponseVo {
     private int totalElements;
     private int totalPages;
     private int currentPage;
-    private List<ApplyInfo> applys;
+    private List<ApplicantInfo> applicants;
 
     @Getter
     @NoArgsConstructor
-    public static class ApplyInfo {
-        private Long applyId;
-        private String username;
-        private LocalDateTime applyDate;
+    public static class ApplicantInfo {
+        private Integer applicantId;
+        private String name;
+        private Date applyDate;
         private String status;
 
         @Builder
-        public ApplyInfo(Long applyId, String username, LocalDateTime applyDate, String status) {
-            this.applyId = applyId;
-            this.username = username;
+        public ApplicantInfo(Integer applicantId, String name, Date applyDate, String status) {
+            this.applicantId = applicantId;
+            this.name = name;
             this.applyDate = applyDate;
             this.status = status;
         }
@@ -36,22 +36,22 @@ public class ShowProjectApplicantsListResponseVo {
 
     @Builder
     public ShowProjectApplicantsListResponseVo(int totalElements, int totalPages, int currentPage,
-        List<ApplyInfo> applys) {
+        List<ApplicantInfo> applicants) {
         this.totalElements = totalElements;
         this.totalPages = totalPages;
         this.currentPage = currentPage;
-        this.applys = applys;
+        this.applicants = applicants;
     }
 
     public static ShowProjectApplicantsListResponseVo dtoToVo(
         ProjectApplicantsResponseDto projectApplicantsResponseDto) {
 
-        List<ApplyInfo> applyInfoList = projectApplicantsResponseDto.getApplys().stream()
-            .map(apply -> ApplyInfo.builder()
-                .applyId(apply.getApplyId())
-                .username(apply.getUsername())
-                .applyDate(apply.getApplyDate())
-                .status(apply.getStatus())
+        List<ApplicantInfo> applicantInfoList = projectApplicantsResponseDto.getApplicants().stream()
+            .map(dtoApplicant -> ApplicantInfo.builder()
+                .applicantId(dtoApplicant.getApplicantId())
+                .name(dtoApplicant.getName())
+                .applyDate(dtoApplicant.getApplyDate())
+                .status(dtoApplicant.getStatus())
                 .build())
             .collect(Collectors.toList());
 
@@ -59,7 +59,7 @@ public class ShowProjectApplicantsListResponseVo {
             .totalElements(projectApplicantsResponseDto.getTotalElements())
             .totalPages(projectApplicantsResponseDto.getTotalPages())
             .currentPage(projectApplicantsResponseDto.getCurrentPage())
-            .applys(applyInfoList)
+            .applicants(applicantInfoList)
             .build();
     }
 }

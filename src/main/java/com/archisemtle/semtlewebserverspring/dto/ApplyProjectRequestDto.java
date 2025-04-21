@@ -1,7 +1,6 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
 import java.util.List;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +9,23 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ApplyProjectRequestDto {
-    private Long postId;
-    private String answer;
+    private List<AnswerDto> answers;
     private List<String> urls;
-    private List<String> fileUrls;
+    private List<FileDto> files;
+
+    @Getter
+    @Setter
+    @Builder
+    public static class AnswerDto {
+        private Integer questionId;
+        private String answer;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class FileDto {
+        private String fileName;
+        private String fileUrl;
+    }
 }

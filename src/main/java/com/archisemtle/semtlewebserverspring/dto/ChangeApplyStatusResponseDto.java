@@ -1,7 +1,8 @@
 package com.archisemtle.semtlewebserverspring.dto;
 
-import com.archisemtle.semtlewebserverspring.domain.Apply;
+import com.archisemtle.semtlewebserverspring.domain.Applicants;
 import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,13 +11,15 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ChangeApplyStatusResponseDto {
+    private String message;
     private String updatedStatus;
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 
-    public static ChangeApplyStatusResponseDto entityToDto(Apply apply) {
+    public static ChangeApplyStatusResponseDto entityToDto(Applicants applicants) {
         return ChangeApplyStatusResponseDto.builder()
-            .updatedStatus(apply.getStatus())
-            .updatedAt(apply.getUpdatedAt())
+            .message("신청자의 상태가 성공적으로 변경되었습니다.")
+            .updatedStatus(applicants.getStatus())
+            .updatedAt(String.valueOf(LocalDateTime.now()))
             .build();
     }
 }

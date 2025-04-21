@@ -1,6 +1,5 @@
 package com.archisemtle.semtlewebserverspring.dto.archive;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +16,7 @@ public class ArchiveRequestDto {
     private String content;
     private String title;
     private UUID uuid;
-    private LocalDateTime createdAt;
+    private Date createdAt;
     private List<String> imageUrl;
     private List<String> fileUrl;
     

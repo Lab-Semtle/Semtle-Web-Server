@@ -1,7 +1,5 @@
 package com.archisemtle.semtlewebserverspring.vo.activity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import lombok.Builder;
@@ -16,7 +14,7 @@ public class ActivityResponseVo {
     private String title;
     private String content;
     private String writer;
-    private LocalDateTime createdAt;
+    private Date createdAt;
     private List<String> images;
     private String type;
 

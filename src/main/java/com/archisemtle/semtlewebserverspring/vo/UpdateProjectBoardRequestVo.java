@@ -18,7 +18,6 @@ public class UpdateProjectBoardRequestVo {
     private LocalDate projectStartTime;
     private LocalDate projectEndTime;
     private LocalDate projectRecruitingEndTime;
-    private List<String> projectBoardImages;
 
     public static UpdateProjectBoardRequestDto voToDto(
         UpdateProjectBoardRequestVo updateProjectBoardRequestVo) {
@@ -31,7 +30,6 @@ public class UpdateProjectBoardRequestVo {
             .projectStartTime(updateProjectBoardRequestVo.getProjectStartTime())
             .projectEndTime(updateProjectBoardRequestVo.getProjectEndTime())
             .projectRecruitingEndTime(updateProjectBoardRequestVo.getProjectRecruitingEndTime())
-            .projectBoardImages(updateProjectBoardRequestVo.getProjectBoardImages())
             .build();
     }
 }

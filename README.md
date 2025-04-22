@@ -1,7 +1,9 @@
 # 아치셈틀 학회 사이트
 아치셈틀 학회 활성화 및 관리를 위한 사이트
 
-# 버전업된 모습
+# 아키텍쳐
+![image](https://github.com/user-attachments/assets/0572365d-1f48-4892-ad39-6b302eca50a5)
+
 
 # 구동모습
 

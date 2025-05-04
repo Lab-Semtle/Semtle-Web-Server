@@ -1,7 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo.member;
 
 import com.archisemtle.semtlewebserverspring.dto.member.MemberReadResponseDto;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,10 +14,9 @@ public class MemberReadResponseVo {
     private String password;
     private String studentId;
     private String username;
-    private LocalDate birth;
+    private Date birth;
     private String phone;
     private String role;
-    private String profileImageUrl;
     private boolean manageApprovalStatus;
 
     public static MemberReadResponseVo dtoToVo(
@@ -31,7 +30,6 @@ public class MemberReadResponseVo {
             .birth(memberReadResponseDto.getBirth())
             .phone(memberReadResponseDto.getPhone())
             .role(memberReadResponseDto.getRole())
-            .profileImageUrl(memberReadResponseDto.getProfileImageUrl())
             .manageApprovalStatus(memberReadResponseDto.isManageApprovalStatus())
             .build();
     }

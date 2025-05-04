@@ -1,7 +1,7 @@
 package com.archisemtle.semtlewebserverspring.vo;
 
 import com.archisemtle.semtlewebserverspring.dto.ShowProjectApplicantInfoResponseDto;
-import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,38 +9,54 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ShowProjectApplicantInfoResponseVo {
-    private Long applyId;
-    private String username;
-    private LocalDateTime applyDate;
+    private Integer applicantId;
+    private String name;
+    private Date applyDate;
     private String status;
     private String email;
     private String phone;
+    private String resumeUrl;
+    private String portfolioUrl;
+    private String customAnswer;
+    private String additionalFile;
 
     @Builder
     public ShowProjectApplicantInfoResponseVo(
-        Long applyId,
-        String username,
-        LocalDateTime applyDate,
+        Integer applicantId,
+        String name,
+        Date applyDate,
         String status,
         String email,
-        String phone){
-        this.applyId = applyId;
-        this.username = username;
+        String phone,
+        String resumeUrl,
+        String portfolioUrl,
+        String customAnswer,
+        String additionalFile){
+        this.applicantId = applicantId;
+        this.name = name;
         this.applyDate = applyDate;
         this.status = status;
         this.email = email;
         this.phone = phone;
+        this.resumeUrl = resumeUrl;
+        this.portfolioUrl = portfolioUrl;
+        this.customAnswer = customAnswer;
+        this.additionalFile = additionalFile;
     }
 
     public static ShowProjectApplicantInfoResponseVo dtoToVo(
         ShowProjectApplicantInfoResponseDto showProjectApplicantInfoResponseDto) {
         return ShowProjectApplicantInfoResponseVo.builder()
-            .applyId(showProjectApplicantInfoResponseDto.getApplyId())
-            .username(showProjectApplicantInfoResponseDto.getUsername())
+            .applicantId(showProjectApplicantInfoResponseDto.getApplicantId())
+            .name(showProjectApplicantInfoResponseDto.getName())
             .applyDate(showProjectApplicantInfoResponseDto.getApplyDate())
             .status(showProjectApplicantInfoResponseDto.getStatus())
             .email(showProjectApplicantInfoResponseDto.getEmail())
             .phone(showProjectApplicantInfoResponseDto.getPhone())
+            .resumeUrl(showProjectApplicantInfoResponseDto.getResumeUrl())
+            .portfolioUrl(showProjectApplicantInfoResponseDto.getPortfolioUrl())
+            .customAnswer(showProjectApplicantInfoResponseDto.getCustomAnswer())
+            .additionalFile(showProjectApplicantInfoResponseDto.getAdditionalFile())
             .build();
     }
 }

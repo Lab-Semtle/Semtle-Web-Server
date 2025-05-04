@@ -3,6 +3,9 @@ name: SEMTLE-WEB-SERVER CI/CD
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'   # README 수정 시에는 실행 안 됨
+      - 'main.yml'
   pull_request:
     branches: [ "main" ]
 

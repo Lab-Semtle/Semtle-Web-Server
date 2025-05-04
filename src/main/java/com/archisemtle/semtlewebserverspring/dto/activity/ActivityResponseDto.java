@@ -2,7 +2,6 @@ package com.archisemtle.semtlewebserverspring.dto.activity;
 
 import com.archisemtle.semtlewebserverspring.domain.activity.Activity;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityResponseVo;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +16,7 @@ public class ActivityResponseDto {
     private String title;
     private String content;
     private String writer;
-    private LocalDateTime createdAt;
+    private Date createdAt;
     private List<String> images;
     private String type;
 

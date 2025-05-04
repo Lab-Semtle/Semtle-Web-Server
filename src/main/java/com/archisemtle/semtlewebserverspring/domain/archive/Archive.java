@@ -32,9 +32,7 @@ public class Archive {
     private String title;
     @Column(unique = false, nullable = false)
     private String writer;
-
-    @Lob
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false, unique = false,columnDefinition = "Text")
     private String content;
     @Column(unique = false, nullable = false)
     private LocalDateTime createdAt;

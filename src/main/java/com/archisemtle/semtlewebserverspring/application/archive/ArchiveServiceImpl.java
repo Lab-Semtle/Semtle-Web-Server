@@ -9,6 +9,7 @@ import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveListResponseDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveRequestDto;
 import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.archive.ArchiveRepository;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,7 @@ public class ArchiveServiceImpl implements ArchiveService{
             .title(requestDto.getTitle())
             .content(requestDto.getContent())
             .writer(requestDto.getWriter())
-            .createdAt(new Date())
+            .createdAt(LocalDateTime.now())
             .uuid(requestDto.getUuid())
             .imageUrl(requestDto.getImageUrl())
             .fileUrl(requestDto.getFileUrl())

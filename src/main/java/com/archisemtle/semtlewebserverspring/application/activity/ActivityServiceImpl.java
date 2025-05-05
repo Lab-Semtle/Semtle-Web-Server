@@ -12,6 +12,7 @@ import com.archisemtle.semtlewebserverspring.vo.activity.ActivityListResponseVo;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Null;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class ActivityServiceImpl implements ActivityService{
             .writer(requestDto.getWriter())
             .images(requestDto.getImages())
             .uuid(requestDto.getUuid())
-            .createdAt(new Date())
+            .createdAt(java.time.LocalDateTime.now())
             .type(requestDto.getType())
             .build();
 
@@ -67,7 +68,7 @@ public class ActivityServiceImpl implements ActivityService{
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .writer(requestDto.getWriter())
-                .createdAt(requestDto.getCreatedAt())
+                .createdAt(LocalDateTime.now())
                 .uuid(activity.getUuid())
                 .images(requestDto.getImages())
                 .type(requestDto.getType())

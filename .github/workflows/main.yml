@@ -90,3 +90,6 @@ jobs:
             # ✅ 최신 spring 이미지로 다시 실행
             docker compose -f /root/semtle-web-server/docker-compose.yml up -d --no-deps --force-recreate spring_app
             docker system prune -f
+            # log확인
+            docker ps -a | grep spring_app
+            docker logs spring_app || echo "No logs for spring_app"

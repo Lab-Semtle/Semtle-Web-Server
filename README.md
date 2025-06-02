@@ -16,7 +16,7 @@
 https://archisemtle.com/
 
 # 담당 
- - 서용: 배포 및 프로젝트 모집 게시판, DB설계
+ - 서용: 서버배포, 프로젝트 모집 게시판API, DB설계
 
 ## 구동방법
  - PostgreSQL설치, Schema생성후 -> application.yml작성, SpringBoot어플리케이션 실행

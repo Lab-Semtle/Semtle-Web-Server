@@ -14,6 +14,7 @@ import com.archisemtle.semtlewebserverspring.dto.member.verifyAdminRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberPasswordResetResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,7 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/signin")
+    @Operation(summary = "로그인API", description = "사용자가 로그인을 시도합니다.")
     public CommonResponse<LoginResponseVo> Login(@RequestBody LoginRequestDto loginRequestDto) {
         LoginResponseVo loginResponseVo = LoginResponseVo.dtoToVo(
             memberService.login(loginRequestDto));
@@ -43,6 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/password/reset/email")
+    @Operation(summary = "이메일을 통한 비밀번호 초기화API", description = "이메일을 통해서 비밀번호를 초기화하는 API입니다.")
     public CommonResponse<MemberPasswordResetResponseVo> requestPasswordReset(
         @RequestBody MemberPasswordResetEmailRequestDto memberPasswordResetEmailRequestDto
     ) {
@@ -55,6 +58,7 @@ public class AuthController {
     }
 
     @PostMapping("/password/reset")
+    @Operation(summary = "비밀번호 초기화API", description = "비밀번호를 초기화하는 API입니다.")
     public CommonResponse<String> confirmPasswordReset(
         @RequestBody MemberPasswordResetRequestDto memberPasswordResetRequestDto
     ) {
@@ -66,6 +70,7 @@ public class AuthController {
     }
 
     @PutMapping("/password/manager")
+    @Operation(summary = "관리자 2차 인증API", description = "관리자가 2차인증을 하는 API입니다.")
     public CommonResponse<String> verifyAdmin(
         @RequestBody verifyAdminRequestDto verifyAdminRequestDto) {
 

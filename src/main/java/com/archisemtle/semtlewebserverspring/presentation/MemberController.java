@@ -25,6 +25,7 @@ import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberListResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberPasswordResetResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberReadResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -48,6 +49,7 @@ public class MemberController {
 
     // 회원 입력
     @PostMapping
+    @Operation(summary = "테스트 사용자를 추가하는 API", description = "테스트 사용자를 추가하는 API입니다.")
     public CommonResponse<MemberReadResponseVo> save(
         @RequestBody MemberRegistrationRequestDto memberRegistrationRequestDto) {
         memberService.save(memberRegistrationRequestDto);
@@ -55,6 +57,7 @@ public class MemberController {
     }
 
     @PostMapping(value = "/signup", consumes = "multipart/form-data")
+    @Operation(summary = "사용자를 엑셀로 추가하는 API", description = "사용자를 엑셀로 추가하는 API입니다.")
     public CommonResponse<ExcelAddMemberResponseVo> excelAddMember(
         @RequestPart("file")
         @io.swagger.v3.oas.annotations.Parameter(
@@ -82,6 +85,7 @@ public class MemberController {
     // 입력 - uuid
     // 출력 - 이름, 생년월일, 전화번호, 학번, 프로필 사진
     @GetMapping("/{uuid}")
+    @Operation(summary = "사용자 정보를 조회하는 API", description = "사용자 정보를 조회하는 API입니다.")
     public CommonResponse<MemberReadResponseVo> showMember(@PathVariable UUID uuid) {
         MemberReadResponseDto showMemberDto = memberService.show(uuid);
         MemberReadResponseVo responseVo = MemberReadResponseVo.dtoToVo(showMemberDto);
@@ -91,6 +95,7 @@ public class MemberController {
     // 개인 정보 수정
     // uuid, 이름, 생년월일, 전화번호, 학번, 프로필 사진
     @PatchMapping("/{uuid}")
+    @Operation(summary = "사용자를 정보를 수정하는 API", description = "사용자를 정보를 수정하는 API입니다.")
     public CommonResponse<Void> updateMember(@PathVariable UUID uuid,
         @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
         memberService.update(uuid, memberUpdateRequestDto);
@@ -99,6 +104,7 @@ public class MemberController {
     }
 
     @GetMapping
+    @Operation(summary = "사용자 리스트를 조회하는 API", description = "사용자 리스트를 조회하는 API입니다.")
     public CommonResponse<MemberListResponseVo> getMemberList(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size,
@@ -130,6 +136,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{uuid}/deactivate")
+    @Operation(summary = "사용자를 할동가능 여부를 수정하는 API", description = "사용자의 활동가능 여부를 수정하는 API입니다.")
     public CommonResponse<String> deactivateMember(
         @PathVariable UUID uuid,
         @RequestBody MemberDeactiveRequestDto memberDeactiveRequestDto

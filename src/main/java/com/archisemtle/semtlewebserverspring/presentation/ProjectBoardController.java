@@ -14,6 +14,7 @@ import com.archisemtle.semtlewebserverspring.vo.ProjectBoardPageResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.ProjectListRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.UpdateProjectBoardRequestVo;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class ProjectBoardController {
     private final ProjectBoardRepository projectBoardRepository;
 
     @PostMapping("/write")
+    @Operation(summary = "프로젝트 모집 게시물 작성 API", description = "프로젝트 모집 게시물 작성하는 API입니다.")
     public CommonResponse<String> addProjectBoard(
         @RequestBody AddProjcetBoardRequestVo addProjcetBoardRequestVo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,6 +55,7 @@ public class ProjectBoardController {
     }
 
     @GetMapping("/{projectBoardId}")
+    @Operation(summary = "프로젝트 모집 게시물 조회 API", description = "프로젝트 모집 게시물 조회하는 API입니다.")
     public CommonResponse<ProjectBoardResponseVo> getProjectBoardCommonResponse(
         @PathVariable("projectBoardId") Long id) {
 
@@ -61,6 +64,7 @@ public class ProjectBoardController {
     }
 
     @DeleteMapping("/{projectBoardId}")
+    @Operation(summary = "프로젝트 모집 게시물 삭제 API", description = "프로젝트 모집 게시물 삭제하는 API입니다.")
     public CommonResponse<String> deleteProjectBoard(@PathVariable("projectBoardId") Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID uuid = UUID.fromString(authentication.getName());
@@ -69,6 +73,7 @@ public class ProjectBoardController {
     }
 
     @PostMapping("/update/{projectBoardId}")
+    @Operation(summary = "프로젝트 모집 게시물 수정 API", description = "프로젝트 모집 게시물 수정하는 API입니다.")
     public CommonResponse<String> updateProjectBoard(@PathVariable("projectBoardId") Long id,
         @RequestBody
         UpdateProjectBoardRequestVo updateProjectBoardRequestVo) {
@@ -80,6 +85,7 @@ public class ProjectBoardController {
     }
 
     @GetMapping("/projectboardlist")
+    @Operation(summary = "프로젝트 모집 게시물 리스트 조회 API(레거시)", description = "프로젝트 모집 게시물 리스트 조회하는 API입니다.")
     public CommonResponse<List<ProjectListRequestVo>> getProjectBoardList(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size) {
@@ -91,6 +97,7 @@ public class ProjectBoardController {
     }
 
     @GetMapping
+    @Operation(summary = "프로젝트 모집 게시물목록 (필터링) 조회 API", description = "프로젝트 모집 게시물목록 (필터링) 조회 API입니다.")
     public CommonResponse<Page<ProjectBoardListDto>> getProjectBoardList2(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size,
@@ -107,6 +114,7 @@ public class ProjectBoardController {
     }
 
     @GetMapping("/projectboardlist/{projectBoardId}")
+    @Operation(summary = "프로젝트 모집 게시물을 각각 조회 API(레거시)", description = "프로젝트 모집 게시물을 각각 조회하는 API입니다.")
     public CommonResponse<ProjectBoardPageResponseVo> getProjectBoardPageCommonResponse(
         @PathVariable("projectBoardId") Long id) {
 

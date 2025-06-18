@@ -13,6 +13,7 @@ import com.archisemtle.semtlewebserverspring.vo.activity.ActivityListResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.activity.ActivityResponseVo;
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class ActivityController {
 
     //게시물 생성
     @PostMapping
+    @Operation(summary = "활동 게시물 생성API", description = "활동 게시물을 생성합니다.")
     public CommonResponse<String> createActivity(@RequestBody ActivityRequestVo requestVo)
         throws IOException {
 
@@ -57,6 +59,7 @@ public class ActivityController {
 
     //게시물 읽기
     @GetMapping("/{id}")
+    @Operation(summary = "활동 게시물 읽기API", description = "활동 게시물을 읽어옵니다.")
     public CommonResponse<ActivityResponseVo> getActivity(@PathVariable Long id){
         ActivityResponseDto dto = activityService.readActivityBoard(id);
         return CommonResponse.success("게시물 읽기 성공", ActivityResponseDto.dtoToVo(dto));
@@ -64,6 +67,7 @@ public class ActivityController {
 
     //게시물 수정 성공
     @PutMapping("/{id}")
+    @Operation(summary = "활동 게시물 수정API", description = "활동 게시물을 수정합니다.")
     public CommonResponse<String> updateActivity(@PathVariable Long id, @RequestBody ActivityRequestVo requestVo)
         throws IOException
     {
@@ -73,12 +77,14 @@ public class ActivityController {
 
     //게시물 삭제 성공
     @DeleteMapping("/{id}")
+    @Operation(summary = "활동 게시물 삭제API", description = "활동 게시물을 삭제합니다.")
     public CommonResponse<String> deleteActivity(@PathVariable Long id) {
         activityService.deleteActivityBoard(id);
         return CommonResponse.success("게시글 삭제 성공");
     }
 
     @GetMapping
+    @Operation(summary = "활동 게시물 목록 읽기API", description = "활동 게시판 목록을 읽어옵니다.")
     public CommonResponse<ActivityListResponseVo> getActivityList(
         @RequestParam(name = "page", defaultValue = "1") int page,
         @RequestParam(name = "size", defaultValue = "15") int size,
@@ -94,6 +100,7 @@ public class ActivityController {
     }
 
     @GetMapping("/recent")
+    @Operation(summary = "최근 활동 게시물 목록읽기API", description = "최근 활동 게시물을 읽어옵니다.")
     public CommonResponse<ActivityListResponseVo> getCurActivityList(
         @RequestParam(name = "limit", defaultValue = "3") int limit){
 

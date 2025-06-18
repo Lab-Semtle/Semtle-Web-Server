@@ -40,8 +40,8 @@ public class SwaggerConfig {
     // API의 기본 정보 설정
     private Info apiInfo() {
         return new Info()
-            .title("SemtleAPI") // API의 제목
-            .description("셈틀API") // API에 대한 설명
+            .title("SemtleServerAPI") // API의 제목
+            .description("셈틀서버API") // API에 대한 설명
             .version("1.0.0"); // API의 버전
     }
 }

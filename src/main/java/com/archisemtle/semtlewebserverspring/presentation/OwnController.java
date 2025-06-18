@@ -14,6 +14,7 @@ import com.archisemtle.semtlewebserverspring.dto.archive.ArchiveResponseDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.ProjectBoardRepositoryImpl;
 import com.archisemtle.semtlewebserverspring.vo.ProjectBoardPageResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveListResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,7 @@ public class OwnController {
     private final ProjectBoardRepositoryImpl projectBoardRepository;
 
     @GetMapping("/archives")
+    @Operation(summary = "자신이 올린 족보목록을 조회하는 API", description = "자신이 올린 족보목록을 조회하는 API입니다.")
     public CommonResponse<ArchiveListResponseVo> getOwnArchiveList(
         @RequestParam(name = "page", defaultValue = "1") int page,
         @RequestParam(name = "size", defaultValue = "10") int size,
@@ -50,6 +52,7 @@ public class OwnController {
     }
 
     @GetMapping("/promotions")
+    @Operation(summary = "자신이 올린 프로젝트홍보목록을 조회하는 API", description = "자신이 올린 프로젝트홍보목록을 조회하는 API입니다.")
     public ResponseEntity<CommonResponse<?>> getPromotionsByOwnerId(
         @RequestParam(name = "page", defaultValue = "1", required = false) int page,
         @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
@@ -78,6 +81,7 @@ public class OwnController {
     }
 
     @GetMapping("/mywritingprojectboard")
+    @Operation(summary = "자신이 올린 포르젝트 모집 목록을 조회하는 API", description = "자신이 올린 프로젝트 모집 목록을 조회하는 API입니다.")
     public CommonResponse<Page<ProjectBoardListDto>> getMyWritingProjectBoard(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size

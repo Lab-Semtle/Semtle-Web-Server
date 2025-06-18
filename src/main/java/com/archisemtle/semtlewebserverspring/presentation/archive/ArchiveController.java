@@ -10,6 +10,7 @@ import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveListRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveListResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveRequestVo;
 import com.archisemtle.semtlewebserverspring.vo.archive.ArchiveResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ public class ArchiveController {
 
     //게시물 생성
     @PostMapping
+    @Operation(summary = "족보 게시물 생성API", description = "족보 게시물을 생성합니다.")
     public CommonResponse<String> createArchive(@RequestBody ArchiveRequestVo requestVo) throws IOException{
         archiveService.createArchiveBoard(ArchiveRequestVo.voToDto(requestVo));
         return CommonResponse.success("Secret Note 게시물이 성공적으로 등록되었습니다.");
@@ -43,6 +45,7 @@ public class ArchiveController {
 
     //게시물 읽기
     @GetMapping("/{id}")
+    @Operation(summary = "족보 게시물 읽기API", description = "족보 게시물을 읽어옵니다.")
     public CommonResponse<ArchiveResponseVo> readArchive(@PathVariable Long id){
         ArchiveResponseDto responseDto = archiveService.readArchiveBoard(id);
         return CommonResponse.success("족보 게시판 흭득 성공", ArchiveResponseDto.dtoToVo(responseDto));
@@ -50,6 +53,7 @@ public class ArchiveController {
 
     //게시물 수정
     @PutMapping("/{id}")
+    @Operation(summary = "족보 게시물 수정API", description = "족보 게시물을 수정합니다.")
     public CommonResponse<String> updateArchive(@RequestBody ArchiveRequestVo requestVo, @PathVariable Long id)
     throws IOException {
 
@@ -59,6 +63,7 @@ public class ArchiveController {
 
     //게시물 삭제
     @DeleteMapping("/{id}")
+    @Operation(summary = "족보 게시물 삭제API", description = "족보 게시물을 삭제합니다.")
     public CommonResponse<String> deleteArchive(@PathVariable Long id){
         archiveService.deleteArchiveBoard(id);
         return CommonResponse.success("족보 게시판 삭제 성공");
@@ -66,6 +71,7 @@ public class ArchiveController {
 
     //게시물 목록 읽기
     @GetMapping
+    @Operation(summary = "족보 게시물 목록 읽기API", description = "족보 게시물 목록 읽어옵니다.")
     public CommonResponse<ArchiveListResponseVo> getArchiveList(
         @RequestParam(name = "page", defaultValue = "1") int page,
         @RequestParam(name = "size", defaultValue = "15") int size,

@@ -49,7 +49,8 @@ public class SecurityConfig {
                 SessionCreationPolicy.STATELESS)) // Stateless 설정
             .authorizeHttpRequests(auth -> auth
 
-                .requestMatchers(HttpMethod.POST, "/api/v1/members", "/api/v1/auth/signin")
+                .requestMatchers(HttpMethod.POST, "/api/v1/members", "/api/v1/auth/signin",
+                    "/api/v1/auth/signup")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/index/**", "/api/v1/projectboard/**",
                     "/api/v1/promotions/**", "/api/v1/activity/**").permitAll()

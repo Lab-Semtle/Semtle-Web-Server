@@ -1,5 +1,6 @@
 package com.archisemtle.semtlewebserverspring.presentation;
 
+import com.archisemtle.semtlewebserverspring.application.member.AuthService;
 import com.archisemtle.semtlewebserverspring.application.member.MemberService;
 import com.archisemtle.semtlewebserverspring.application.member.PasswordResetService;
 import com.archisemtle.semtlewebserverspring.common.BaseException;
@@ -14,6 +15,7 @@ import com.archisemtle.semtlewebserverspring.dto.member.verifyAdminRequestDto;
 import com.archisemtle.semtlewebserverspring.infrastructure.MemberRepository;
 import com.archisemtle.semtlewebserverspring.vo.member.LoginResponseVo;
 import com.archisemtle.semtlewebserverspring.vo.member.MemberPasswordResetResponseVo;
+import com.archisemtle.semtlewebserverspring.vo.member.MemberSignupRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final MemberService memberService;
+    private final AuthService authService;
     private final PasswordResetService passwordResetService;
     private final MemberRepository memberRepository;
 
@@ -89,5 +92,12 @@ public class AuthController {
         }
 
         return CommonResponse.success("관리자 2차인증에 성공하셨습니다.");
+    }
+
+    @PostMapping("/signup")
+    public CommonResponse<String> memberSignUp(
+        @RequestBody MemberSignupRequestVo memberSignupRequestVo) {
+        authService.memberSignup(MemberSignupRequestVo.voToDto(memberSignupRequestVo));
+        return CommonResponse.success("회원가입을 성공했습니다.");
     }
 }
